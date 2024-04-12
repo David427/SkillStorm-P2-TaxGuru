@@ -38,7 +38,7 @@ a {
 .usa-hero {
   background-image: url("http://localhost:5173/girl_hero.jpg") !important;
   margin: 2rem;
-  padding: 8rem;
+  padding: 5rem;
 }
 
 @media (max-width: 63.99em) {
