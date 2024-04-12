@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 function App() {
   return (
-    <div className="root__main">
+    <main className="full-page">
       <section className="usa-hero">
         <div className="usa-hero__callout">
           <h1 className="usa-hero__heading">
@@ -40,7 +40,7 @@ function App() {
           </Grid>
         </Grid>
       </section>
-    </div>
+    </main>
   );
 }
 

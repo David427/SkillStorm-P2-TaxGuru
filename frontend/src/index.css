@@ -3,9 +3,9 @@
   line-height: 1.5;
   font-weight: 400;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  color-scheme: light;
+  color: #213547;
+  background-color: #fff;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -18,7 +18,7 @@ a {
   color: inherit;
 }
 
-.root__main {
+.full-page {
   min-height: calc(100vh - 107px);
 }
 
@@ -31,21 +31,14 @@ a {
   justify-content: space-between;
 }
 
-.usa-nav-container {
+/* .usa-nav-container {
   border-bottom: 1px solid #dfe1e2;
-}
+} */
 
 .usa-hero {
   background-image: url("http://localhost:5173/girl_hero.jpg") !important;
   margin: 2rem;
   padding: 8rem;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
 }
 
 @media (max-width: 63.99em) {
