@@ -26,7 +26,6 @@ Project to build a Federal tax preparation service deployed on AWS.
     - GitHub
 
 # **Non-Functional Requirements**
-- Professional UI built using Trussworks.
 - Create an account page where users can view and update account, personal, and financial info.
 
 # **Notes**
