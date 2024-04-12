@@ -3,25 +3,24 @@ Project to build a Federal tax preparation service deployed on AWS.
 
 # **Objective**
 - Create a tax preparation website styled like the IRS website.
-- Microservices architecture? TBD...
 
 # **Functional Requirements**
 - User administration | Create an account, login. We probably need at least two users to showcase full functionality.
 - User information | Enter personal info.
 - Financial information | Enter financial info.
 - Tax information | Show a user’s Federal tax breakdown, how much their return is or how much they owe, etc.
-- Technology stack (as of 4/10/24; subject to change):
-    - Spring Boot
+- Technology stack (as of 4/12/24; subject to change):
+    - Spring Boot (monolithic app architecture)
     - JUnit
     - React with TypeScript
     - Jest
     - Redux
     - Trussworks
     - i18n
-    - MongoDB and DocumentDB with AWS
+    - Aurora (Amazon's RDB)
     - AWS
     - Spring Security
-    - OAuth2
+    - OAuth2 (plus JWT? TBD)
     - Docker
     - Kubernetes
     - GitHub
