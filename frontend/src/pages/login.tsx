@@ -10,7 +10,7 @@ import {
 import { Link } from "react-router-dom";
 import { FormEvent, useState } from "react";
 
-export function Login() {
+export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {

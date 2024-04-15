@@ -8,8 +8,9 @@ import "@trussworks/react-uswds/lib/index.css";
 
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
-import { Login } from "./pages/login.tsx";
-import { SignUp } from "./pages/signup.tsx";
+import Login from "./pages/login.tsx";
+import SignUp from "./pages/signup.tsx";
+import Personal from "./pages/filing/personal.tsx";
 import { HeaderNav } from "./components/header.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
@@ -20,6 +21,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         <Route path="/" element={<App />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
+        <Route path="/filing/personal" element={<Personal />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>

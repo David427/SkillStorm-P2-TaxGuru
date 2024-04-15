@@ -24,7 +24,7 @@ function Required() {
   );
 }
 
-export function SignUp() {
+export default function SignUp() {
   const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
