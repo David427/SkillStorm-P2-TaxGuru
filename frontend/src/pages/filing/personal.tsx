@@ -15,7 +15,11 @@ import { FormEvent } from "react";
 
 import { states } from "../../states";
 
+import { useNavigate } from "react-router-dom";
+
 export default function Personal() {
+  const navigate = useNavigate();
+
   const handlePersonalInfo = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -35,12 +39,14 @@ export default function Personal() {
       // @ts-expect-error untyped form elements but we need the values
       state: e.currentTarget.elements.state.value,
       // @ts-expect-error untyped form elements but we need the values
+      zipcode: e.currentTarget.elements.zipcode.value,
+      // @ts-expect-error untyped form elements but we need the values
       filingStatus: e.currentTarget.elements.filing_status.value,
     };
 
     console.log(formData);
 
-    return;
+    navigate("/filing/w2");
   };
 
   return (
@@ -155,6 +161,20 @@ export default function Personal() {
               </Grid>
 
               <Grid tablet={{ col: true }}>
+                <Label htmlFor="zipcode">Zip Code</Label>
+                <TextInputMask
+                  id="zipcode"
+                  name="zipcode"
+                  type="text"
+                  mask="_____"
+                  pattern="^\d{5}"
+                  required
+                />
+              </Grid>
+            </Grid>
+
+            <Grid row>
+              <Grid tablet={{ col: 6 }}>
                 <Label htmlFor="filing_status">Filing Status</Label>
                 <Select id="filing_status" name="filing_status" required>
                   <option>- Select -</option>
