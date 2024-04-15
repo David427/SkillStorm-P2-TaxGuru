@@ -23,17 +23,14 @@ a {
 }
 
 .w-full {
-  width: 100%;
+  max-width: 100% !important;
+  width: 100% !important;
 }
 
 .usa-navbar {
   display: flex;
   justify-content: space-between;
 }
-
-/* .usa-nav-container {
-  border-bottom: 1px solid #dfe1e2;
-} */
 
 .usa-hero {
   background-image: url("http://localhost:5173/girl_hero.jpg") !important;
