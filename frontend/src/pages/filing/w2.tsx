@@ -15,9 +15,11 @@ import {
 import { FormEvent } from "react";
 
 import { states } from "../../states";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function W2() {
+  const navigate = useNavigate();
+
   const handleW2Info = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -41,6 +43,7 @@ export default function W2() {
     };
 
     console.log(formData);
+    navigate("/filing/self-employment");
   };
 
   return (
