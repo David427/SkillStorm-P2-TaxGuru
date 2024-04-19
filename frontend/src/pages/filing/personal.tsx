@@ -31,6 +31,8 @@ export default function Personal() {
       // @ts-expect-error untyped form elements but we need the values
       birthdate: e.currentTarget.elements.birthdate.value,
       // @ts-expect-error untyped form elements but we need the values
+      ssn: e.currentTarget.elements.ssn.value,
+      // @ts-expect-error untyped form elements but we need the values
       tel: e.currentTarget.elements.tel.value,
       // @ts-expect-error untyped form elements but we need the values
       streetAddress: e.currentTarget.elements.street_address.value,
@@ -86,7 +88,7 @@ export default function Personal() {
               </Grid>
             </Grid>
 
-            {/* Birthdate and Phone Number */}
+            {/* Birthdate and SSN */}
             <Grid row gap>
               <Grid tablet={{ col: true }}>
                 <Label id="label-birthdate" htmlFor="birthdate">
@@ -109,6 +111,28 @@ export default function Personal() {
               </Grid>
 
               <Grid tablet={{ col: true }}>
+                <Label id="label-ssn" htmlFor="ssn">
+                  SSN or TIN
+                </Label>
+                <span id="hint-ssn" className="usa-hint">
+                  123-45-6789
+                </span>
+                <TextInputMask
+                  id="ssn"
+                  name="ssn"
+                  type="text"
+                  aria-labelledby="label-ssn"
+                  aria-describedby="hint-ssn"
+                  mask="___-__-____"
+                  pattern="\d{3}-\d{2}-\d{4}"
+                  required
+                />
+              </Grid>
+            </Grid>
+
+            {/* Phone number and Street Address */}
+            <Grid row gap>
+              <Grid tablet={{ col: true }}>
                 <Label id="label-tel" htmlFor="tel">
                   US Telephone Number
                 </Label>
@@ -126,28 +150,28 @@ export default function Personal() {
                   required
                 />
               </Grid>
-            </Grid>
-
-            {/* Street Address and City */}
-            <Grid row gap>
               <Grid tablet={{ col: true }}>
                 <Label htmlFor="street_address">Street Address</Label>
+                <span id="hint-street-address" className="usa-hint">
+                  123 Park Ln
+                </span>
                 <TextInput
                   id="street_address"
                   name="street_address"
+                  aria-describedby="hint-street-address"
                   type="text"
                   required
                 />
               </Grid>
+            </Grid>
 
+            {/* City and State */}
+            <Grid row gap>
               <Grid tablet={{ col: true }}>
                 <Label htmlFor="city">City</Label>
                 <TextInput id="city" name="city" type="text" required />
               </Grid>
-            </Grid>
 
-            {/* State and Filing Status */}
-            <Grid row gap>
               <Grid tablet={{ col: true }}>
                 <Label htmlFor="state">State</Label>
                 <Select id="state" name="state" required>
@@ -159,7 +183,10 @@ export default function Personal() {
                   ))}
                 </Select>
               </Grid>
+            </Grid>
 
+            {/* Zip and Filing Status */}
+            <Grid row gap>
               <Grid tablet={{ col: true }}>
                 <Label htmlFor="zipcode">Zip Code</Label>
                 <TextInputMask
@@ -171,10 +198,8 @@ export default function Personal() {
                   required
                 />
               </Grid>
-            </Grid>
 
-            <Grid row>
-              <Grid tablet={{ col: 6 }}>
+              <Grid tablet={{ col: true }}>
                 <Label htmlFor="filing_status">Filing Status</Label>
                 <Select id="filing_status" name="filing_status" required>
                   <option>- Select -</option>
