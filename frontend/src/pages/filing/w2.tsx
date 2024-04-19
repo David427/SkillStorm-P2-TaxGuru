@@ -135,6 +135,7 @@ export default function W2() {
               </Grid>
             </Grid>
 
+            {/* Wages and Tax withheld */}
             <Grid row gap>
               <Grid tablet={{ col: true }}>
                 <Label id="label-wages" htmlFor="wages">
@@ -171,15 +172,23 @@ export default function W2() {
               </Grid>
             </Grid>
 
-            <ButtonGroup type="default">
-              <Link
-                to="/filing/personal"
-                className="usa-button usa-button--outline"
-              >
-                Back
-              </Link>
-              <Button type="submit">Continue</Button>
-            </ButtonGroup>
+            <div className="tablet:display-flex tablet:flex-justify">
+              <ButtonGroup type="default">
+                <Link
+                  to="/filing/personal"
+                  className="usa-button usa-button--outline"
+                >
+                  Back
+                </Link>
+                <Link
+                  to="/filing/self-employment"
+                  className="usa-button usa-button--base"
+                >
+                  Skip
+                </Link>
+                <Button type="submit">Continue</Button>
+              </ButtonGroup>
+            </div>
           </Fieldset>
         </Form>
       </GridContainer>
