@@ -21,8 +21,8 @@ public class FormW2Dto {
     private String city;
     private State state;
     private String zipCode;
-    private float wages;
-    private float taxWithheld;
+    private double wages;
+    private double taxWithheld;
     private FinancialData financialData;
 
 }

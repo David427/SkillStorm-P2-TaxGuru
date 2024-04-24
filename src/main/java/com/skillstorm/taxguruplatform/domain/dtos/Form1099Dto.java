@@ -15,8 +15,8 @@ public class Form1099Dto {
 
     private int id;
     private String accountNum;
-    private float income;
-    private float taxWithheld;
+    private double income;
+    private double taxWithheld;
     private String payerName;
     private String payerState;
     private String payerZipCode;

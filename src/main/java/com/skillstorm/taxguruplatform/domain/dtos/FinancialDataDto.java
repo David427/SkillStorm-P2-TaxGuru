@@ -16,9 +16,9 @@ import lombok.NoArgsConstructor;
 public class FinancialDataDto {
 
     private int id;
-    private float grossIncome;
+    private double grossIncome;
     private boolean stdDeduction;
-    private float result;
+    private double result;
     private AppUser appUser;
     private FormW2 formW2;
     private Form1099 form1099;

@@ -16,14 +16,15 @@ public class FinancialData {
 
     @Id
     @SequenceGenerator(
-            name = "financial_data_seq",
+            name = "financial_data_id_seq",
             allocationSize = 1
     )
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "financial_data_seq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "financial_data_id_seq")
     private int id;
-    private float grossIncome;
+
+    private double grossIncome;
     private boolean stdDeduction;
-    private float result;
+    private double result;
 
     @OneToOne(mappedBy = "financialData")
     private AppUser appUser;

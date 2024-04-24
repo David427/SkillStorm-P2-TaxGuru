@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Data
@@ -19,18 +20,24 @@ public class AppUser {
 
     @Id
     private String username;
+
     private String email;
     private String firstName;
     private String lastName;
     private String suffix;
-    private Date dateOfBirth;
+    private LocalDate dateOfBirth;
     private String ssn;
     private String streetAddress;
     private String city;
+
+    @Column(name = "user_state")
     private State state;
+
     private String zipCode;
     private String phoneNumber;
     private String filingStatus;
+
+    @Column(name = "user_password")
     private String password;
 
     @OneToOne(cascade = CascadeType.ALL)
