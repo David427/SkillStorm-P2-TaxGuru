@@ -11,6 +11,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Login from "./pages/login.tsx";
 import W2 from "./pages/filing/w2.tsx";
 import SignUp from "./pages/signup.tsx";
+import Review from "./pages/filing/review.tsx";
 import Personal from "./pages/filing/personal.tsx";
 import Deductions from "./pages/filing/deductions.tsx";
 import SelfEmployment from "./pages/filing/self-employment.tsx";
@@ -29,6 +30,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         <Route path="/filing/w2" element={<W2 />} />
         <Route path="/filing/self-employment" element={<SelfEmployment />} />
         <Route path="/filing/deductions" element={<Deductions />} />
+        <Route path="/filing/review" element={<Review />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>

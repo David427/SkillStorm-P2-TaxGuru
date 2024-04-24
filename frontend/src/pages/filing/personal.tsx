@@ -41,7 +41,7 @@ export default function Personal() {
       // @ts-expect-error untyped form elements but we need the values
       state: e.currentTarget.elements.state.value,
       // @ts-expect-error untyped form elements but we need the values
-      zipcode: e.currentTarget.elements.zipcode.value,
+      zipCode: e.currentTarget.elements.zipcode.value,
       // @ts-expect-error untyped form elements but we need the values
       filingStatus: e.currentTarget.elements.filing_status.value,
     };
