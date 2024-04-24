@@ -18,7 +18,7 @@ export default function Login() {
 
     const formData = {
       // @ts-expect-error untyped form elements but we need the values
-      email: e.currentTarget.elements.email.value,
+      username: e.currentTarget.elements.username.value,
       // @ts-expect-error untyped form elements but we need the values
       password: e.currentTarget.elements.password.value,
     };
@@ -37,8 +37,13 @@ export default function Login() {
                 <h1 className="margin-bottom-0">Log in</h1>
                 <Form onSubmit={handleSubmit}>
                   <Fieldset legend="Access your account" legendStyle="default">
-                    <Label htmlFor="email">Email address</Label>
-                    <TextInput id="email" name="email" type="email" required />
+                    <Label htmlFor="username">Username</Label>
+                    <TextInput
+                      id="username"
+                      name="username"
+                      type="text"
+                      required
+                    />
 
                     <Label htmlFor="password">Password</Label>
                     <TextInput

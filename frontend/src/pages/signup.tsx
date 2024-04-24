@@ -16,14 +16,6 @@ import {
 import { FormEvent, useState } from "react";
 import { Link } from "react-router-dom";
 
-function Required() {
-  return (
-    <abbr title="required" className="usa-label--required">
-      *
-    </abbr>
-  );
-}
-
 export default function SignUp() {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -32,7 +24,7 @@ export default function SignUp() {
 
     const formData = {
       // @ts-expect-error untyped form elements but we need the values
-      email: e.currentTarget.elements.email.value,
+      username: e.currentTarget.elements.username.value,
       // @ts-expect-error untyped form elements but we need the values
       password: e.currentTarget.elements.password.value,
       // @ts-expect-error untyped form elements but we need the values
@@ -74,13 +66,18 @@ export default function SignUp() {
                       indicates a required field
                     </p>
 
-                    <Label htmlFor="email">
-                      Email Address <Required />
+                    <Label htmlFor="username" requiredMarker>
+                      Username
                     </Label>
-                    <TextInput id="email" name="email" type="email" required />
+                    <TextInput
+                      id="username"
+                      name="username"
+                      type="text"
+                      required
+                    />
 
-                    <Label htmlFor="password">
-                      Create Password <Required />
+                    <Label htmlFor="password" requiredMarker>
+                      Create Password
                     </Label>
                     <TextInput
                       id="password"
@@ -97,8 +94,8 @@ export default function SignUp() {
                       {showPassword ? "Hide Password" : "Show Password"}
                     </button>
 
-                    <Label htmlFor="password">
-                      Confirm Password <Required />
+                    <Label htmlFor="password" requiredMarker>
+                      Confirm Password
                     </Label>
                     <TextInput
                       id="password_confirm"
