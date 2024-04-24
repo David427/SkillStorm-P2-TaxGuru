@@ -27,7 +27,7 @@ export default function Review() {
   return (
     <main className="full-page">
       <GridContainer className="usa-section">
-        <StepIndicator headingLevel="h4" ofText="of" stepText="Step">
+        <StepIndicator headingLevel="h3" ofText="of" stepText="Step">
           <StepIndicatorStep label="Personal Information" status="complete" />
           <StepIndicatorStep label="W-2 Information" status="complete" />
           <StepIndicatorStep label="Self Employment" status="complete" />
@@ -40,6 +40,9 @@ export default function Review() {
           <Fieldset legend="Review the information and ensure it is correct. If you see any errors, click the section header to edit the values.">
             {/* Personal */}
             <section>
+              <h4 className="margin-bottom-0">
+                <Link to="/filing/personal">Personal Information</Link>
+              </h4>
               <Grid row gap>
                 <Grid tablet={{ col: true }}>
                   <Label id="label-first_name" htmlFor="first_name">

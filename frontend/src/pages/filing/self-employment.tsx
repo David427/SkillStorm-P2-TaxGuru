@@ -39,7 +39,7 @@ export default function SelfEmployment() {
   return (
     <main className="full-page">
       <GridContainer className="usa-section">
-        <StepIndicator headingLevel="h4" ofText="of" stepText="Step">
+        <StepIndicator headingLevel="h3" ofText="of" stepText="Step">
           <StepIndicatorStep label="Personal Information" status="complete" />
           <StepIndicatorStep label="W-2 Information" status="complete" />
           <StepIndicatorStep label="Self Employment" status="current" />

@@ -17,6 +17,19 @@ import { states } from "../../states";
 
 import { useNavigate } from "react-router-dom";
 
+const suffixOptions = [
+  "Jr.",
+  "Sr.",
+  "II",
+  "III",
+  "IV",
+  "V",
+  "Ph.D.",
+  "M.D.",
+  "J.D.",
+  "Esq.",
+];
+
 export default function Personal() {
   const navigate = useNavigate();
 
@@ -28,6 +41,8 @@ export default function Personal() {
       firstName: e.currentTarget.elements.first_name.value,
       // @ts-expect-error untyped form elements but we need the values
       lastName: e.currentTarget.elements.last_name.value,
+      // @ts-expect-error untyped form elements but we need the values
+      suffix: e.currentTarget.elements.suffix.value,
       // @ts-expect-error untyped form elements but we need the values
       birthdate: e.currentTarget.elements.birthdate.value,
       // @ts-expect-error untyped form elements but we need the values
@@ -54,7 +69,7 @@ export default function Personal() {
   return (
     <main className="full-page">
       <GridContainer className="usa-section">
-        <StepIndicator headingLevel="h4" ofText="of" stepText="Step">
+        <StepIndicator headingLevel="h3" ofText="of" stepText="Step">
           <StepIndicatorStep label="Personal Information" status="current" />
           <StepIndicatorStep label="W-2 Information" />
           <StepIndicatorStep label="Self Employment" />
@@ -65,33 +80,51 @@ export default function Personal() {
 
         <Form onSubmit={handlePersonalInfo} className="w-full">
           <Fieldset legend="Enter your personal information.">
-            {/* First and Last Name */}
+            {/* FName, LName, Suffix */}
             <Grid row gap>
               <Grid tablet={{ col: true }}>
-                <Label htmlFor="first_name">First Name</Label>
+                <Label htmlFor="first_name" requiredMarker>
+                  First Name
+                </Label>
                 <TextInput
                   id="first_name"
                   name="first_name"
                   type="text"
+                  autoComplete="given-name"
                   required
                 />
               </Grid>
 
               <Grid tablet={{ col: true }}>
-                <Label htmlFor="last_name">Last Name</Label>
+                <Label htmlFor="last_name" requiredMarker>
+                  Last Name
+                </Label>
                 <TextInput
                   id="last_name"
                   name="last_name"
                   type="text"
+                  autoComplete="family-name"
                   required
                 />
+              </Grid>
+
+              <Grid tablet={{ col: true }}>
+                <Label htmlFor="suffix">Suffix</Label>
+                <Select id="suffix" name="suffix">
+                  <option>- Select -</option>
+                  {suffixOptions.map((s) => (
+                    <option key={s} value={s}>
+                      {s}
+                    </option>
+                  ))}
+                </Select>
               </Grid>
             </Grid>
 
             {/* Birthdate and SSN */}
             <Grid row gap>
               <Grid tablet={{ col: true }}>
-                <Label id="label-birthdate" htmlFor="birthdate">
+                <Label id="label-birthdate" htmlFor="birthdate" requiredMarker>
                   Birthdate
                 </Label>
                 <span id="hint-birthdate" className="usa-hint">
@@ -111,7 +144,7 @@ export default function Personal() {
               </Grid>
 
               <Grid tablet={{ col: true }}>
-                <Label id="label-ssn" htmlFor="ssn">
+                <Label id="label-ssn" htmlFor="ssn" requiredMarker>
                   SSN or TIN
                 </Label>
                 <span id="hint-ssn" className="usa-hint">
@@ -133,7 +166,7 @@ export default function Personal() {
             {/* Phone number and Street Address */}
             <Grid row gap>
               <Grid tablet={{ col: true }}>
-                <Label id="label-tel" htmlFor="tel">
+                <Label id="label-tel" htmlFor="tel" requiredMarker>
                   US Telephone Number
                 </Label>
                 <span id="hint-tel" className="usa-hint">
@@ -147,11 +180,14 @@ export default function Personal() {
                   aria-describedby="hint-tel"
                   mask="___-___-____"
                   pattern="\d{3}-\d{3}-\d{4}"
+                  autoComplete="tel-national"
                   required
                 />
               </Grid>
               <Grid tablet={{ col: true }}>
-                <Label htmlFor="street_address">Street Address</Label>
+                <Label htmlFor="street_address" requiredMarker>
+                  Street Address
+                </Label>
                 <span id="hint-street-address" className="usa-hint">
                   123 Park Ln
                 </span>
@@ -160,6 +196,7 @@ export default function Personal() {
                   name="street_address"
                   aria-describedby="hint-street-address"
                   type="text"
+                  autoComplete="street-address"
                   required
                 />
               </Grid>
@@ -168,12 +205,16 @@ export default function Personal() {
             {/* City and State */}
             <Grid row gap>
               <Grid tablet={{ col: true }}>
-                <Label htmlFor="city">City</Label>
+                <Label htmlFor="city" requiredMarker>
+                  City
+                </Label>
                 <TextInput id="city" name="city" type="text" required />
               </Grid>
 
               <Grid tablet={{ col: true }}>
-                <Label htmlFor="state">State</Label>
+                <Label htmlFor="state" requiredMarker>
+                  State
+                </Label>
                 <Select id="state" name="state" required>
                   <option>- Select -</option>
                   {states.map((s) => (
@@ -188,19 +229,24 @@ export default function Personal() {
             {/* Zip and Filing Status */}
             <Grid row gap>
               <Grid tablet={{ col: true }}>
-                <Label htmlFor="zipcode">Zip Code</Label>
+                <Label htmlFor="zipcode" requiredMarker>
+                  Zip Code
+                </Label>
                 <TextInputMask
                   id="zipcode"
                   name="zipcode"
                   type="text"
                   mask="_____"
                   pattern="^\d{5}"
+                  autoComplete="postal-code"
                   required
                 />
               </Grid>
 
               <Grid tablet={{ col: true }}>
-                <Label htmlFor="filing_status">Filing Status</Label>
+                <Label htmlFor="filing_status" requiredMarker>
+                  Filing Status
+                </Label>
                 <Select id="filing_status" name="filing_status" required>
                   <option>- Select -</option>
                   <option value="single">Single</option>
