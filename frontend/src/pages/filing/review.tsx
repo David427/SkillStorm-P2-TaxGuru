@@ -43,6 +43,7 @@ export default function Review() {
               <h4 className="margin-bottom-0">
                 <Link to="/filing/personal">Personal Information</Link>
               </h4>
+              {/* Fname Lname Birthdate */}
               <Grid row gap>
                 <Grid tablet={{ col: true }}>
                   <Label id="label-first_name" htmlFor="first_name">
@@ -86,6 +87,39 @@ export default function Review() {
                     // the pattern fits the date format MM/DD/YYYY
                     pattern="^(0[1-9]|1[0-2])/(0[1-9]|[12][0-9]|3[01])/\d{4}$"
                     defaultValue="11/28/2001"
+                    disabled
+                  />
+                </Grid>
+              </Grid>
+
+              {/* SSN & Filing Status */}
+              <Grid row gap>
+                <Grid tablet={{ col: true }}>
+                  <Label id="label-ssn" htmlFor="ssn">
+                    SSN or TIN
+                  </Label>
+                  <TextInputMask
+                    id="ssn"
+                    name="ssn"
+                    type="text"
+                    aria-labelledby="label-ssn"
+                    mask="___-__-____"
+                    pattern="\d{3}-\d{2}-\d{4}"
+                    defaultValue="123-45-6789"
+                    disabled
+                  />
+                </Grid>
+
+                <Grid tablet={{ col: true }}>
+                  <Label id="label-filing_status" htmlFor="filing_status">
+                    Filing Status
+                  </Label>
+                  <TextInput
+                    id="filing_status"
+                    name="filing_status"
+                    type="text"
+                    aria-labelledby="label-filing_status"
+                    defaultValue="Single"
                     disabled
                   />
                 </Grid>
