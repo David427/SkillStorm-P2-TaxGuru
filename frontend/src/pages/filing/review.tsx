@@ -163,14 +163,14 @@ export default function Review() {
                 </Grid>
 
                 <Grid tablet={{ col: true }}>
-                  <Label id="label-withheld" htmlFor="withheld">
+                  <Label id="label-w2_withheld" htmlFor="w2_withheld">
                     Federal Taxes Withheld
                   </Label>
                   <TextInput
-                    id="withheld"
-                    name="withheld"
+                    id="w2_withheld"
+                    name="w2_withheld"
                     type="number"
-                    aria-labelledby="label-withheld"
+                    aria-labelledby="label-w2_withheld"
                     defaultValue={10_000}
                     disabled
                   />
@@ -179,6 +179,44 @@ export default function Review() {
             </section>
 
             {/* Self Employment */}
+            <section>
+              <h4 className="margin-bottom-0">
+                <Link to="/filing/self-employment">
+                  Self Employment Information
+                </Link>
+              </h4>
+
+              {/* Non-Employment Compensation & Taxes Withheld */}
+              <Grid row gap>
+                <Grid tablet={{ col: true }}>
+                  <Label id="label-nec_wages" htmlFor="nec_wages">
+                    Non-Employee Compensation
+                  </Label>
+                  <TextInput
+                    id="nec_wages"
+                    name="nec_wages"
+                    type="number"
+                    aria-labelledby="label-nec_wages"
+                    defaultValue={10_000}
+                    disabled
+                  />
+                </Grid>
+
+                <Grid tablet={{ col: true }}>
+                  <Label id="label-nec_withheld" htmlFor="nec_withheld">
+                    Federal Taxes Withheld
+                  </Label>
+                  <TextInput
+                    id="nec_withheld"
+                    name="nec_withheld"
+                    type="number"
+                    aria-labelledby="label-nec_withheld"
+                    defaultValue={1_000}
+                    disabled
+                  />
+                </Grid>
+              </Grid>
+            </section>
 
             {/* Deductions */}
 
