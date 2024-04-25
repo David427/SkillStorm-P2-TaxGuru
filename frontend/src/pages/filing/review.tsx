@@ -127,6 +127,56 @@ export default function Review() {
             </section>
 
             {/* W2 */}
+            <section>
+              <h4 className="margin-bottom-0">
+                <Link to="/filing/w2">W-2 Information</Link>
+              </h4>
+
+              {/* Employer Name, Wages, & Taxes Withheld */}
+              <Grid row gap>
+                <Grid tablet={{ col: true }}>
+                  <Label id="label-employer_name" htmlFor="employer_name">
+                    Employer Name
+                  </Label>
+                  <TextInput
+                    id="employer_name"
+                    name="employer_name"
+                    type="text"
+                    aria-labelledby="label-employer_name"
+                    defaultValue={"Skillstorm Commercial Services, LLC"}
+                    disabled
+                  />
+                </Grid>
+
+                <Grid tablet={{ col: true }}>
+                  <Label id="label-wages" htmlFor="wages">
+                    Wages
+                  </Label>
+                  <TextInput
+                    id="wages"
+                    name="wages"
+                    type="number"
+                    aria-labelledby="label-wages"
+                    defaultValue={100_000}
+                    disabled
+                  />
+                </Grid>
+
+                <Grid tablet={{ col: true }}>
+                  <Label id="label-withheld" htmlFor="withheld">
+                    Federal Taxes Withheld
+                  </Label>
+                  <TextInput
+                    id="withheld"
+                    name="withheld"
+                    type="number"
+                    aria-labelledby="label-withheld"
+                    defaultValue={10_000}
+                    disabled
+                  />
+                </Grid>
+              </Grid>
+            </section>
 
             {/* Self Employment */}
 
