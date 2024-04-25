@@ -17,7 +17,17 @@ const navItems = [
   </Link>,
 ];
 
+const authenticatedNavItems = [
+  <Link to="/filing/personal" className="usa-nav__link">
+    Begin Filing
+  </Link>,
+  <Link to="/account" className="usa-nav__link">
+    My Account
+  </Link>,
+];
+
 export function HeaderNav() {
+  const isAuthenticated = true;
   const [mobileExpanded, setMobileExpanded] = useState(false);
 
   return (
@@ -35,7 +45,7 @@ export function HeaderNav() {
         </div>
 
         <PrimaryNav
-          items={navItems}
+          items={isAuthenticated ? authenticatedNavItems : navItems}
           mobileExpanded={mobileExpanded}
           onToggleMobileNav={() => setMobileExpanded((prev) => !prev)}
         ></PrimaryNav>
