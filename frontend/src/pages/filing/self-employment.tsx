@@ -53,7 +53,7 @@ export default function SelfEmployment() {
             {/* Payer and Recipient TIN */}
             <Grid row gap>
               <Grid tablet={{ col: true }}>
-                <Label id="label-payer-tin" htmlFor="payer_tin">
+                <Label id="label-payer-tin" htmlFor="payer_tin" requiredMarker>
                   Payer's TIN
                 </Label>
                 <TextInputMask
@@ -68,7 +68,11 @@ export default function SelfEmployment() {
               </Grid>
 
               <Grid tablet={{ col: true }}>
-                <Label id="label-recipient-tin" htmlFor="recipient_tin">
+                <Label
+                  id="label-recipient-tin"
+                  htmlFor="recipient_tin"
+                  requiredMarker
+                >
                   Recipient's TIN
                 </Label>
                 <TextInputMask
@@ -86,7 +90,9 @@ export default function SelfEmployment() {
             {/* NEC */}
             <Grid row gap>
               <Grid tablet={{ col: true }}>
-                <Label htmlFor="label-nec">Non Employee Compensation</Label>
+                <Label htmlFor="label-nec" requiredMarker>
+                  Non Employee Compensation
+                </Label>
                 <span id="hint-nec" className="usa-hint">
                   Box 1 on 1099-NEC
                 </span>
@@ -101,7 +107,7 @@ export default function SelfEmployment() {
               </Grid>
 
               <Grid tablet={{ col: true }}>
-                <Label id="label-withheld" htmlFor="withheld">
+                <Label id="label-withheld" htmlFor="withheld" requiredMarker>
                   Federal Income Tax Withheld
                 </Label>
                 <span id="hint-witheld" className="usa-hint">

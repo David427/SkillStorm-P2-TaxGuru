@@ -63,7 +63,7 @@ export default function W2() {
             {/* Employer ID and Name */}
             <Grid row gap>
               <Grid tablet={{ col: true }}>
-                <Label id="label-ein" htmlFor="ein">
+                <Label id="label-ein" htmlFor="ein" requiredMarker>
                   Employer ID Number (EIN)
                 </Label>
                 <span id="hint-ein" className="usa-hint">
@@ -82,7 +82,7 @@ export default function W2() {
               </Grid>
 
               <Grid tablet={{ col: true }}>
-                <Label id="label-e_name" htmlFor="e_name">
+                <Label id="label-e_name" htmlFor="e_name" requiredMarker>
                   Employer Name
                 </Label>
                 <span id="hint-e_name" className="usa-hint">
@@ -95,7 +95,7 @@ export default function W2() {
             {/* Employer Street Address and City */}
             <Grid row gap>
               <Grid tablet={{ col: true }}>
-                <Label htmlFor="e_street_address">
+                <Label htmlFor="e_street_address" requiredMarker>
                   Employer Street Address
                 </Label>
                 <TextInput
@@ -107,7 +107,9 @@ export default function W2() {
               </Grid>
 
               <Grid tablet={{ col: true }}>
-                <Label htmlFor="e_city">City</Label>
+                <Label htmlFor="e_city" requiredMarker>
+                  City
+                </Label>
                 <TextInput id="e_city" name="e_city" type="text" required />
               </Grid>
             </Grid>
@@ -115,18 +117,9 @@ export default function W2() {
             {/* Zip Code and State */}
             <Grid row gap>
               <Grid tablet={{ col: true }}>
-                <Label htmlFor="e_zipcode">Zip Code</Label>
-                <TextInputMask
-                  id="e_zipcode"
-                  name="e_zipcode"
-                  type="text"
-                  mask="_____"
-                  pattern="^\d{5}"
-                  required
-                />
-              </Grid>
-              <Grid tablet={{ col: true }}>
-                <Label htmlFor="e_state">State</Label>
+                <Label htmlFor="e_state" requiredMarker>
+                  State
+                </Label>
                 <Select id="e_state" name="e_state" required>
                   <option>- Select -</option>
                   {states.map((s) => (
@@ -136,12 +129,25 @@ export default function W2() {
                   ))}
                 </Select>
               </Grid>
+              <Grid tablet={{ col: true }}>
+                <Label htmlFor="e_zipcode" requiredMarker>
+                  Zip Code
+                </Label>
+                <TextInputMask
+                  id="e_zipcode"
+                  name="e_zipcode"
+                  type="text"
+                  mask="_____"
+                  pattern="^\d{5}"
+                  required
+                />
+              </Grid>
             </Grid>
 
             {/* Wages and Tax withheld */}
             <Grid row gap>
               <Grid tablet={{ col: true }}>
-                <Label id="label-wages" htmlFor="wages">
+                <Label id="label-wages" htmlFor="wages" requiredMarker>
                   Wages, tips and other compensation
                 </Label>
                 <span id="hint-wages" className="usa-hint">
@@ -158,7 +164,7 @@ export default function W2() {
               </Grid>
 
               <Grid tablet={{ col: true }}>
-                <Label id="label-withheld" htmlFor="withheld">
+                <Label id="label-withheld" htmlFor="withheld" requiredMarker>
                   Federal Income Tax Withheld
                 </Label>
                 <span id="hint-witheld" className="usa-hint">
