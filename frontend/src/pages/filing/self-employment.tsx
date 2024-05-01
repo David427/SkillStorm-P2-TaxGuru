@@ -110,7 +110,7 @@ export default function SelfEmployment() {
                 <Label id="label-withheld" htmlFor="withheld" requiredMarker>
                   Federal Income Tax Withheld
                 </Label>
-                <span id="hint-witheld" className="usa-hint">
+                <span id="hint-withheld" className="usa-hint">
                   Box 4 on 1099-NEC
                 </span>
                 <TextInput

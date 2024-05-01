@@ -39,7 +39,11 @@ export default function W2() {
       // @ts-expect-error untyped form elements but we need the values
       wages: e.currentTarget.elements.wages.value,
       // @ts-expect-error untyped form elements but we need the values
-      withheld: e.currentTarget.elements.withheld.value,
+      fedWithheld: e.currentTarget.elements.fed_withheld.value,
+      // @ts-expect-error untyped form elements but we need the values
+      socialWithheld: e.currentTarget.elements.social_withheld.value,
+      // @ts-expect-error untyped form elements but we need the values
+      medicareWithheld: e.currentTarget.elements.medicare_withheld.value,
     };
 
     console.log(formData);
@@ -144,7 +148,7 @@ export default function W2() {
               </Grid>
             </Grid>
 
-            {/* Wages and Tax withheld */}
+            {/* Wages and Federal Tax withheld */}
             <Grid row gap>
               <Grid tablet={{ col: true }}>
                 <Label id="label-wages" htmlFor="wages" requiredMarker>
@@ -164,18 +168,67 @@ export default function W2() {
               </Grid>
 
               <Grid tablet={{ col: true }}>
-                <Label id="label-withheld" htmlFor="withheld" requiredMarker>
+                <Label
+                  id="label-fed-withheld"
+                  htmlFor="fed_withheld"
+                  requiredMarker
+                >
                   Federal Income Tax Withheld
                 </Label>
-                <span id="hint-witheld" className="usa-hint">
+                <span id="hint-fedwithheld" className="usa-hint">
                   Box 2 on W-2 Form
                 </span>
                 <TextInput
-                  id="withheld"
-                  name="withheld"
+                  id="fed_withheld"
+                  name="fed_withheld"
                   type="number"
-                  aria-describedby="hint-withheld"
-                  aria-labelledby="label-withheld"
+                  aria-describedby="hint-fed-withheld"
+                  aria-labelledby="label-fed-withheld"
+                  required
+                />
+              </Grid>
+            </Grid>
+
+            {/* Social Security and Medicare Tax Withheld */}
+            <Grid row gap>
+              <Grid tablet={{ col: true }}>
+                <Label
+                  id="label-social-withheld"
+                  htmlFor="social_withheld"
+                  requiredMarker
+                >
+                  Social Security Tax Withheld
+                </Label>
+                <span id="hint-social-withheld" className="usa-hint">
+                  Box 4 on W-2 Form
+                </span>
+                <TextInput
+                  id="social_withheld"
+                  name="social_withheld"
+                  type="number"
+                  aria-describedby="hint-social-withheld"
+                  aria-labelledby="label-social-withheld"
+                  required
+                />
+              </Grid>
+
+              <Grid tablet={{ col: true }}>
+                <Label
+                  id="label-medicare-withheld"
+                  htmlFor="medicare_withheld"
+                  requiredMarker
+                >
+                  Medicare Tax Withheld
+                </Label>
+                <span id="hint-medicare-withheld" className="usa-hint">
+                  Box 2 on W-2 Form
+                </span>
+                <TextInput
+                  id="medicare_withheld"
+                  name="medicare_withheld"
+                  type="number"
+                  aria-describedby="hint-medicare-withheld"
+                  aria-labelledby="label-medicare-withheld"
                   required
                 />
               </Grid>
