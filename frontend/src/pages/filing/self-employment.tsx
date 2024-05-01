@@ -43,7 +43,7 @@ export default function SelfEmployment() {
           <StepIndicatorStep label="Personal Information" status="complete" />
           <StepIndicatorStep label="W-2 Information" status="complete" />
           <StepIndicatorStep label="Self Employment" status="current" />
-          <StepIndicatorStep label="Deductions" />
+          <StepIndicatorStep label="Credits & Deductions" />
           <StepIndicatorStep label="Review" />
           <StepIndicatorStep label="Results" />
         </StepIndicator>

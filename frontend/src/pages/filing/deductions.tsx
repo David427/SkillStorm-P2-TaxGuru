@@ -8,7 +8,6 @@ import {
   ButtonGroup,
   GridContainer,
   StepIndicator,
-  TextInputMask,
   StepIndicatorStep,
 } from "@trussworks/react-uswds";
 import { FormEvent } from "react";
@@ -31,77 +30,67 @@ export default function Deductions() {
           <StepIndicatorStep label="Personal Information" status="complete" />
           <StepIndicatorStep label="W-2 Information" status="complete" />
           <StepIndicatorStep label="Self Employment" status="complete" />
-          <StepIndicatorStep label="Deductions" status="current" />
+          <StepIndicatorStep label="Credits & Deductions" status="current" />
           <StepIndicatorStep label="Review" />
           <StepIndicatorStep label="Results" />
         </StepIndicator>
 
         <Form onSubmit={handleDeductions} className="w-full">
-          <Fieldset legend="This information can be found on form 1099-NEC. If you don't have any Self Employment Income to enter, you can skip this section.">
-            {/* Payer and Recipient TIN */}
+          <Fieldset legend="Let's help you get the highest possible refund.">
+            {/* Mortgage Interest & Property Taxes Paid */}
             <Grid row gap>
               <Grid tablet={{ col: true }}>
-                <Label id="label-payer-tin" htmlFor="payer_tin">
-                  Payer's TIN
+                <Label id="label-mortgage-interest" htmlFor="mortgage_interest">
+                  Mortgage Interest Paid
                 </Label>
-                <TextInputMask
-                  id="payer_tin"
-                  name="payer_tin"
-                  type="text"
-                  aria-labelledby="label-payer-tin"
-                  mask="__-_______"
-                  pattern="^\d{2}-\d{7}"
-                  required
+                <TextInput
+                  id="mortgage_interest"
+                  name="mortgage_interest"
+                  type="number"
+                  aria-labelledby="label-mortgage-interest"
+                  defaultValue={0}
                 />
               </Grid>
 
               <Grid tablet={{ col: true }}>
-                <Label id="label-recipient-tin" htmlFor="recipient_tin">
-                  Recipient's TIN
+                <Label id="label-property-taxes" htmlFor="property_taxes">
+                  Property Taxes Paid
                 </Label>
-                <TextInputMask
-                  id="recipient_tin"
-                  name="recipient_tin"
-                  type="text"
-                  aria-labelledby="label-recipient-tin"
-                  mask="___-__-____"
-                  pattern="\d{3}-\d{2}-\d{4}"
-                  required
+                <TextInput
+                  id="property_taxes"
+                  name="property_taxes"
+                  type="number"
+                  aria-labelledby="label-property-taxes"
+                  defaultValue={0}
                 />
               </Grid>
             </Grid>
 
-            {/* NEC */}
+            {/* Donations */}
             <Grid row gap>
               <Grid tablet={{ col: true }}>
-                <Label htmlFor="label-nec">Non Employee Compensation</Label>
-                <span id="hint-nec" className="usa-hint">
-                  Box 1 on 1099-NEC
-                </span>
+                <Label id="label-donations" htmlFor="donations">
+                  Check or Cash Donations
+                </Label>
                 <TextInput
-                  id="nec"
-                  name="nec"
+                  id="donations"
+                  name="donations"
                   type="number"
-                  aria-describedby="hint-nec"
-                  aria-labelledby="label-nec"
-                  required
+                  aria-labelledby="label-donations"
+                  defaultValue={0}
                 />
               </Grid>
 
               <Grid tablet={{ col: true }}>
-                <Label id="label-withheld" htmlFor="withheld">
-                  Federal Income Tax Withheld
+                <Label id="label-nonCash-donations" htmlFor="nonCash_donations">
+                  Total Non-Cash Donations
                 </Label>
-                <span id="hint-withheld" className="usa-hint">
-                  Box 4 on 1099-NEC
-                </span>
                 <TextInput
-                  id="withheld"
-                  name="withheld"
+                  id="nonCash_donations"
+                  name="nonCash_donations"
                   type="number"
-                  aria-describedby="hint-withheld"
-                  aria-labelledby="label-withheld"
-                  required
+                  aria-labelledby="label-nonCash-donations"
+                  defaultValue={0}
                 />
               </Grid>
             </Grid>

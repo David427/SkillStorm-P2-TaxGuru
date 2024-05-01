@@ -73,7 +73,7 @@ export default function Personal() {
           <StepIndicatorStep label="Personal Information" status="current" />
           <StepIndicatorStep label="W-2 Information" />
           <StepIndicatorStep label="Self Employment" />
-          <StepIndicatorStep label="Deductions" />
+          <StepIndicatorStep label="Credits & Deductions" />
           <StepIndicatorStep label="Review" />
           <StepIndicatorStep label="Results" />
         </StepIndicator>

@@ -32,7 +32,7 @@ export default function Results() {
           <StepIndicatorStep label="Personal Information" />
           <StepIndicatorStep label="W-2 Information" />
           <StepIndicatorStep label="Self Employment" />
-          <StepIndicatorStep label="Deductions" />
+          <StepIndicatorStep label="Credits & Deductions" />
           <StepIndicatorStep label="Review" />
           <StepIndicatorStep label="Results" />
         </StepIndicator>

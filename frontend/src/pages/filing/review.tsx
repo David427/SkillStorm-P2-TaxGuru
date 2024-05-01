@@ -31,7 +31,7 @@ export default function Review() {
           <StepIndicatorStep label="Personal Information" status="complete" />
           <StepIndicatorStep label="W-2 Information" status="complete" />
           <StepIndicatorStep label="Self Employment" status="complete" />
-          <StepIndicatorStep label="Deductions" status="complete" />
+          <StepIndicatorStep label="Credits & Deductions" status="complete" />
           <StepIndicatorStep label="Review" status="current" />
           <StepIndicatorStep label="Results" />
         </StepIndicator>

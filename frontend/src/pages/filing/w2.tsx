@@ -57,7 +57,7 @@ export default function W2() {
           <StepIndicatorStep label="Personal Information" status="complete" />
           <StepIndicatorStep label="W-2 Information" status="current" />
           <StepIndicatorStep label="Self Employment" />
-          <StepIndicatorStep label="Deductions" />
+          <StepIndicatorStep label="Credits & Deductions" />
           <StepIndicatorStep label="Review" />
           <StepIndicatorStep label="Results" />
         </StepIndicator>
