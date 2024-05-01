@@ -21,6 +21,12 @@ export default function Account() {
     return;
   };
 
+  const handlePasswordChange = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    return;
+  };
+
   return (
     <main className="full-page">
       <div className="bg-base-lightest">
@@ -120,6 +126,52 @@ export default function Account() {
           </Form>
         </GridContainer>
       </div>
+      {/* New Password */}
+      <GridContainer>
+        <h2>Change Password</h2>
+
+        <Form onSubmit={handlePasswordChange}>
+          <Fieldset
+            legend="Change your existing password"
+            legendStyle="default"
+          >
+            <Grid row>
+              <Grid tablet={{ col: true }}>
+                <Label htmlFor="current-password">Current Password</Label>
+                <TextInput
+                  id="current-password"
+                  name="current-password"
+                  type="password"
+                />
+              </Grid>
+            </Grid>
+            <Grid row>
+              <Grid tablet={{ col: true }}>
+                <Label htmlFor="new-password">New Password</Label>
+                <TextInput
+                  id="new-password"
+                  name="new-password"
+                  type="password"
+                />
+              </Grid>
+            </Grid>
+            <Grid row>
+              <Grid tablet={{ col: true }}>
+                <Label htmlFor="new-password-confirm">
+                  Confirm New Password
+                </Label>
+                <TextInput
+                  id="new-password-confirm"
+                  name="new-password-confirm"
+                  type="password"
+                />
+              </Grid>
+            </Grid>
+
+            <Button type="submit">Change Password</Button>
+          </Fieldset>
+        </Form>
+      </GridContainer>
     </main>
   );
 }
