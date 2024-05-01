@@ -55,6 +55,7 @@ export default function W2() {
       <GridContainer className="usa-section">
         <StepIndicator headingLevel="h3" ofText="of" stepText="Step">
           <StepIndicatorStep label="Personal Information" status="complete" />
+          <StepIndicatorStep label="Filing Information" status="complete" />
           <StepIndicatorStep label="W-2 Information" status="current" />
           <StepIndicatorStep label="Self Employment" />
           <StepIndicatorStep label="Credits & Deductions" />
@@ -237,7 +238,7 @@ export default function W2() {
             <div className="tablet:display-flex tablet:flex-justify">
               <ButtonGroup type="default">
                 <Link
-                  to="/filing/personal"
+                  to="/filing/filing-information"
                   className="usa-button usa-button--outline"
                 >
                   Back

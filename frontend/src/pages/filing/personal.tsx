@@ -63,7 +63,7 @@ export default function Personal() {
 
     console.log(formData);
 
-    navigate("/filing/w2");
+    navigate("/filing/filing-information");
   };
 
   return (
@@ -71,6 +71,7 @@ export default function Personal() {
       <GridContainer className="usa-section">
         <StepIndicator headingLevel="h3" ofText="of" stepText="Step">
           <StepIndicatorStep label="Personal Information" status="current" />
+          <StepIndicatorStep label="Filing Information" />
           <StepIndicatorStep label="W-2 Information" />
           <StepIndicatorStep label="Self Employment" />
           <StepIndicatorStep label="Credits & Deductions" />

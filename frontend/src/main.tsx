@@ -16,6 +16,7 @@ import Review from "./pages/filing/review.tsx";
 import Personal from "./pages/filing/personal.tsx";
 import Deductions from "./pages/filing/deductions.tsx";
 import SelfEmployment from "./pages/filing/self-employment.tsx";
+import FilingInformation from "./pages/filing/filling-information.tsx";
 
 import { HeaderNav } from "./components/header.tsx";
 
@@ -29,6 +30,10 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         <Route path="/signup" element={<SignUp />} />
         <Route path="/account" element={<Account />} />
         <Route path="/filing/personal" element={<Personal />} />
+        <Route
+          path="/filing/filing-information"
+          element={<FilingInformation />}
+        />
         <Route path="/filing/w2" element={<W2 />} />
         <Route path="/filing/self-employment" element={<SelfEmployment />} />
         <Route path="/filing/deductions" element={<Deductions />} />

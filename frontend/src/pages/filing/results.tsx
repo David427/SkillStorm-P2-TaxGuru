@@ -29,12 +29,13 @@ export default function Results() {
     <main className="full-page">
       <GridContainer className="usa-section">
         <StepIndicator headingLevel="h3" ofText="of" stepText="Step">
-          <StepIndicatorStep label="Personal Information" />
-          <StepIndicatorStep label="W-2 Information" />
-          <StepIndicatorStep label="Self Employment" />
-          <StepIndicatorStep label="Credits & Deductions" />
-          <StepIndicatorStep label="Review" />
-          <StepIndicatorStep label="Results" />
+          <StepIndicatorStep label="Personal Information" status="complete" />
+          <StepIndicatorStep label="Filing Information" status="complete" />
+          <StepIndicatorStep label="W-2 Information" status="complete" />
+          <StepIndicatorStep label="Self Employment" status="complete" />
+          <StepIndicatorStep label="Credits & Deductions" status="complete" />
+          <StepIndicatorStep label="Review" status="complete" />
+          <StepIndicatorStep label="Results" status="current" />
         </StepIndicator>
 
         <Form onSubmit={handlePersonalInfo}>

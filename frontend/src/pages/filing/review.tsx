@@ -29,6 +29,7 @@ export default function Review() {
       <GridContainer className="usa-section">
         <StepIndicator headingLevel="h3" ofText="of" stepText="Step">
           <StepIndicatorStep label="Personal Information" status="complete" />
+          <StepIndicatorStep label="Filing Information" status="complete" />
           <StepIndicatorStep label="W-2 Information" status="complete" />
           <StepIndicatorStep label="Self Employment" status="complete" />
           <StepIndicatorStep label="Credits & Deductions" status="complete" />
