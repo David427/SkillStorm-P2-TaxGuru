@@ -1,7 +1,14 @@
-import { Grid } from "@trussworks/react-uswds";
+import { useTranslation } from "react-i18next";
+
 import { Link } from "react-router-dom";
+import { Grid } from "@trussworks/react-uswds";
 
 function App() {
+  const {
+    t,
+    i18n: { language },
+  } = useTranslation();
+
   return (
     <main className="full-page">
       <section className="usa-hero">
@@ -40,6 +47,8 @@ function App() {
           </Grid>
         </Grid>
       </section>
+      <h1>{t("title")}</h1>
+      <h2>{language}</h2>
     </main>
   );
 }
