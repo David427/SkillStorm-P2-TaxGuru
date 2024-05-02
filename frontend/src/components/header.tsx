@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 
 import {
@@ -5,8 +6,9 @@ import {
   Header,
   PrimaryNav,
   NavMenuButton,
+  LanguageSelector,
 } from "@trussworks/react-uswds";
-import { useState } from "react";
+import { changeLanguage } from "i18next";
 
 const navItems = [
   <Link to="/login" className="usa-nav__link">
@@ -15,6 +17,28 @@ const navItems = [
   <Link to="/signup" className="usa-nav__link">
     Sign Up
   </Link>,
+  <LanguageSelector
+    className="usa-button--unstyled usa-nav__link language-selector"
+    label="Languages"
+    langs={[
+      {
+        attr: "en",
+        label: "English",
+        label_local: "English",
+        on_click() {
+          changeLanguage("es");
+        },
+      },
+      {
+        attr: "es",
+        label: "Espanol",
+        label_local: "Spanish",
+        on_click() {
+          changeLanguage("en");
+        },
+      },
+    ]}
+  />,
 ];
 
 const authenticatedNavItems = [
@@ -24,10 +48,32 @@ const authenticatedNavItems = [
   <Link to="/account" className="usa-nav__link">
     My Account
   </Link>,
+  <LanguageSelector
+    className="usa-button--unstyled usa-nav__link language-selector"
+    label="Languages"
+    langs={[
+      {
+        attr: "en",
+        label: "English",
+        label_local: "English",
+        on_click() {
+          changeLanguage("es");
+        },
+      },
+      {
+        attr: "es",
+        label: "Espanol",
+        label_local: "Spanish",
+        on_click() {
+          changeLanguage("en");
+        },
+      },
+    ]}
+  />,
 ];
 
 export function HeaderNav() {
-  const isAuthenticated = true;
+  const isAuthenticated = false;
   const [mobileExpanded, setMobileExpanded] = useState(false);
 
   return (

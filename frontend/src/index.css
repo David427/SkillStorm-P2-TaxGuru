@@ -34,8 +34,12 @@ a {
 
 .usa-hero {
   background-image: url("/girl_hero.jpg") !important;
-  margin: 2rem;
-  padding: 5rem;
+}
+
+.language-selector {
+  margin-left: 0 !important;
+  margin-bottom: 0 !important;
+  position: initial !important;
 }
 
 @media (max-width: 63.99em) {

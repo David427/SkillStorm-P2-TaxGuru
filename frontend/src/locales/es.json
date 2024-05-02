@@ -1,5 +1,13 @@
 {
   "translation": {
-    "title": "Un Titulo!"
+    "index": {
+      "hero-heading-alt": "Actúa ahora:",
+      "hero-heading": "Los impuestos federales deben pagarse antes del 15 de abril",
+      "hero-desc": "Le guiaremos a través de nuestra herramienta gratuita de impuestos federales, para asegurarnos de que complete sus impuestos a tiempo y con facilidad.",
+      "hero-cta": "Empiece Hoy",
+      "tagline": "Declara los impuestos gratis",
+      "point-1": "TaxGuru es su compañero de confianza para presentar sus impuestos federales sin esfuerzo. Despídete del estrés de la temporada de impuestos y disfruta de una experiencia perfecta con nuestra plataforma.",
+      "point-2": "Nuestra plataforma utiliza las últimas directrices del IRS para calcular sus declaraciones con precisión, asegurándose de que recibe cada dólar que le corresponde y proporcionándole tranquilidad."
+    }
   }
 }

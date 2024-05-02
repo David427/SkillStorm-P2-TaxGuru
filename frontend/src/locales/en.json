@@ -1,5 +1,13 @@
 {
   "translation": {
-    "title": "A Title!"
+    "index": {
+      "hero-heading-alt": "Act now:",
+      "hero-heading": "Federal taxes are due by April 15th",
+      "hero-desc": "We'll walk you through our free federal tax tool, to ensure you complete your taxes on time and with ease.",
+      "hero-cta": "Get Started Today",
+      "tagline": "File Your Taxes For Free",
+      "point-1": "TaxGuru is your reliable companion for filing your federal taxes effortlessly. Say goodbye to the stress of tax season and embrace a seamless experience with our platform.",
+      "point-2": "Our platform uses the latest IRS guidelines to calculate your returns with precision, ensuring you get every dollar you're entitled to, and providing you with peace-of-mind."
+    }
   }
 }
