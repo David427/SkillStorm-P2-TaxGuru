@@ -1,11 +1,13 @@
 package com.skillstorm.taxguruplatform.domain.dtos;
 
-import com.skillstorm.taxguruplatform.domain.entities.FinancialData;
-import jakarta.persistence.*;
+import com.skillstorm.taxguruplatform.domain.entities.TaxReturn;
+import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.math.BigDecimal;
 
 @Data
 @NoArgsConstructor
@@ -13,13 +15,12 @@ import lombok.NoArgsConstructor;
 @Builder
 public class Form1099Dto {
 
-    private int id;
+    private long id;
     private String accountNum;
-    private double income;
-    private double taxWithheld;
+    private BigDecimal income;
+    private BigDecimal fedTaxWithheld;
     private String payerName;
     private String payerState;
     private String payerZipCode;
-    private FinancialData financialData;
 
 }

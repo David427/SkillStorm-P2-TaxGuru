@@ -1,8 +1,6 @@
 package com.skillstorm.taxguruplatform.utils.mappers;
 
-import com.skillstorm.taxguruplatform.domain.dtos.FinancialDataDto;
 import com.skillstorm.taxguruplatform.domain.dtos.Form1099Dto;
-import com.skillstorm.taxguruplatform.domain.entities.FinancialData;
 import com.skillstorm.taxguruplatform.domain.entities.Form1099;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;

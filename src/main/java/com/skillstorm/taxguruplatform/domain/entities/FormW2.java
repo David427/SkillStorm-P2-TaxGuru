@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -21,21 +23,17 @@ public class FormW2 {
             allocationSize = 1
     )
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "form_w2_data_id_seq")
-    private int id;
+    private Long id;
 
     private String eid;
-    private String employerName;
-    private String streetAddress;
-    private String city;
-
-    @Column(name = "employer_state")
-    private State state;
-
-    private String zipCode;
-    private double wages;
-    private double taxWithheld;
-
-    @OneToOne(mappedBy = "formW2")
-    private FinancialData financialData;
+    private String empName;
+    private String empStreetAddress;
+    private String empCity;
+    private String empState;
+    private String empZipCode;
+    private BigDecimal income;
+    private BigDecimal fedTaxWithheld;
+    private BigDecimal ssTaxWithheld;
+    private BigDecimal mediTaxWithheld;
 
 }

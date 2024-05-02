@@ -6,6 +6,8 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface AppUserRepository extends PagingAndSortingRepository<AppUser, String> {
+public interface AppUserRepository extends JpaRepository<AppUser, String> {
+
+    boolean existsByUsername(String username);
 
 }

@@ -1,10 +1,10 @@
 package com.skillstorm.taxguruplatform.repositories;
 
-import com.skillstorm.taxguruplatform.domain.entities.Form1099;
+import com.skillstorm.taxguruplatform.domain.entities.AdjustmentData;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface Form1099Repository extends JpaRepository<Form1099, Integer> {
+public interface AdjustmentDataRepository extends JpaRepository<AdjustmentData, Integer> {
 
 }

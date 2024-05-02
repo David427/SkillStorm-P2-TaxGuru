@@ -1,12 +1,13 @@
 package com.skillstorm.taxguruplatform.domain.dtos;
 
-import com.skillstorm.taxguruplatform.domain.entities.FinancialData;
+import com.skillstorm.taxguruplatform.domain.entities.TaxReturn;
 import com.skillstorm.taxguruplatform.utils.enums.State;
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.math.BigDecimal;
 
 @Data
 @NoArgsConstructor
@@ -14,15 +15,16 @@ import lombok.NoArgsConstructor;
 @Builder
 public class FormW2Dto {
 
-    private int id;
+    private long id;
     private String eid;
-    private String companyName;
-    private String streetAddress;
-    private String city;
-    private State state;
-    private String zipCode;
-    private double wages;
-    private double taxWithheld;
-    private FinancialData financialData;
+    private String empName;
+    private String empStreetAddress;
+    private String empCity;
+    private String empState;
+    private String empZipCode;
+    private BigDecimal income;
+    private BigDecimal fedTaxWithheld;
+    private BigDecimal ssTaxWithheld;
+    private BigDecimal mediTaxWithheld;
 
 }

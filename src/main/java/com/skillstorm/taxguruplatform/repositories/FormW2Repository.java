@@ -1,10 +1,10 @@
 package com.skillstorm.taxguruplatform.repositories;
 
 import com.skillstorm.taxguruplatform.domain.entities.FormW2;
-import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface FormW2Repository extends PagingAndSortingRepository<FormW2, Integer> {
+public interface FormW2Repository extends JpaRepository<FormW2, Integer> {
 
 }

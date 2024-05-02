@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -20,16 +22,13 @@ public class Form1099 {
             allocationSize = 1
     )
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "form_1099_data_id_seq")
-    private int id;
+    private long id;
 
     private String accountNum;
-    private double income;
-    private double taxWithheld;
+    private BigDecimal income;
+    private BigDecimal fedTaxWithheld;
     private String payerName;
     private String payerState;
     private String payerZipCode;
-
-    @OneToOne(mappedBy = "form1099")
-    private FinancialData financialData;
 
 }

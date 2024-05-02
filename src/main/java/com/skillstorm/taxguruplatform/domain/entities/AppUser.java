@@ -6,9 +6,15 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDate;
-import java.util.Date;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -16,7 +22,7 @@ import java.util.Date;
 @Builder
 @Entity
 @Table(name = "users")
-public class AppUser {
+public class AppUser implements UserDetails {
 
     @Id
     private String username;
@@ -29,19 +35,43 @@ public class AppUser {
     private String ssn;
     private String streetAddress;
     private String city;
-
-    @Column(name = "user_state")
-    private State state;
-
+    private String userState;
     private String zipCode;
     private String phoneNumber;
-    private String filingStatus;
+    private String userRole;
 
     @Column(name = "user_password")
     private String password;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "financial_data_id", referencedColumnName = "id")
-    private FinancialData financialData;
+    @JoinColumn(name = "tax_return_id", referencedColumnName = "id")
+    private TaxReturn taxReturn;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        Set<SimpleGrantedAuthority> authorities = new HashSet<>();
+        authorities.add(new SimpleGrantedAuthority(userRole));
+        return authorities;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return false;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return false;
+    }
 
 }
