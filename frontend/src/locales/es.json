@@ -8,6 +8,27 @@
       "tagline": "Declara los impuestos gratis",
       "point-1": "TaxGuru es su compañero de confianza para presentar sus impuestos federales sin esfuerzo. Despídete del estrés de la temporada de impuestos y disfruta de una experiencia perfecta con nuestra plataforma.",
       "point-2": "Nuestra plataforma utiliza las últimas directrices del IRS para calcular sus declaraciones con precisión, asegurándose de que recibe cada dólar que le corresponde y proporcionándole tranquilidad."
+    },
+    "auth": {
+      "login": "Iniciar sesión",
+      "login-desc": "Accede a tu cuenta.",
+      "username": "Nombre de usuario",
+      "password": "Contraseña",
+      "show-password": "Mostrar Contraseña",
+      "hide-password": "Esconder Contraseña",
+      "no-account": "¿No tienes una cuenta?",
+      "create-account1": "Crea tu cuenta ahora →",
+      "tagline": "Empiece hoy mismo y presente sus impuestos federales con facilidad.",
+      "signup": "Regístrate",
+      "signup-desc": "Empieza con una cuenta.",
+      "required": "indica un campo obligatorio",
+      "confirm-password": "Confirmar contraseña",
+      "existing-account": "¿Ya tienes una cuenta?",
+      "tagline-desc": "Le guiaremos a través del proceso para garantizar una precisión del 100% y un reembolso máximo.",
+      "point-1": "Declaración federal gratuita",
+      "point-1-desc": "Creemos que debe tener un acceso fácil y gratuito para presentar sus impuestos federales. Por eso hemos creado una plataforma sin fisuras para que pueda presentarla sin coste alguno.",
+      "point-2": "Seguridad industrial",
+      "point-2-desc": "Damos prioridad a la seguridad de sus datos con medidas de seguridad de primer nivel para garantizar que su información permanezca confidencial y protegida de accesos no autorizados."
     }
   }
 }

@@ -9,8 +9,10 @@ import {
 } from "@trussworks/react-uswds";
 import { Link } from "react-router-dom";
 import { FormEvent, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 export default function Login() {
+  const { t } = useTranslation();
   const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -34,10 +36,10 @@ export default function Login() {
           <Grid row className="flex-justify-center">
             <Grid col={12} tablet={{ col: 8 }} desktop={{ col: 6 }}>
               <div className="bg-white padding-y-3 padding-x-5 border border-base-lightest">
-                <h1 className="margin-bottom-0">Log in</h1>
+                <h1 className="margin-bottom-0">{t("auth.login")}</h1>
                 <Form onSubmit={handleSubmit}>
-                  <Fieldset legend="Access your account" legendStyle="default">
-                    <Label htmlFor="username">Username</Label>
+                  <Fieldset legend={t("auth.login-desc")} legendStyle="default">
+                    <Label htmlFor="username">{t("auth.username")}</Label>
                     <TextInput
                       id="username"
                       name="username"
@@ -45,7 +47,7 @@ export default function Login() {
                       required
                     />
 
-                    <Label htmlFor="password">Password</Label>
+                    <Label htmlFor="password">{t("auth.password")}</Label>
                     <TextInput
                       id="password"
                       name="password"
@@ -59,18 +61,20 @@ export default function Login() {
                       aria-controls="password password_confirm"
                       onClick={() => setShowPassword((prev) => !prev)}
                     >
-                      {showPassword ? "Hide Password" : "Show Password"}
+                      {showPassword
+                        ? t("auth.hide-password")
+                        : t("auth.show-password")}
                     </button>
 
-                    <Button type="submit">Log in</Button>
+                    <Button type="submit">{t("auth.login")}</Button>
                   </Fieldset>
                 </Form>
               </div>
 
               <p className="text-center">
-                Don&apos;t have an account?{" "}
+                {t("auth.no-account")}{" "}
                 <Link to="/signup" className="usa-link">
-                  Create your account now
+                  {t("auth.create-account1")}
                 </Link>
               </p>
             </Grid>

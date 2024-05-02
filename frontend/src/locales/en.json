@@ -8,6 +8,27 @@
       "tagline": "File Your Taxes For Free",
       "point-1": "TaxGuru is your reliable companion for filing your federal taxes effortlessly. Say goodbye to the stress of tax season and embrace a seamless experience with our platform.",
       "point-2": "Our platform uses the latest IRS guidelines to calculate your returns with precision, ensuring you get every dollar you're entitled to, and providing you with peace-of-mind."
+    },
+    "auth": {
+      "login": "Log in",
+      "login-desc": "Access your account.",
+      "username": "Username",
+      "password": "Password",
+      "show-password": "Show Password",
+      "hide-password": "Hide Password",
+      "no-account": "Don't have an account?",
+      "create-account1": "Create your account now →",
+      "tagline": "Get started today and file your federal taxes with ease.",
+      "signup": "Create Account",
+      "signup-desc": "Get started with an account.",
+      "required": "indicates a required field",
+      "confirm-password": "Confirm Password",
+      "existing-account": "Already have an account?",
+      "tagline-desc": "We'll walk you through the process to ensure 100% accuracy and a maximum refund.",
+      "point-1": "Free Federal Filing",
+      "point-1-desc": "We believe you should have easy and free access to file your federal taxes. That's why we created a seamless platform to allow you to file at no cost.",
+      "point-2": "Industry Grade Security",
+      "point-2-desc": "We prioritize your data's safety with top-notch security measures to ensure your information stays confidential and protected from unauthorized access."
     }
   }
 }

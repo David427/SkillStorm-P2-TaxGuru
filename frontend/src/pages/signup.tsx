@@ -13,10 +13,12 @@ import {
   IconListTitle,
   IconListContent,
 } from "@trussworks/react-uswds";
-import { FormEvent, useState } from "react";
 import { Link } from "react-router-dom";
+import { FormEvent, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 export default function SignUp() {
+  const { t } = useTranslation();
   const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -49,13 +51,13 @@ export default function SignUp() {
             >
               {/* Mobile only, tagline displays at the top of the screen */}
               <h1 className="desktop:display-none font-sans-lg margin-bottom-4 tablet:margin-top-neg-3">
-                A tagline that explains the benefit of creating an account.
+                {t("auth.tagline")}
               </h1>
 
               <div className="bg-white padding-y-3 padding-x-5 border border-base-lighter">
-                <h2 className="margin-bottom-0">Create Account</h2>
+                <h2 className="margin-bottom-0">{t("auth.signup")}</h2>
                 <Form onSubmit={handleSubmit}>
-                  <Fieldset legend="Get started with an account.">
+                  <Fieldset legend={t("auth.signup-desc")}>
                     <p>
                       <abbr
                         title="required"
@@ -63,11 +65,11 @@ export default function SignUp() {
                       >
                         *
                       </abbr>{" "}
-                      indicates a required field
+                      {t("auth.required")}
                     </p>
 
                     <Label htmlFor="username" requiredMarker>
-                      Username
+                      {t("auth.username")}
                     </Label>
                     <TextInput
                       id="username"
@@ -77,7 +79,7 @@ export default function SignUp() {
                     />
 
                     <Label htmlFor="password" requiredMarker>
-                      Create Password
+                      {t("auth.password")}
                     </Label>
                     <TextInput
                       id="password"
@@ -91,11 +93,13 @@ export default function SignUp() {
                       aria-controls="password password_confirm"
                       onClick={() => setShowPassword((prev) => !prev)}
                     >
-                      {showPassword ? "Hide Password" : "Show Password"}
+                      {showPassword
+                        ? t("auth.hide-password")
+                        : t("auth.show-password")}
                     </button>
 
                     <Label htmlFor="password" requiredMarker>
-                      Confirm Password
+                      {t("auth.confirm-password")}
                     </Label>
                     <TextInput
                       id="password_confirm"
@@ -103,15 +107,15 @@ export default function SignUp() {
                       type={showPassword ? "text" : "password"}
                     />
 
-                    <Button type="submit">Create Account</Button>
+                    <Button type="submit">{t("auth.signup")}</Button>
                   </Fieldset>
                 </Form>
               </div>
 
               <p className="text-center">
-                Already have an account?{" "}
+                {t("auth.existing-account")}{" "}
                 <Link to="/login" className="usa-link">
-                  Log in
+                  {t("auth.login") + " →"}
                 </Link>
               </p>
             </Grid>
@@ -126,14 +130,11 @@ export default function SignUp() {
             >
               <div className="border-top border-base-lighter padding-top-4 desktop:border-0 desktop:padding-top-0">
                 <h2 className="display-none desktop:display-block">
-                  Get started today and file your federal taxes with ease.
+                  {t("auth.tagline")}
                 </h2>
 
                 <div className="usa-prose">
-                  <p>
-                    We'll walk you through the process to ensure 100% accuracy
-                    and a maximum refund.
-                  </p>
+                  <p>{t("auth.tagline-desc")}</p>
                   <IconList className="usa-icon-list--size-lg">
                     <IconListItem>
                       <IconListIcon className="text-green">
@@ -141,13 +142,9 @@ export default function SignUp() {
                       </IconListIcon>
                       <IconListContent>
                         <IconListTitle type="h3">
-                          Free Federal Filing
+                          {t("auth.point-1")}
                         </IconListTitle>
-                        <p>
-                          We believe you should have easy and free access to
-                          file your federal taxes. That's why we created a
-                          seamless platform to allow you to file at no cost.
-                        </p>
+                        <p>{t("auth.point-1-desc")}</p>
                       </IconListContent>
                     </IconListItem>
 
@@ -157,13 +154,9 @@ export default function SignUp() {
                       </IconListIcon>
                       <IconListContent>
                         <IconListTitle type="h3">
-                          Industry Grade Security
+                          {t("auth.point-2")}
                         </IconListTitle>
-                        <p>
-                          We prioritize your data's safety with top-notch
-                          security measures to ensure your information stays
-                          confidential and protected from unauthorized access.
-                        </p>
+                        <p>{t("auth.point-2-desc")}</p>
                       </IconListContent>
                     </IconListItem>
                   </IconList>
