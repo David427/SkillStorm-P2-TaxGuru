@@ -46,7 +46,7 @@ export default function FilingInformation() {
         <StepIndicator headingLevel="h3" ofText="of" stepText="Step">
           <StepIndicatorStep label={t("personal.title")} status="complete" />
           <StepIndicatorStep label={t("filing-info.title")} status="current" />
-          <StepIndicatorStep label="W-2 Information" />
+          <StepIndicatorStep label={t("w2.title")} />
           <StepIndicatorStep label="Self Employment" />
           <StepIndicatorStep label="Credits & Deductions" />
           <StepIndicatorStep label="Review" />
@@ -62,19 +62,17 @@ export default function FilingInformation() {
                 </Label>
                 <Select id="filing_status" name="filing_status" required>
                   <option>{t("select")}</option>
-                  <option value="single">{t("filing-info.single")}</option>
+                  <option value="Single">{t("filing-info.single")}</option>
                   {/* TODO: what is the backend expecting here for value? */}
-                  <option value="married_filing_separately">
-                    {t("filing-info.married")}
-                  </option>
-                  <option value="head_of_household">
+                  <option value="Married">{t("filing-info.married")}</option>
+                  <option value="Head of Household">
                     {t("filing-info.hoh")}
                   </option>
                 </Select>
               </Grid>
 
               <Grid tablet={{ col: true }}>
-                <Label htmlFor="dependents">
+                <Label htmlFor="dependents" requiredMarker>
                   {t("filing-info.dependents")}
                 </Label>
                 <TextInput
@@ -82,6 +80,7 @@ export default function FilingInformation() {
                   name="dependents"
                   type="number"
                   defaultValue={0}
+                  required
                 />
               </Grid>
             </Grid>

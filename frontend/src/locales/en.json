@@ -70,6 +70,21 @@
       "single": "Single",
       "married": "Married filing separately",
       "hoh": "Head of household"
+    },
+    "w2": {
+      "hint": "Box {{hint}} on W-2 Form",
+      "title": "W-2 Information",
+      "desc": "If you don't have any W-2 information to enter, you can skip this section.",
+      "ein": "Employer ID Number (EIN)",
+      "ename": "Employer Name",
+      "estreet": "Employer Street Address",
+      "ecity": "Employer City",
+      "estate": "Employer State",
+      "ezip": "Employer Zip Code",
+      "wages": "Wages, tips, and other compensation",
+      "federal-withheld": "Federal Income Tax Withheld",
+      "social-withheld": "Social Security Tax Withheld",
+      "medicare-withheld": "Medicare Tax Withheld"
     }
   }
 }

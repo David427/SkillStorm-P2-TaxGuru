@@ -15,9 +15,11 @@ import {
 import { FormEvent } from "react";
 
 import { states } from "../../states";
+import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 
 export default function W2() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   const handleW2Info = (e: FormEvent<HTMLFormElement>) => {
@@ -56,7 +58,7 @@ export default function W2() {
         <StepIndicator headingLevel="h3" ofText="of" stepText="Step">
           <StepIndicatorStep label={t("personal.title")} status="complete" />
           <StepIndicatorStep label={t("filing-info.title")} status="complete" />
-          <StepIndicatorStep label="W-2 Information" status="current" />
+          <StepIndicatorStep label={t("w2.title")} status="current" />
           <StepIndicatorStep label="Self Employment" />
           <StepIndicatorStep label="Credits & Deductions" />
           <StepIndicatorStep label="Review" />
@@ -64,15 +66,15 @@ export default function W2() {
         </StepIndicator>
 
         <Form onSubmit={handleW2Info} className="w-full">
-          <Fieldset legend="If you don't have any W2 Information to enter, you can skip this section.">
+          <Fieldset legend={t("w2.desc")}>
             {/* Employer ID and Name */}
             <Grid row gap>
               <Grid tablet={{ col: true }}>
                 <Label id="label-ein" htmlFor="ein" requiredMarker>
-                  Employer ID Number (EIN)
+                  {t("w2.ein")}
                 </Label>
                 <span id="hint-ein" className="usa-hint">
-                  Box b on W-2 Form
+                  {t("w2.hint", { hint: "b" })}
                 </span>
                 <TextInputMask
                   id="ein"
@@ -88,10 +90,10 @@ export default function W2() {
 
               <Grid tablet={{ col: true }}>
                 <Label id="label-e_name" htmlFor="e_name" requiredMarker>
-                  Employer Name
+                  {t("w2.ename")}
                 </Label>
                 <span id="hint-e_name" className="usa-hint">
-                  Box c on W-2 Form
+                  {t("w2.hint", { hint: "c" })}
                 </span>
                 <TextInput id="e_name" name="e_name" type="text" required />
               </Grid>
@@ -101,7 +103,7 @@ export default function W2() {
             <Grid row gap>
               <Grid tablet={{ col: true }}>
                 <Label htmlFor="e_street_address" requiredMarker>
-                  Employer Street Address
+                  {t("w2.estreet")}
                 </Label>
                 <TextInput
                   id="e_street_address"
@@ -113,7 +115,7 @@ export default function W2() {
 
               <Grid tablet={{ col: true }}>
                 <Label htmlFor="e_city" requiredMarker>
-                  City
+                  {t("w2.ecity")}
                 </Label>
                 <TextInput id="e_city" name="e_city" type="text" required />
               </Grid>
@@ -123,10 +125,10 @@ export default function W2() {
             <Grid row gap>
               <Grid tablet={{ col: true }}>
                 <Label htmlFor="e_state" requiredMarker>
-                  State
+                  {t("w2.estate")}
                 </Label>
                 <Select id="e_state" name="e_state" required>
-                  <option>- Select -</option>
+                  <option>{t("select")}</option>
                   {states.map((s) => (
                     <option key={s} value={s}>
                       {s}
@@ -136,7 +138,7 @@ export default function W2() {
               </Grid>
               <Grid tablet={{ col: true }}>
                 <Label htmlFor="e_zipcode" requiredMarker>
-                  Zip Code
+                  {t("w2.ezip")}
                 </Label>
                 <TextInputMask
                   id="e_zipcode"
@@ -153,10 +155,10 @@ export default function W2() {
             <Grid row gap>
               <Grid tablet={{ col: true }}>
                 <Label id="label-wages" htmlFor="wages" requiredMarker>
-                  Wages, tips and other compensation
+                  {t("w2.wages")}
                 </Label>
                 <span id="hint-wages" className="usa-hint">
-                  Box 1 on W-2 Form
+                  {t("w2.hint", { hint: "1" })}
                 </span>
                 <TextInput
                   id="wages"
@@ -174,10 +176,10 @@ export default function W2() {
                   htmlFor="fed_withheld"
                   requiredMarker
                 >
-                  Federal Income Tax Withheld
+                  {t("w2.federal-withheld")}
                 </Label>
                 <span id="hint-fedwithheld" className="usa-hint">
-                  Box 2 on W-2 Form
+                  {t("w2.hint", { hint: "2" })}
                 </span>
                 <TextInput
                   id="fed_withheld"
@@ -198,10 +200,10 @@ export default function W2() {
                   htmlFor="social_withheld"
                   requiredMarker
                 >
-                  Social Security Tax Withheld
+                  {t("w2.social-withheld")}
                 </Label>
                 <span id="hint-social-withheld" className="usa-hint">
-                  Box 4 on W-2 Form
+                  {t("w2.hint", { hint: "4" })}
                 </span>
                 <TextInput
                   id="social_withheld"
@@ -219,10 +221,10 @@ export default function W2() {
                   htmlFor="medicare_withheld"
                   requiredMarker
                 >
-                  Medicare Tax Withheld
+                  {t("w2.medicare-withheld")}
                 </Label>
                 <span id="hint-medicare-withheld" className="usa-hint">
-                  Box 2 on W-2 Form
+                  {t("w2.hint", { hint: "6" })}
                 </span>
                 <TextInput
                   id="medicare_withheld"
@@ -241,15 +243,15 @@ export default function W2() {
                   to="/filing/filing-information"
                   className="usa-button usa-button--outline"
                 >
-                  Back
+                  {t("back")}
                 </Link>
                 <Link
                   to="/filing/self-employment"
                   className="usa-button usa-button--base"
                 >
-                  Skip
+                  {t("skip")}
                 </Link>
-                <Button type="submit">Continue</Button>
+                <Button type="submit">{t("continue")}</Button>
               </ButtonGroup>
             </div>
           </Fieldset>

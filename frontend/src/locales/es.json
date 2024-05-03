@@ -69,6 +69,21 @@
       "single": "Soltero",
       "married": "Casado que presenta por separado",
       "hoh": "Jefe de familia"
+    },
+    "w2": {
+      "hint": "Casilla {{hint}} en el Formulario W-2",
+      "title": "Información del W-2",
+      "desc": "Si no tiene información del W-2 para ingresar, puede omitir esta sección.",
+      "ein": "Número de Identificación del Empleador (EIN)",
+      "ename": "Nombre del Empleador",
+      "estreet": "Dirección del Empleador",
+      "ecity": "Ciudad del Empleador",
+      "estate": "Estado del Empleador",
+      "ezip": "Código Postal del Empleador",
+      "wages": "Salarios, propinas y otras compensaciones",
+      "federal-withheld": "Impuesto sobre la Renta Federal Retenido",
+      "social-withheld": "Impuesto sobre la Seguridad Social Retenido",
+      "medicare-withheld": "Impuesto sobre Medicare Retenido"
     }
   }
 }
