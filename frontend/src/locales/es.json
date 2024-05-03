@@ -100,6 +100,10 @@
       "taxes": "Impuestos sobre la Propiedad Pagados",
       "donations": "Donaciones en Cheque o Efectivo",
       "nonCash": "Total de Donaciones No en Efectivo"
+    },
+    "review": {
+      "title": "Revisión",
+      "desc": "Revise la información y asegúrese de que sea correcta. Si observa algún error, haga clic en el encabezado de la sección para editar los valores."
     }
   }
 }

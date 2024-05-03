@@ -49,7 +49,7 @@ export default function FilingInformation() {
           <StepIndicatorStep label={t("w2.title")} />
           <StepIndicatorStep label={t("1099.title")} />
           <StepIndicatorStep label={t("deductions.title")} />
-          <StepIndicatorStep label="Review" />
+          <StepIndicatorStep label={t("review.title")} />
           <StepIndicatorStep label="Results" />
         </StepIndicator>
 

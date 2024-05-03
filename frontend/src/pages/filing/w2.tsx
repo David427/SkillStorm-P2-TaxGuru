@@ -61,7 +61,7 @@ export default function W2() {
           <StepIndicatorStep label={t("w2.title")} status="current" />
           <StepIndicatorStep label={t("1099.title")} />
           <StepIndicatorStep label={t("deductions.title")} />
-          <StepIndicatorStep label="Review" />
+          <StepIndicatorStep label={t("review.title")} />
           <StepIndicatorStep label="Results" />
         </StepIndicator>
 

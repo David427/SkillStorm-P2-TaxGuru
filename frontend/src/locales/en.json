@@ -101,6 +101,10 @@
       "taxes": "Property Taxes Paid",
       "donations": "Check or Cash Donations",
       "nonCash": "Total Non-Cash Donations"
+    },
+    "review": {
+      "title": "Review",
+      "desc": "Review the information and ensure it is correct. If you see any errors, click the section header to edit the values."
     }
   }
 }

@@ -13,9 +13,11 @@ import {
 } from "@trussworks/react-uswds";
 import { FormEvent } from "react";
 
+import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 
 export default function Review() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   const handleReviewInfo = (e: FormEvent<HTMLFormElement>) => {
@@ -33,22 +35,22 @@ export default function Review() {
           <StepIndicatorStep label={t("w2.title")} status="complete" />
           <StepIndicatorStep label={t("1099.title")} status="complete" />
           <StepIndicatorStep label={t("deductions.title")} status="complete" />
-          <StepIndicatorStep label="Review" status="current" />
+          <StepIndicatorStep label={t("review.title")} status="current" />
           <StepIndicatorStep label="Results" />
         </StepIndicator>
 
         <Form onSubmit={handleReviewInfo} className="w-full">
-          <Fieldset legend="Review the information and ensure it is correct. If you see any errors, click the section header to edit the values.">
+          <Fieldset legend={t("review.desc")}>
             {/* Personal */}
             <section>
               <h4 className="margin-bottom-0">
-                <Link to="/filing/personal">Personal Information</Link>
+                <Link to="/filing/personal">{t("personal.title")}</Link>
               </h4>
               {/* Fname Lname Birthdate */}
               <Grid row gap>
                 <Grid tablet={{ col: true }}>
                   <Label id="label-first_name" htmlFor="first_name">
-                    First Name
+                    {t("personal.fname")}
                   </Label>
                   <TextInput
                     id="first_name"
@@ -62,7 +64,7 @@ export default function Review() {
 
                 <Grid tablet={{ col: true }}>
                   <Label id="label-last_name" htmlFor="last_name">
-                    Last Name
+                    {t("personal.lname")}
                   </Label>
                   <TextInput
                     id="last_name"
@@ -76,7 +78,7 @@ export default function Review() {
 
                 <Grid tablet={{ col: true }}>
                   <Label id="label-birthdate" htmlFor="birthdate">
-                    Birthdate
+                    {t("personal.birthdate")}
                   </Label>
                   <TextInputMask
                     id="birthdate"
@@ -113,7 +115,7 @@ export default function Review() {
 
                 <Grid tablet={{ col: true }}>
                   <Label id="label-filing_status" htmlFor="filing_status">
-                    Filing Status
+                    {t("filing-info.status")}
                   </Label>
                   <TextInput
                     id="filing_status"
@@ -130,14 +132,14 @@ export default function Review() {
             {/* W2 */}
             <section>
               <h4 className="margin-bottom-0">
-                <Link to="/filing/w2">W-2 Information</Link>
+                <Link to="/filing/w2">{t("w2.title")}</Link>
               </h4>
 
               {/* Employer Name, Wages, & Taxes Withheld */}
               <Grid row gap>
                 <Grid tablet={{ col: true }}>
                   <Label id="label-employer_name" htmlFor="employer_name">
-                    Employer Name
+                    {t("w2.ename")}
                   </Label>
                   <TextInput
                     id="employer_name"
@@ -151,7 +153,7 @@ export default function Review() {
 
                 <Grid tablet={{ col: true }}>
                   <Label id="label-wages" htmlFor="wages">
-                    Wages
+                    {t("w2.wages")}
                   </Label>
                   <TextInput
                     id="wages"
@@ -165,7 +167,7 @@ export default function Review() {
 
                 <Grid tablet={{ col: true }}>
                   <Label id="label-w2_withheld" htmlFor="w2_withheld">
-                    Federal Taxes Withheld
+                    {t("w2.federal-withheld")}
                   </Label>
                   <TextInput
                     id="w2_withheld"
@@ -182,16 +184,14 @@ export default function Review() {
             {/* Self Employment */}
             <section>
               <h4 className="margin-bottom-0">
-                <Link to="/filing/self-employment">
-                  Self Employment Information
-                </Link>
+                <Link to="/filing/self-employment">{t("1099.title")}</Link>
               </h4>
 
               {/* Non-Employment Compensation & Taxes Withheld */}
               <Grid row gap>
                 <Grid tablet={{ col: true }}>
                   <Label id="label-nec_wages" htmlFor="nec_wages">
-                    Non-Employee Compensation
+                    {t("1099.nec")}
                   </Label>
                   <TextInput
                     id="nec_wages"
@@ -205,7 +205,7 @@ export default function Review() {
 
                 <Grid tablet={{ col: true }}>
                   <Label id="label-nec_withheld" htmlFor="nec_withheld">
-                    Federal Taxes Withheld
+                    {t("w2.federal-withheld")}
                   </Label>
                   <TextInput
                     id="nec_withheld"
@@ -227,9 +227,9 @@ export default function Review() {
                   to="/filing/self-employment"
                   className="usa-button usa-button--outline"
                 >
-                  Back
+                  {t("back")}
                 </Link>
-                <Button type="submit">Continue</Button>
+                <Button type="submit">{t("continue")}</Button>
               </ButtonGroup>
             </div>
           </Fieldset>

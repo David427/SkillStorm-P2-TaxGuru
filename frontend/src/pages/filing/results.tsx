@@ -34,7 +34,7 @@ export default function Results() {
           <StepIndicatorStep label={t("w2.title")} status="complete" />
           <StepIndicatorStep label={t("1099.title")} status="complete" />
           <StepIndicatorStep label={t("deductions.title")} status="complete" />
-          <StepIndicatorStep label="Review" status="complete" />
+          <StepIndicatorStep label={t("review.title")} status="complete" />
           <StepIndicatorStep label="Results" status="current" />
         </StepIndicator>
 

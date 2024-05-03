@@ -35,7 +35,7 @@ export default function Deductions() {
           <StepIndicatorStep label={t("w2.title")} status="complete" />
           <StepIndicatorStep label={t("1099.title")} status="complete" />
           <StepIndicatorStep label={t("deductions.title")} status="current" />
-          <StepIndicatorStep label="Review" />
+          <StepIndicatorStep label={t("review.title")} />
           <StepIndicatorStep label="Results" />
         </StepIndicator>
 
