@@ -1,16 +1,10 @@
 package com.skillstorm.taxguruplatform.controllers;
 
+import com.skillstorm.taxguruplatform.exceptions.ResultCalculationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.skillstorm.taxguruplatform.domain.dtos.TaxReturnDto;
 import com.skillstorm.taxguruplatform.exceptions.TaxReturnAlreadyExistsException;
@@ -32,6 +26,11 @@ public class TaxReturnController {
     @PostMapping
     public ResponseEntity<TaxReturnDto> createTaxReturn(@RequestBody TaxReturnDto taxReturnDto) throws TaxReturnAlreadyExistsException {
         return new ResponseEntity<>(taxReturnService.create(taxReturnDto), HttpStatus.CREATED);
+    }
+
+    @GetMapping("/{id}/result")
+    public ResponseEntity<TaxReturnDto> calculateResult(@PathVariable("id") long id) throws TaxReturnNotFoundException, ResultCalculationException {
+        return new ResponseEntity<>(taxReturnService.calculateResult(id), HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
