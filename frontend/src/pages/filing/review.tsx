@@ -46,7 +46,7 @@ export default function Review() {
               <h4 className="margin-bottom-0">
                 <Link to="/filing/personal">{t("personal.title")}</Link>
               </h4>
-              {/* Fname Lname Birthdate */}
+              {/* Fname & Lname */}
               <Grid row gap>
                 <Grid tablet={{ col: true }}>
                   <Label id="label-first_name" htmlFor="first_name">
@@ -75,7 +75,10 @@ export default function Review() {
                     disabled
                   />
                 </Grid>
+              </Grid>
 
+              {/* Birthdate & SSN */}
+              <Grid row gap>
                 <Grid tablet={{ col: true }}>
                   <Label id="label-birthdate" htmlFor="birthdate">
                     {t("personal.birthdate")}
@@ -93,10 +96,7 @@ export default function Review() {
                     disabled
                   />
                 </Grid>
-              </Grid>
 
-              {/* SSN & Filing Status */}
-              <Grid row gap>
                 <Grid tablet={{ col: true }}>
                   <Label id="label-ssn" htmlFor="ssn">
                     SSN or TIN
@@ -112,7 +112,19 @@ export default function Review() {
                     disabled
                   />
                 </Grid>
+              </Grid>
+            </section>
 
+            {/* Filing Information */}
+            <section>
+              <h4 className="margin-bottom-0">
+                <Link to="/filing/filing-information">
+                  {t("filing-info.title")}
+                </Link>
+              </h4>
+
+              {/* Filing Status and Dependents */}
+              <Grid row gap>
                 <Grid tablet={{ col: true }}>
                   <Label id="label-filing_status" htmlFor="filing_status">
                     {t("filing-info.status")}
@@ -122,7 +134,21 @@ export default function Review() {
                     name="filing_status"
                     type="text"
                     aria-labelledby="label-filing_status"
-                    defaultValue="Single"
+                    defaultValue={"Single"}
+                    disabled
+                  />
+                </Grid>
+
+                <Grid tablet={{ col: true }}>
+                  <Label id="label-dependents" htmlFor="dependents">
+                    {t("review.dependents")}
+                  </Label>
+                  <TextInput
+                    id="dependents"
+                    name="dependents"
+                    type="number"
+                    aria-labelledby="label-dependents"
+                    defaultValue={0}
                     disabled
                   />
                 </Grid>
@@ -153,7 +179,7 @@ export default function Review() {
 
                 <Grid tablet={{ col: true }}>
                   <Label id="label-wages" htmlFor="wages">
-                    {t("w2.wages")}
+                    {t("review.wages")}
                   </Label>
                   <TextInput
                     id="wages"
@@ -220,6 +246,77 @@ export default function Review() {
             </section>
 
             {/* Deductions */}
+            <section>
+              <h4 className="margin-bottom-0">
+                <Link to="/filing/deductions">{t("deductions.title")}</Link>
+              </h4>
+              <Grid row gap>
+                <Grid tablet={{ col: true }}>
+                  <Label
+                    id="label-mortgage-interest"
+                    htmlFor="mortgage_interest"
+                  >
+                    {t("deductions.interest")}
+                  </Label>
+                  <TextInput
+                    id="mortgage_interest"
+                    name="mortgage_interest"
+                    type="number"
+                    aria-labelledby="label-mortgage-interest"
+                    defaultValue={0}
+                    disabled
+                  />
+                </Grid>
+
+                <Grid tablet={{ col: true }}>
+                  <Label id="label-property-taxes" htmlFor="property_taxes">
+                    {t("deductions.taxes")}
+                  </Label>
+                  <TextInput
+                    id="property_taxes"
+                    name="property_taxes"
+                    type="number"
+                    aria-labelledby="label-property-taxes"
+                    defaultValue={0}
+                    disabled
+                  />
+                </Grid>
+              </Grid>
+
+              {/* Donations */}
+              <Grid row gap>
+                <Grid tablet={{ col: true }}>
+                  <Label id="label-donations" htmlFor="donations">
+                    {t("deductions.donations")}
+                  </Label>
+                  <TextInput
+                    id="donations"
+                    name="donations"
+                    type="number"
+                    aria-labelledby="label-donations"
+                    defaultValue={0}
+                    disabled
+                  />
+                </Grid>
+
+                <Grid tablet={{ col: true }}>
+                  <Label
+                    id="label-nonCash-donations"
+                    htmlFor="nonCash_donations"
+                  >
+                    {t("deductions.nonCash")}
+                  </Label>
+                  <TextInput
+                    id="nonCash_donations"
+                    name="nonCash_donations"
+                    type="number"
+                    aria-labelledby="label-nonCash-donations"
+                    defaultValue={0}
+                    disabled
+                  />
+                </Grid>
+              </Grid>
+            </section>
 
             <div className="tablet:display-flex tablet:flex-justify">
               <ButtonGroup type="default">

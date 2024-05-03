@@ -103,7 +103,9 @@
     },
     "review": {
       "title": "Revisión",
-      "desc": "Revise la información y asegúrese de que sea correcta. Si observa algún error, haga clic en el encabezado de la sección para editar los valores."
+      "desc": "Revise la información y asegúrese de que sea correcta. Si observa algún error, haga clic en el encabezado de la sección para editar los valores.",
+      "dependents": "Dependientes",
+      "wages": "Salario"
     },
     "results": {
       "title": "Resultados",

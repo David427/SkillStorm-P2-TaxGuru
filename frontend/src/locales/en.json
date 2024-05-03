@@ -92,7 +92,7 @@
       "desc": "This information can be found on form 1099-NEC. If you don't have any self employment income to enter, you can skip this section.",
       "payerTIN": "Payer's TIN",
       "recipientTIN": "Recipient's TIN",
-      "nec": "Non Employee Compensation"
+      "nec": "Non-Employee Compensation"
     },
     "deductions": {
       "title": "Credits & Deductions",
@@ -104,7 +104,9 @@
     },
     "review": {
       "title": "Review",
-      "desc": "Review the information and ensure it is correct. If you see any errors, click the section header to edit the values."
+      "desc": "Review the information and ensure it is correct. If you see any errors, click the section header to edit the values.",
+      "dependents": "Dependents",
+      "wages": "Wages"
     },
     "results": {
       "title": "Results",
