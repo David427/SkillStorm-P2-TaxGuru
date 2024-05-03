@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class AdjustmentDataDto {
+public class AdjustmentDto {
 
     private long id;
     private boolean stdDeduction;

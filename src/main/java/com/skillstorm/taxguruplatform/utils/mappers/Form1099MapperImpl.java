@@ -4,7 +4,9 @@ import com.skillstorm.taxguruplatform.domain.dtos.Form1099Dto;
 import com.skillstorm.taxguruplatform.domain.entities.Form1099;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class Form1099MapperImpl implements Mapper<Form1099, Form1099Dto> {
 
     private final ModelMapper modelMapper;

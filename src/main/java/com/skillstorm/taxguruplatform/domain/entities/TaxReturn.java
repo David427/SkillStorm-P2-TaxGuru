@@ -43,6 +43,6 @@ public class TaxReturn {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "adjustments_id", referencedColumnName = "id")
-    private AdjustmentData adjustmentData;
+    private Adjustment adjustment;
 
 }

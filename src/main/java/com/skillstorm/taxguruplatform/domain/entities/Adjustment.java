@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @Entity
 @Table(name = "adjustments")
-public class AdjustmentData {
+public class Adjustment {
 
     @Id
     @SequenceGenerator(

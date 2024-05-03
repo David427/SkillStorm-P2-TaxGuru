@@ -4,7 +4,9 @@ import com.skillstorm.taxguruplatform.domain.dtos.FormW2Dto;
 import com.skillstorm.taxguruplatform.domain.entities.FormW2;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class FormW2MapperImpl implements Mapper<FormW2, FormW2Dto> {
 
     private final ModelMapper modelMapper;
