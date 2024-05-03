@@ -30,7 +30,7 @@ export default function Deductions() {
           <StepIndicatorStep label={t("personal.title")} status="complete" />
           <StepIndicatorStep label={t("filing-info.title")} status="complete" />
           <StepIndicatorStep label={t("w2.title")} status="complete" />
-          <StepIndicatorStep label="Self Employment" status="complete" />
+          <StepIndicatorStep label={t("1099.title")} status="complete" />
           <StepIndicatorStep label="Credits & Deductions" status="current" />
           <StepIndicatorStep label="Review" />
           <StepIndicatorStep label="Results" />

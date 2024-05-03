@@ -85,6 +85,14 @@
       "federal-withheld": "Federal Income Tax Withheld",
       "social-withheld": "Social Security Tax Withheld",
       "medicare-withheld": "Medicare Tax Withheld"
+    },
+    "1099": {
+      "hint": "Box {{hint}} on Form 1099-NEC",
+      "title": "Self Employment",
+      "desc": "This information can be found on form 1099-NEC. If you don't have any self employment income to enter, you can skip this section.",
+      "payerTIN": "Payer's TIN",
+      "recipientTIN": "Recipient's TIN",
+      "nec": "Non Employee Compensation"
     }
   }
 }

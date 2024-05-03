@@ -84,6 +84,14 @@
       "federal-withheld": "Impuesto sobre la Renta Federal Retenido",
       "social-withheld": "Impuesto sobre la Seguridad Social Retenido",
       "medicare-withheld": "Impuesto sobre Medicare Retenido"
+    },
+    "1099": {
+      "hint": "Casilla {{hint}} en el Formulario 1099-NEC",
+      "title": "Trabajo por cuenta propia",
+      "desc": "Esta información se puede encontrar en el formulario 1099-NEC. Si no tiene ingresos por trabajo por cuenta propia para ingresar, puede omitir esta sección.",
+      "payerTIN": "TIN del pagador",
+      "recipientTIN": "TIN del receptor",
+      "nec": "Compensación a no empleados"
     }
   }
 }

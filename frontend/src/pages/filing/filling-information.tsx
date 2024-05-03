@@ -47,7 +47,7 @@ export default function FilingInformation() {
           <StepIndicatorStep label={t("personal.title")} status="complete" />
           <StepIndicatorStep label={t("filing-info.title")} status="current" />
           <StepIndicatorStep label={t("w2.title")} />
-          <StepIndicatorStep label="Self Employment" />
+          <StepIndicatorStep label={t("1099.title")} />
           <StepIndicatorStep label="Credits & Deductions" />
           <StepIndicatorStep label="Review" />
           <StepIndicatorStep label="Results" />

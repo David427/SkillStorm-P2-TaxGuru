@@ -13,9 +13,11 @@ import {
 } from "@trussworks/react-uswds";
 import { FormEvent } from "react";
 
+import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 
 export default function SelfEmployment() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   const handleSelfEmploymentInfo = (e: FormEvent<HTMLFormElement>) => {
@@ -43,19 +45,19 @@ export default function SelfEmployment() {
           <StepIndicatorStep label={t("personal.title")} status="complete" />
           <StepIndicatorStep label={t("filing-info.title")} status="complete" />
           <StepIndicatorStep label={t("w2.title")} status="complete" />
-          <StepIndicatorStep label="Self Employment" status="current" />
+          <StepIndicatorStep label={t("1099.title")} status="current" />
           <StepIndicatorStep label="Credits & Deductions" />
           <StepIndicatorStep label="Review" />
           <StepIndicatorStep label="Results" />
         </StepIndicator>
 
         <Form onSubmit={handleSelfEmploymentInfo} className="w-full">
-          <Fieldset legend="This information can be found on form 1099-NEC. If you don't have any Self Employment Income to enter, you can skip this section.">
+          <Fieldset legend={t("1099.desc")}>
             {/* Payer and Recipient TIN */}
             <Grid row gap>
               <Grid tablet={{ col: true }}>
                 <Label id="label-payer-tin" htmlFor="payer_tin" requiredMarker>
-                  Payer's TIN
+                  {t("1099.payerTIN")}
                 </Label>
                 <TextInputMask
                   id="payer_tin"
@@ -74,7 +76,7 @@ export default function SelfEmployment() {
                   htmlFor="recipient_tin"
                   requiredMarker
                 >
-                  Recipient's TIN
+                  {t("1099.recipientTIN")}
                 </Label>
                 <TextInputMask
                   id="recipient_tin"
@@ -92,10 +94,10 @@ export default function SelfEmployment() {
             <Grid row gap>
               <Grid tablet={{ col: true }}>
                 <Label htmlFor="label-nec" requiredMarker>
-                  Non Employee Compensation
+                  {t("1099.nec")}
                 </Label>
                 <span id="hint-nec" className="usa-hint">
-                  Box 1 on 1099-NEC
+                  {t("1099.hint", { hint: "1" })}
                 </span>
                 <TextInput
                   id="nec"
@@ -109,10 +111,10 @@ export default function SelfEmployment() {
 
               <Grid tablet={{ col: true }}>
                 <Label id="label-withheld" htmlFor="withheld" requiredMarker>
-                  Federal Income Tax Withheld
+                  {t("w2.federal-withheld")}
                 </Label>
                 <span id="hint-withheld" className="usa-hint">
-                  Box 4 on 1099-NEC
+                  {t("1099.hint", { hint: "4" })}
                 </span>
                 <TextInput
                   id="withheld"
@@ -131,15 +133,15 @@ export default function SelfEmployment() {
                   to="/filing/w2"
                   className="usa-button usa-button--outline"
                 >
-                  Back
+                  {t("back")}
                 </Link>
                 <Link
                   to="/filing/deductions"
                   className="usa-button usa-button--base"
                 >
-                  Skip
+                  {t("skip")}
                 </Link>
-                <Button type="submit">Continue</Button>
+                <Button type="submit">{t("continue")}</Button>
               </ButtonGroup>
             </div>
           </Fieldset>

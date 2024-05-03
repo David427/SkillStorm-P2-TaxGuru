@@ -59,7 +59,7 @@ export default function W2() {
           <StepIndicatorStep label={t("personal.title")} status="complete" />
           <StepIndicatorStep label={t("filing-info.title")} status="complete" />
           <StepIndicatorStep label={t("w2.title")} status="current" />
-          <StepIndicatorStep label="Self Employment" />
+          <StepIndicatorStep label={t("1099.title")} />
           <StepIndicatorStep label="Credits & Deductions" />
           <StepIndicatorStep label="Review" />
           <StepIndicatorStep label="Results" />
