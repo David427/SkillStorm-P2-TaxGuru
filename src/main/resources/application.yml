@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: ${PG_DB_URL}/taxguru
-    username: ${PG_DB_USER}
-    password: ${PG_DB_PW}
+    url: jdbc:postgresql://db:5432/${POSTGRES_DB}
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
 
   output:
     ansi:

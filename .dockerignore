@@ -1,0 +1,34 @@
+# Maven specific
+target/
+!target/*.jar
+mvnw
+mvnw.cmd
+.mvn
+pom.xml
+
+# IDE specific
+.idea/
+*.iml
+*.iws
+.vscode/
+
+# OS specific
+.DS_Store
+._*
+Thumbs.db
+
+# Logs
+logs
+*.log
+
+# Dependency directories (comment out if you build inside Docker)
+# .m2/
+# node_modules/
+
+# Build output directory
+build/
+out/
+
+# Unit test reports, coverage data
+test-output/
+coverage/
