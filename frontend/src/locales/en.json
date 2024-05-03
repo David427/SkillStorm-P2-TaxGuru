@@ -93,6 +93,14 @@
       "payerTIN": "Payer's TIN",
       "recipientTIN": "Recipient's TIN",
       "nec": "Non Employee Compensation"
+    },
+    "deductions": {
+      "title": "Credits & Deductions",
+      "desc": "Let's help you get the highest possible refund.",
+      "interest": "Mortgage Interest Paid",
+      "taxes": "Property Taxes Paid",
+      "donations": "Check or Cash Donations",
+      "nonCash": "Total Non-Cash Donations"
     }
   }
 }

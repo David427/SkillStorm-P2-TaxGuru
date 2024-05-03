@@ -12,9 +12,12 @@ import {
 } from "@trussworks/react-uswds";
 import { FormEvent } from "react";
 
+import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 
 export default function Deductions() {
+  const { t } = useTranslation();
+
   const navigate = useNavigate();
 
   const handleDeductions = (e: FormEvent<HTMLFormElement>) => {
@@ -31,18 +34,18 @@ export default function Deductions() {
           <StepIndicatorStep label={t("filing-info.title")} status="complete" />
           <StepIndicatorStep label={t("w2.title")} status="complete" />
           <StepIndicatorStep label={t("1099.title")} status="complete" />
-          <StepIndicatorStep label="Credits & Deductions" status="current" />
+          <StepIndicatorStep label={t("deductions.title")} status="current" />
           <StepIndicatorStep label="Review" />
           <StepIndicatorStep label="Results" />
         </StepIndicator>
 
         <Form onSubmit={handleDeductions} className="w-full">
-          <Fieldset legend="Let's help you get the highest possible refund.">
+          <Fieldset legend={t("deductions.desc")}>
             {/* Mortgage Interest & Property Taxes Paid */}
             <Grid row gap>
               <Grid tablet={{ col: true }}>
                 <Label id="label-mortgage-interest" htmlFor="mortgage_interest">
-                  Mortgage Interest Paid
+                  {t("deductions.interest")}
                 </Label>
                 <TextInput
                   id="mortgage_interest"
@@ -55,7 +58,7 @@ export default function Deductions() {
 
               <Grid tablet={{ col: true }}>
                 <Label id="label-property-taxes" htmlFor="property_taxes">
-                  Property Taxes Paid
+                  {t("deductions.taxes")}
                 </Label>
                 <TextInput
                   id="property_taxes"
@@ -71,7 +74,7 @@ export default function Deductions() {
             <Grid row gap>
               <Grid tablet={{ col: true }}>
                 <Label id="label-donations" htmlFor="donations">
-                  Check or Cash Donations
+                  {t("deductions.donations")}
                 </Label>
                 <TextInput
                   id="donations"
@@ -84,7 +87,7 @@ export default function Deductions() {
 
               <Grid tablet={{ col: true }}>
                 <Label id="label-nonCash-donations" htmlFor="nonCash_donations">
-                  Total Non-Cash Donations
+                  {t("deductions.nonCash")}
                 </Label>
                 <TextInput
                   id="nonCash_donations"
@@ -102,15 +105,15 @@ export default function Deductions() {
                   to="/filing/self-employment"
                   className="usa-button usa-button--outline"
                 >
-                  Back
+                  {t("back")}
                 </Link>
                 <Link
                   to="/filing/review"
                   className="usa-button usa-button--base"
                 >
-                  Skip
+                  {t("skip")}
                 </Link>
-                <Button type="submit">Continue</Button>
+                <Button type="submit">{t("continue")}</Button>
               </ButtonGroup>
             </div>
           </Fieldset>

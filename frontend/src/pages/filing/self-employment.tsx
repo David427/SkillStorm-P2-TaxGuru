@@ -46,7 +46,7 @@ export default function SelfEmployment() {
           <StepIndicatorStep label={t("filing-info.title")} status="complete" />
           <StepIndicatorStep label={t("w2.title")} status="complete" />
           <StepIndicatorStep label={t("1099.title")} status="current" />
-          <StepIndicatorStep label="Credits & Deductions" />
+          <StepIndicatorStep label={t("deductions.title")} />
           <StepIndicatorStep label="Review" />
           <StepIndicatorStep label="Results" />
         </StepIndicator>

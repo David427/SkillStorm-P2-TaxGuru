@@ -92,6 +92,14 @@
       "payerTIN": "TIN del pagador",
       "recipientTIN": "TIN del receptor",
       "nec": "Compensación a no empleados"
+    },
+    "deductions": {
+      "title": "Créditos y Deducciones",
+      "desc": "Ayudémosle a obtener el mayor reembolso posible.",
+      "interest": "Intereses Hipotecarios Pagados",
+      "taxes": "Impuestos sobre la Propiedad Pagados",
+      "donations": "Donaciones en Cheque o Efectivo",
+      "nonCash": "Total de Donaciones No en Efectivo"
     }
   }
 }
