@@ -105,6 +105,10 @@
     "review": {
       "title": "Review",
       "desc": "Review the information and ensure it is correct. If you see any errors, click the section header to edit the values."
+    },
+    "results": {
+      "title": "Results",
+      "desc": ""
     }
   }
 }

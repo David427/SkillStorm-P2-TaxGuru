@@ -36,7 +36,7 @@ export default function Deductions() {
           <StepIndicatorStep label={t("1099.title")} status="complete" />
           <StepIndicatorStep label={t("deductions.title")} status="current" />
           <StepIndicatorStep label={t("review.title")} />
-          <StepIndicatorStep label="Results" />
+          <StepIndicatorStep label={t("results.title")} />
         </StepIndicator>
 
         <Form onSubmit={handleDeductions} className="w-full">

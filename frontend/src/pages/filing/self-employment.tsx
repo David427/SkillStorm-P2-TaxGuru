@@ -48,7 +48,7 @@ export default function SelfEmployment() {
           <StepIndicatorStep label={t("1099.title")} status="current" />
           <StepIndicatorStep label={t("deductions.title")} />
           <StepIndicatorStep label={t("review.title")} />
-          <StepIndicatorStep label="Results" />
+          <StepIndicatorStep label={t("results.title")} />
         </StepIndicator>
 
         <Form onSubmit={handleSelfEmploymentInfo} className="w-full">

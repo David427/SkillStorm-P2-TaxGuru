@@ -50,7 +50,7 @@ export default function FilingInformation() {
           <StepIndicatorStep label={t("1099.title")} />
           <StepIndicatorStep label={t("deductions.title")} />
           <StepIndicatorStep label={t("review.title")} />
-          <StepIndicatorStep label="Results" />
+          <StepIndicatorStep label={t("results.title")} />
         </StepIndicator>
 
         <Form onSubmit={handleFilingInfo} className="w-full">

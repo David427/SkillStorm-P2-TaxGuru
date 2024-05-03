@@ -36,7 +36,7 @@ export default function Review() {
           <StepIndicatorStep label={t("1099.title")} status="complete" />
           <StepIndicatorStep label={t("deductions.title")} status="complete" />
           <StepIndicatorStep label={t("review.title")} status="current" />
-          <StepIndicatorStep label="Results" />
+          <StepIndicatorStep label={t("results.title")} />
         </StepIndicator>
 
         <Form onSubmit={handleReviewInfo} className="w-full">

@@ -10,15 +10,11 @@ import {
 } from "@trussworks/react-uswds";
 import { FormEvent } from "react";
 
-function Required() {
-  return (
-    <abbr title="required" className="usa-label--required">
-      *
-    </abbr>
-  );
-}
+import { useTranslation } from "react-i18next";
 
 export default function Results() {
+  const { t } = useTranslation();
+
   const handlePersonalInfo = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -35,7 +31,7 @@ export default function Results() {
           <StepIndicatorStep label={t("1099.title")} status="complete" />
           <StepIndicatorStep label={t("deductions.title")} status="complete" />
           <StepIndicatorStep label={t("review.title")} status="complete" />
-          <StepIndicatorStep label="Results" status="current" />
+          <StepIndicatorStep label={t("results.title")} status="current" />
         </StepIndicator>
 
         <Form onSubmit={handlePersonalInfo}>
@@ -47,14 +43,12 @@ export default function Results() {
               indicates a required field
             </p>
 
-            <Label htmlFor="email">
-              Email Address <Required />
+            <Label htmlFor="email" requiredMarker>
+              Email Address
             </Label>
             <TextInput id="email" name="email" type="email" required />
 
-            <Label htmlFor="password">
-              Create Password <Required />
-            </Label>
+            <Label htmlFor="password">Create Password</Label>
             <TextInput id="password" name="password" type="password" />
 
             <Button type="submit">Create Account</Button>

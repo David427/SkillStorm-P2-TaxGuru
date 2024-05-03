@@ -104,6 +104,10 @@
     "review": {
       "title": "Revisión",
       "desc": "Revise la información y asegúrese de que sea correcta. Si observa algún error, haga clic en el encabezado de la sección para editar los valores."
+    },
+    "results": {
+      "title": "Resultados",
+      "desc": ""
     }
   }
 }
