@@ -33,15 +33,15 @@ public class TaxReturn {
     private BigDecimal spouseTotalTaxWithheld;
     private BigDecimal returnResult;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "form_w2_id", referencedColumnName = "id")
     private FormW2 formW2;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "form_1099_id", referencedColumnName = "id")
     private Form1099 form1099;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "adjustments_id", referencedColumnName = "id")
     private Adjustment adjustment;
 
