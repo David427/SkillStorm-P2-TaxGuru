@@ -31,6 +31,7 @@ public class TaxReturn {
     private BigDecimal totalTaxWithheld;
     private BigDecimal spouseTotalIncome;
     private BigDecimal spouseTotalTaxWithheld;
+    private BigDecimal totalTaxOwed;
     private BigDecimal returnResult;
 
     @OneToOne

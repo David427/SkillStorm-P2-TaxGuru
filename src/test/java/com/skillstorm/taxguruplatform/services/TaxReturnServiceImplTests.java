@@ -33,13 +33,60 @@ public class TaxReturnServiceImplTests {
     private TaxReturnServiceImpl taxReturnService;
 
     @Test
-    public void testThatResultCalculationSingleW2Succeeds() throws ResultCalculationException, TaxReturnNotFoundException {
+    void testThatSingleW2ResultCalcSucceeds() throws ResultCalculationException, TaxReturnNotFoundException {
         FormW2 formW2 = FormW2.builder()
-                // Taxable income = income + standard deduction (14600.00)
                 .income(new BigDecimal("72600.00"))
-                .fedTaxWithheld(new BigDecimal("1.00"))
-                .ssTaxWithheld(new BigDecimal("1.00"))
-                .mediTaxWithheld(new BigDecimal("1.00"))
+                // This user paid 15% of their gross income to Federal tax
+                .fedTaxWithheld(new BigDecimal("10890.00"))
+                .ssTaxWithheld(new BigDecimal("4501.20"))
+                .mediTaxWithheld(new BigDecimal("1052.70"))
+                .build();
+
+        Adjustment adjustment = Adjustment.builder()
+                .stdDeduction(true)
+                .build();
+
+        TaxReturn inputTaxReturn = TaxReturn.builder()
+                .filingStatus("Single")
+                .formW2(formW2)
+                .adjustment(adjustment)
+                .build();
+
+        TaxReturn outputTaxReturn = TaxReturn.builder()
+                .id(1)
+                .filingStatus("Single")
+                .formW2(formW2)
+                .adjustment(adjustment)
+                .totalIncome(new BigDecimal("67046.10"))
+                .totalTaxWithheld(new BigDecimal("10890.00"))
+                .totalTaxOwed(new BigDecimal("6870.53"))
+                .build();
+
+        TaxReturnDto taxReturnDto = TaxReturnDto.builder()
+                .build();
+
+        assert inputTaxReturn != null;
+        when(taxReturnRepository.findById(ArgumentMatchers.any(Long.class))).thenReturn(Optional.of(inputTaxReturn));
+        when(taxReturnRepository.save(ArgumentMatchers.any(TaxReturn.class))).thenReturn(outputTaxReturn);
+        when(taxReturnMapper.mapTo(ArgumentMatchers.any(TaxReturn.class))).thenReturn(taxReturnDto);
+
+        BigDecimal totalIncome = taxReturnService.calculateResult(outputTaxReturn.getId()).getTotalIncome();
+        BigDecimal totalTaxWithheld = taxReturnService.calculateResult(outputTaxReturn.getId()).getTotalTaxWithheld();
+        BigDecimal totalTaxOwed = taxReturnService.calculateResult(outputTaxReturn.getId()).getTotalIncome();
+
+        // Total income: 72600.00 - SS tax - Medicare tax = 67046.10
+        assertEquals(totalIncome, new BigDecimal("67046.10"));
+        assertEquals(totalTaxWithheld, new BigDecimal("10890.00"));
+        assertEquals(totalTaxOwed, new BigDecimal("6870.53"));
+    }
+
+    @Test
+    void testThatSingle1099ResultCalcSucceeds() throws ResultCalculationException, TaxReturnNotFoundException {
+        FormW2 formW2 = FormW2.builder()
+                .income(new BigDecimal("72600.00"))
+                .fedTaxWithheld(new BigDecimal("4501.20"))
+                .ssTaxWithheld(new BigDecimal("4501.20"))
+                .mediTaxWithheld(new BigDecimal("1052.70"))
                 .build();
 
         Adjustment adjustment = Adjustment.builder()
@@ -62,9 +109,9 @@ public class TaxReturnServiceImplTests {
         when(taxReturnMapper.mapTo(ArgumentMatchers.any(TaxReturn.class))).thenReturn(taxReturnDto);
 
         assert taxReturn != null;
-        BigDecimal result = taxReturnService.calculateResult(taxReturn.getId()).getReturnResult();
+        BigDecimal totalTaxOwed = taxReturnService.calculateResult(taxReturn.getId()).getTotalTaxOwed();
 
-        assertEquals(result, new BigDecimal("8092.39"));
+        assertEquals(totalTaxOwed, new BigDecimal("8092.39"));
     }
 
 }
