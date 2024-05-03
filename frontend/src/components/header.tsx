@@ -73,7 +73,7 @@ const authenticatedNavItems = [
 ];
 
 export function HeaderNav() {
-  const isAuthenticated = false;
+  const isAuthenticated = true;
   const [mobileExpanded, setMobileExpanded] = useState(false);
 
   return (

@@ -9,10 +9,12 @@ import {
   GridContainer,
 } from "@trussworks/react-uswds";
 import { FormEvent } from "react";
+import { useTranslation } from "react-i18next";
 
 import { states } from "../states";
 
 export default function Account() {
+  const { t } = useTranslation();
   const username = "Clemente";
 
   const handleAccountSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -31,17 +33,17 @@ export default function Account() {
     <main className="full-page">
       <div className="bg-base-lightest">
         <GridContainer className="usa-section">
-          <h1>Welcome, {username}</h1>
+          <h1>
+            {t("account.greeting")}
+            {username}
+          </h1>
 
           <Form onSubmit={handleAccountSubmit} className="w-full">
-            <Fieldset
-              legend="View and manage your account details"
-              legendStyle="default"
-            >
+            <Fieldset legend={t("account.desc1")} legendStyle="default">
               {/* First, Last Name, & Email */}
               <Grid row gap>
                 <Grid tablet={{ col: true }}>
-                  <Label htmlFor="first_name">First Name</Label>
+                  <Label htmlFor="first_name">{t("fname")}</Label>
                   <TextInput
                     id="first_name"
                     name="first_name"
@@ -52,7 +54,7 @@ export default function Account() {
                 </Grid>
 
                 <Grid tablet={{ col: true }}>
-                  <Label htmlFor="last_name">Last Name</Label>
+                  <Label htmlFor="last_name">{t("lname")}</Label>
                   <TextInput
                     id="last_name"
                     name="last_name"
@@ -63,7 +65,7 @@ export default function Account() {
                 </Grid>
 
                 <Grid tablet={{ col: true }}>
-                  <Label htmlFor="email">Email Address</Label>
+                  <Label htmlFor="email">{t("email")}</Label>
                   <TextInput
                     id="email"
                     name="email"
@@ -76,7 +78,7 @@ export default function Account() {
 
               <Grid row gap>
                 <Grid tablet={{ col: true }}>
-                  <Label htmlFor="street_address">Street Address</Label>
+                  <Label htmlFor="street_address">{t("street")}</Label>
                   <TextInput
                     id="street_address"
                     name="street_address"
@@ -87,7 +89,7 @@ export default function Account() {
                 </Grid>
 
                 <Grid tablet={{ col: true }}>
-                  <Label htmlFor="city">City</Label>
+                  <Label htmlFor="city">{t("city")}</Label>
                   <TextInput
                     id="city"
                     name="city"
@@ -99,7 +101,7 @@ export default function Account() {
 
               <Grid row gap>
                 <Grid tablet={{ col: true }}>
-                  <Label htmlFor="state">State</Label>
+                  <Label htmlFor="state">{t("state")}</Label>
                   <Select id="state" name="state">
                     <option>- Select -</option>
                     {states.map((s) => (
@@ -111,7 +113,7 @@ export default function Account() {
                 </Grid>
 
                 <Grid tablet={{ col: true }}>
-                  <Label htmlFor="zipcode">Zip Code</Label>
+                  <Label htmlFor="zipcode">{t("zip")}</Label>
                   <TextInput
                     id="zipcode"
                     name="zipcode"
@@ -121,23 +123,20 @@ export default function Account() {
                 </Grid>
               </Grid>
 
-              <Button type="submit">Save Changes</Button>
+              <Button type="submit">{t("account.save")}</Button>
             </Fieldset>
           </Form>
         </GridContainer>
       </div>
       {/* New Password */}
       <GridContainer>
-        <h2>Change Password</h2>
+        <h2>{t("account.change")}</h2>
 
         <Form onSubmit={handlePasswordChange}>
-          <Fieldset
-            legend="Change your existing password"
-            legendStyle="default"
-          >
+          <Fieldset legend={t("account.desc2")} legendStyle="default">
             <Grid row>
               <Grid tablet={{ col: true }}>
-                <Label htmlFor="current-password">Current Password</Label>
+                <Label htmlFor="current-password">{t("account.current")}</Label>
                 <TextInput
                   id="current-password"
                   name="current-password"
@@ -147,7 +146,7 @@ export default function Account() {
             </Grid>
             <Grid row>
               <Grid tablet={{ col: true }}>
-                <Label htmlFor="new-password">New Password</Label>
+                <Label htmlFor="new-password">{t("account.new")}</Label>
                 <TextInput
                   id="new-password"
                   name="new-password"
@@ -158,7 +157,7 @@ export default function Account() {
             <Grid row>
               <Grid tablet={{ col: true }}>
                 <Label htmlFor="new-password-confirm">
-                  Confirm New Password
+                  {t("account.confirm")}
                 </Label>
                 <TextInput
                   id="new-password-confirm"
@@ -168,7 +167,7 @@ export default function Account() {
               </Grid>
             </Grid>
 
-            <Button type="submit">Change Password</Button>
+            <Button type="submit">{t("account.change-btn")}</Button>
           </Fieldset>
         </Form>
       </GridContainer>

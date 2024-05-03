@@ -1,5 +1,12 @@
 {
   "translation": {
+    "fname": "Nombre",
+    "lname": "Apellido",
+    "email": "Correo Electrónico",
+    "street": "Dirección",
+    "city": "Ciudad",
+    "state": "Estado",
+    "zip": "Código Postal",
     "index": {
       "hero-heading-alt": "Actúa ahora:",
       "hero-heading": "Los impuestos federales deben pagarse antes del 15 de abril",
@@ -29,6 +36,17 @@
       "point-1-desc": "Creemos que debe tener un acceso fácil y gratuito para presentar sus impuestos federales. Por eso hemos creado una plataforma sin fisuras para que pueda presentarla sin coste alguno.",
       "point-2": "Seguridad industrial",
       "point-2-desc": "Damos prioridad a la seguridad de sus datos con medidas de seguridad de primer nivel para garantizar que su información permanezca confidencial y protegida de accesos no autorizados."
+    },
+    "account": {
+      "greeting": "Bienvenido, ",
+      "desc1": "Ve y modifica los datos de tu cuenta",
+      "change": "Cambio de contraseña",
+      "desc2": "Cambiar la contraseña existente",
+      "current": "Contraseña actual",
+      "new": "Nueva contraseña",
+      "confirm": "Confirmar nueva contraseña",
+      "change-btn": "Cambiar Contraseña",
+      "save": "Guardar Cambios"
     }
   }
 }
