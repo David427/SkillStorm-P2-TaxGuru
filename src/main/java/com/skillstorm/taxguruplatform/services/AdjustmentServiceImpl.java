@@ -25,7 +25,7 @@ public class AdjustmentServiceImpl implements AdjustmentService {
     @Override
     public AdjustmentDto create(AdjustmentDto adjustmentDto) throws AdjustmentAlreadyExistsException {
         if (isExisting(adjustmentDto.getId())) {
-            throw new AdjustmentAlreadyExistsException("Tax return already exists.");
+            throw new AdjustmentAlreadyExistsException("Adjustment already exists.");
         }
 
         Adjustment createdAdjustment = adjustmentRepository.save(adjusmentMapper.mapFrom(adjustmentDto));
@@ -38,7 +38,7 @@ public class AdjustmentServiceImpl implements AdjustmentService {
             Adjustment updatedAdjustment = adjustmentRepository.save(adjusmentMapper.mapFrom(adjustmentDto));
             return adjusmentMapper.mapTo(updatedAdjustment);
         } else {
-            throw new AdjustmentNotFoundException("Tax return not found.");
+            throw new AdjustmentNotFoundException("Adjustment not found.");
         }
     }
 
@@ -47,7 +47,7 @@ public class AdjustmentServiceImpl implements AdjustmentService {
         if (isExisting(id)) {
             adjustmentRepository.deleteById(id);
         } else {
-            throw new AdjustmentNotFoundException("Tax return not found.");
+            throw new AdjustmentNotFoundException("Adjustment not found.");
         }
     }
 

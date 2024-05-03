@@ -1,7 +1,6 @@
 package com.skillstorm.taxguruplatform.services;
 
 import com.skillstorm.taxguruplatform.domain.dtos.Form1099Dto;
-import com.skillstorm.taxguruplatform.domain.dtos.Form1099Dto;
 import com.skillstorm.taxguruplatform.domain.entities.Form1099;
 import com.skillstorm.taxguruplatform.exceptions.Form1099AlreadyExistsException;
 import com.skillstorm.taxguruplatform.exceptions.Form1099NotFoundException;
@@ -26,7 +25,7 @@ public class Form1099ServiceImpl implements Form1099Service {
     @Override
     public Form1099Dto create(Form1099Dto form1099Dto) throws Form1099AlreadyExistsException {
         if (isExisting(form1099Dto.getId())) {
-            throw new Form1099AlreadyExistsException("Tax return already exists.");
+            throw new Form1099AlreadyExistsException("Form 1099 already exists.");
         }
 
         Form1099 createdForm1099 = form1099Repository.save(form1099Mapper.mapFrom(form1099Dto));
@@ -39,7 +38,7 @@ public class Form1099ServiceImpl implements Form1099Service {
             Form1099 updatedForm1099 = form1099Repository.save(form1099Mapper.mapFrom(form1099Dto));
             return form1099Mapper.mapTo(updatedForm1099);
         } else {
-            throw new Form1099NotFoundException("Tax return not found.");
+            throw new Form1099NotFoundException("Form 1099 not found.");
         }
     }
 
@@ -48,7 +47,7 @@ public class Form1099ServiceImpl implements Form1099Service {
         if (isExisting(id)) {
             form1099Repository.deleteById(id);
         } else {
-            throw new Form1099NotFoundException("Tax return not found.");
+            throw new Form1099NotFoundException("Form 1099 not found.");
         }
     }
 

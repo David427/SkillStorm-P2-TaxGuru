@@ -1,7 +1,6 @@
 package com.skillstorm.taxguruplatform.services;
 
 import com.skillstorm.taxguruplatform.domain.dtos.FormW2Dto;
-import com.skillstorm.taxguruplatform.domain.dtos.FormW2Dto;
 import com.skillstorm.taxguruplatform.domain.entities.FormW2;
 import com.skillstorm.taxguruplatform.exceptions.FormW2AlreadyExistsException;
 import com.skillstorm.taxguruplatform.exceptions.FormW2NotFoundException;
@@ -26,7 +25,7 @@ public class FormW2ServiceImpl implements FormW2Service {
     @Override
     public FormW2Dto create(FormW2Dto formW2Dto) throws FormW2AlreadyExistsException {
         if (isExisting(formW2Dto.getId())) {
-            throw new FormW2AlreadyExistsException("Tax return already exists.");
+            throw new FormW2AlreadyExistsException("Form W2 already exists.");
         }
 
         FormW2 createdFormW2 = formW2Repository.save(formW2Mapper.mapFrom(formW2Dto));
@@ -39,7 +38,7 @@ public class FormW2ServiceImpl implements FormW2Service {
             FormW2 updatedFormW2 = formW2Repository.save(formW2Mapper.mapFrom(formW2Dto));
             return formW2Mapper.mapTo(updatedFormW2);
         } else {
-            throw new FormW2NotFoundException("Tax return not found.");
+            throw new FormW2NotFoundException("Form W2 not found.");
         }
     }
 
@@ -48,7 +47,7 @@ public class FormW2ServiceImpl implements FormW2Service {
         if (isExisting(id)) {
             formW2Repository.deleteById(id);
         } else {
-            throw new FormW2NotFoundException("Tax return not found.");
+            throw new FormW2NotFoundException("Form W2 not found.");
         }
     }
 
