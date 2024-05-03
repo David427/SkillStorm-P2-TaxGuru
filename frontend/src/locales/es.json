@@ -1,0 +1,115 @@
+{
+  "translation": {
+    "select": "- Seleccionar -",
+    "continue": "Continuar",
+    "back": "Atrás",
+    "skip": "Omitir",
+    "y": "Sí",
+    "n": "No",
+    "index": {
+      "hero-heading-alt": "Actúa ahora:",
+      "hero-heading": "Los impuestos federales deben pagarse antes del 15 de abril",
+      "hero-desc": "Le guiaremos a través de nuestra herramienta gratuita de impuestos federales, para asegurarnos de que complete sus impuestos a tiempo y con facilidad.",
+      "hero-cta": "Empiece Hoy",
+      "tagline": "Declara los impuestos gratis",
+      "point-1": "TaxGuru es su compañero de confianza para presentar sus impuestos federales sin esfuerzo. Despídete del estrés de la temporada de impuestos y disfruta de una experiencia perfecta con nuestra plataforma.",
+      "point-2": "Nuestra plataforma utiliza las últimas directrices del IRS para calcular sus declaraciones con precisión, asegurándose de que recibe cada dólar que le corresponde y proporcionándole tranquilidad."
+    },
+    "auth": {
+      "login": "Iniciar sesión",
+      "login-desc": "Accede a tu cuenta.",
+      "username": "Nombre de usuario",
+      "password": "Contraseña",
+      "show-password": "Mostrar Contraseña",
+      "hide-password": "Esconder Contraseña",
+      "no-account": "¿No tienes una cuenta?",
+      "create-account1": "Crea tu cuenta ahora →",
+      "tagline": "Empiece hoy mismo y presente sus impuestos federales con facilidad.",
+      "signup": "Regístrate",
+      "signup-desc": "Empieza con una cuenta.",
+      "required": "indica un campo obligatorio",
+      "confirm-password": "Confirmar contraseña",
+      "existing-account": "¿Ya tienes una cuenta?",
+      "tagline-desc": "Le guiaremos a través del proceso para garantizar una precisión del 100% y un reembolso máximo.",
+      "point-1": "Declaración federal gratuita",
+      "point-1-desc": "Creemos que debe tener un acceso fácil y gratuito para presentar sus impuestos federales. Por eso hemos creado una plataforma sin fisuras para que pueda presentarla sin coste alguno.",
+      "point-2": "Seguridad industrial",
+      "point-2-desc": "Damos prioridad a la seguridad de sus datos con medidas de seguridad de primer nivel para garantizar que su información permanezca confidencial y protegida de accesos no autorizados."
+    },
+    "account": {
+      "greeting": "Bienvenido, ",
+      "desc1": "Ve y modifica los datos de tu cuenta",
+      "change": "Cambio de contraseña",
+      "desc2": "Cambiar la contraseña existente",
+      "current": "Contraseña actual",
+      "new": "Nueva contraseña",
+      "confirm": "Confirmar nueva contraseña",
+      "change-btn": "Cambiar Contraseña",
+      "save": "Guardar Cambios"
+    },
+    "personal": {
+      "title": "Información Personal",
+      "desc": "Ingrese su información personal.",
+      "fname": "Nombre",
+      "lname": "Apellido",
+      "suffix": "Sufijo",
+      "birthdate": "Fecha de Nacimiento",
+      "tel": "Número de Teléfono de EE. UU.",
+      "street": "Dirección",
+      "city": "Ciudad",
+      "state": "Estado",
+      "zip": "Código Postal"
+    },
+    "filing-info": {
+      "title": "Información de Declaración",
+      "desc": "Necesitamos un poco más de información sobre su estado de declaración.",
+      "status": "Estado de Declaración",
+      "dependents": "¿Cuántos dependientes puede reclamar?",
+      "isDependent": "¿Alguien puede reclamarlo como dependiente?",
+      "single": "Soltero",
+      "married": "Casado que presenta por separado",
+      "hoh": "Jefe de familia"
+    },
+    "w2": {
+      "hint": "Casilla {{hint}} en el Formulario W-2",
+      "title": "Información del W-2",
+      "desc": "Si no tiene información del W-2 para ingresar, puede omitir esta sección.",
+      "ein": "Número de Identificación del Empleador (EIN)",
+      "ename": "Nombre del Empleador",
+      "estreet": "Dirección del Empleador",
+      "ecity": "Ciudad del Empleador",
+      "estate": "Estado del Empleador",
+      "ezip": "Código Postal del Empleador",
+      "wages": "Salarios, propinas y otras compensaciones",
+      "federal-withheld": "Impuesto sobre la Renta Federal Retenido",
+      "social-withheld": "Impuesto sobre la Seguridad Social Retenido",
+      "medicare-withheld": "Impuesto sobre Medicare Retenido"
+    },
+    "1099": {
+      "hint": "Casilla {{hint}} en el Formulario 1099-NEC",
+      "title": "Trabajo por cuenta propia",
+      "desc": "Esta información se puede encontrar en el formulario 1099-NEC. Si no tiene ingresos por trabajo por cuenta propia para ingresar, puede omitir esta sección.",
+      "payerTIN": "TIN del pagador",
+      "recipientTIN": "TIN del receptor",
+      "nec": "Compensación a no empleados"
+    },
+    "deductions": {
+      "title": "Créditos y Deducciones",
+      "desc": "Ayudémosle a obtener el mayor reembolso posible.",
+      "interest": "Intereses Hipotecarios Pagados",
+      "taxes": "Impuestos sobre la Propiedad Pagados",
+      "donations": "Donaciones en Cheque o Efectivo",
+      "nonCash": "Total de Donaciones No en Efectivo"
+    },
+    "review": {
+      "title": "Revisión",
+      "desc": "Revise la información y asegúrese de que sea correcta. Si observa algún error, haga clic en el encabezado de la sección para editar los valores.",
+      "dependents": "Dependientes",
+      "wages": "Salario"
+    },
+    "results": {
+      "title": "Resultados",
+      "desc": ""
+    }
+  }
+}

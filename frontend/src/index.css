@@ -1,0 +1,49 @@
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light;
+  color: #213547;
+  background-color: #fff;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.full-page {
+  min-height: calc(100vh - 107px);
+}
+
+.w-full {
+  max-width: 100% !important;
+  width: 100% !important;
+}
+
+.usa-navbar {
+  display: flex;
+  justify-content: space-between;
+}
+
+.usa-hero {
+  background-image: url("/girl_hero.jpg") !important;
+}
+
+.language-selector {
+  margin-left: 0 !important;
+  margin-bottom: 0 !important;
+  position: initial !important;
+}
+
+@media (max-width: 63.99em) {
+  .usa-nav-container {
+    border-bottom: none;
+  }
+}
