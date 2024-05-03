@@ -53,7 +53,7 @@ public class AdjustmentServiceImpl implements AdjustmentService {
 
     @Override
     public boolean isExisting(long id) {
-        return false;
+        return adjustmentRepository.existsById(id);
     }
 
 }

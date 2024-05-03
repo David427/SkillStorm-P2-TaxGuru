@@ -53,7 +53,7 @@ public class Form1099ServiceImpl implements Form1099Service {
 
     @Override
     public boolean isExisting(long id) {
-        return false;
+        return form1099Repository.existsById(id);
     }
 
 }

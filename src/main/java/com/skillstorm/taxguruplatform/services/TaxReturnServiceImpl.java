@@ -52,7 +52,7 @@ public class TaxReturnServiceImpl implements TaxReturnService {
 
     @Override
     public boolean isExisting(long id) {
-        return false;
+        return taxReturnRepository.existsById(id);
     }
 
 }
