@@ -43,7 +43,7 @@ export default function Account() {
               {/* First, Last Name, & Email */}
               <Grid row gap>
                 <Grid tablet={{ col: true }}>
-                  <Label htmlFor="first_name">{t("fname")}</Label>
+                  <Label htmlFor="first_name">{t("personal.fname")}</Label>
                   <TextInput
                     id="first_name"
                     name="first_name"
@@ -54,7 +54,7 @@ export default function Account() {
                 </Grid>
 
                 <Grid tablet={{ col: true }}>
-                  <Label htmlFor="last_name">{t("lname")}</Label>
+                  <Label htmlFor="last_name">{t("personal.lname")}</Label>
                   <TextInput
                     id="last_name"
                     name="last_name"
@@ -65,7 +65,7 @@ export default function Account() {
                 </Grid>
 
                 <Grid tablet={{ col: true }}>
-                  <Label htmlFor="email">{t("email")}</Label>
+                  <Label htmlFor="email">{t("account.email")}</Label>
                   <TextInput
                     id="email"
                     name="email"
@@ -78,7 +78,7 @@ export default function Account() {
 
               <Grid row gap>
                 <Grid tablet={{ col: true }}>
-                  <Label htmlFor="street_address">{t("street")}</Label>
+                  <Label htmlFor="street_address">{t("personal.street")}</Label>
                   <TextInput
                     id="street_address"
                     name="street_address"
@@ -89,7 +89,7 @@ export default function Account() {
                 </Grid>
 
                 <Grid tablet={{ col: true }}>
-                  <Label htmlFor="city">{t("city")}</Label>
+                  <Label htmlFor="city">{t("personal.city")}</Label>
                   <TextInput
                     id="city"
                     name="city"
@@ -101,7 +101,7 @@ export default function Account() {
 
               <Grid row gap>
                 <Grid tablet={{ col: true }}>
-                  <Label htmlFor="state">{t("state")}</Label>
+                  <Label htmlFor="state">{t("personal.state")}</Label>
                   <Select id="state" name="state">
                     <option>- Select -</option>
                     {states.map((s) => (
@@ -113,7 +113,7 @@ export default function Account() {
                 </Grid>
 
                 <Grid tablet={{ col: true }}>
-                  <Label htmlFor="zipcode">{t("zip")}</Label>
+                  <Label htmlFor="zipcode">{t("personal.zip")}</Label>
                   <TextInput
                     id="zipcode"
                     name="zipcode"

@@ -1,12 +1,11 @@
 {
   "translation": {
-    "fname": "Nombre",
-    "lname": "Apellido",
-    "email": "Correo Electrónico",
-    "street": "Dirección",
-    "city": "Ciudad",
-    "state": "Estado",
-    "zip": "Código Postal",
+    "select": "- Seleccionar -",
+    "continue": "Continuar",
+    "back": "Atrás",
+    "skip": "Omitir",
+    "y": "Sí",
+    "n": "No",
     "index": {
       "hero-heading-alt": "Actúa ahora:",
       "hero-heading": "Los impuestos federales deben pagarse antes del 15 de abril",
@@ -47,6 +46,29 @@
       "confirm": "Confirmar nueva contraseña",
       "change-btn": "Cambiar Contraseña",
       "save": "Guardar Cambios"
+    },
+    "personal": {
+      "title": "Información Personal",
+      "desc": "Ingrese su información personal.",
+      "fname": "Nombre",
+      "lname": "Apellido",
+      "suffix": "Sufijo",
+      "birthdate": "Fecha de Nacimiento",
+      "tel": "Número de Teléfono de EE. UU.",
+      "street": "Dirección",
+      "city": "Ciudad",
+      "state": "Estado",
+      "zip": "Código Postal"
+    },
+    "filing-info": {
+      "title": "Información de Declaración",
+      "desc": "Necesitamos un poco más de información sobre su estado de declaración.",
+      "status": "Estado de Declaración",
+      "dependents": "¿Cuántos dependientes puede reclamar?",
+      "isDependent": "¿Alguien puede reclamarlo como dependiente?",
+      "single": "Soltero",
+      "married": "Casado que presenta por separado",
+      "hoh": "Jefe de familia"
     }
   }
 }

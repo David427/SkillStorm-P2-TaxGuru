@@ -16,6 +16,7 @@ import { FormEvent } from "react";
 import { states } from "../../states";
 
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const suffixOptions = [
   "Jr.",
@@ -31,6 +32,7 @@ const suffixOptions = [
 ];
 
 export default function Personal() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   const handlePersonalInfo = (e: FormEvent<HTMLFormElement>) => {
@@ -57,8 +59,6 @@ export default function Personal() {
       state: e.currentTarget.elements.state.value,
       // @ts-expect-error untyped form elements but we need the values
       zipCode: e.currentTarget.elements.zipcode.value,
-      // @ts-expect-error untyped form elements but we need the values
-      filingStatus: e.currentTarget.elements.filing_status.value,
     };
 
     console.log(formData);
@@ -70,8 +70,8 @@ export default function Personal() {
     <main className="full-page">
       <GridContainer className="usa-section">
         <StepIndicator headingLevel="h3" ofText="of" stepText="Step">
-          <StepIndicatorStep label="Personal Information" status="current" />
-          <StepIndicatorStep label="Filing Information" />
+          <StepIndicatorStep label={t("personal.title")} status="current" />
+          <StepIndicatorStep label={t("filing-info.title")} />
           <StepIndicatorStep label="W-2 Information" />
           <StepIndicatorStep label="Self Employment" />
           <StepIndicatorStep label="Credits & Deductions" />
@@ -80,12 +80,12 @@ export default function Personal() {
         </StepIndicator>
 
         <Form onSubmit={handlePersonalInfo} className="w-full">
-          <Fieldset legend="Enter your personal information.">
+          <Fieldset legend={t("personal.desc")}>
             {/* FName, LName, Suffix */}
             <Grid row gap>
               <Grid tablet={{ col: true }}>
                 <Label htmlFor="first_name" requiredMarker>
-                  First Name
+                  {t("personal.fname")}
                 </Label>
                 <TextInput
                   id="first_name"
@@ -98,7 +98,7 @@ export default function Personal() {
 
               <Grid tablet={{ col: true }}>
                 <Label htmlFor="last_name" requiredMarker>
-                  Last Name
+                  {t("personal.lname")}
                 </Label>
                 <TextInput
                   id="last_name"
@@ -110,9 +110,9 @@ export default function Personal() {
               </Grid>
 
               <Grid tablet={{ col: true }}>
-                <Label htmlFor="suffix">Suffix</Label>
+                <Label htmlFor="suffix">{t("personal.suffix")}</Label>
                 <Select id="suffix" name="suffix">
-                  <option>- Select -</option>
+                  <option>{t("select")}</option>
                   {suffixOptions.map((s) => (
                     <option key={s} value={s}>
                       {s}
@@ -126,7 +126,7 @@ export default function Personal() {
             <Grid row gap>
               <Grid tablet={{ col: true }}>
                 <Label id="label-birthdate" htmlFor="birthdate" requiredMarker>
-                  Birthdate
+                  {t("personal.birthdate")}
                 </Label>
                 <span id="hint-birthdate" className="usa-hint">
                   MM/DD/YYYY
@@ -168,7 +168,7 @@ export default function Personal() {
             <Grid row gap>
               <Grid tablet={{ col: true }}>
                 <Label id="label-tel" htmlFor="tel" requiredMarker>
-                  US Telephone Number
+                  {t("personal.tel")}
                 </Label>
                 <span id="hint-tel" className="usa-hint">
                   123-456-7890
@@ -187,7 +187,7 @@ export default function Personal() {
               </Grid>
               <Grid tablet={{ col: true }}>
                 <Label htmlFor="street_address" requiredMarker>
-                  Street Address
+                  {t("personal.street")}
                 </Label>
                 <span id="hint-street-address" className="usa-hint">
                   123 Park Ln
@@ -207,17 +207,17 @@ export default function Personal() {
             <Grid row gap>
               <Grid tablet={{ col: true }}>
                 <Label htmlFor="city" requiredMarker>
-                  City
+                  {t("personal.city")}
                 </Label>
                 <TextInput id="city" name="city" type="text" required />
               </Grid>
 
               <Grid tablet={{ col: true }}>
                 <Label htmlFor="state" requiredMarker>
-                  State
+                  {t("personal.state")}
                 </Label>
                 <Select id="state" name="state" required>
-                  <option>- Select -</option>
+                  <option>{t("select")}</option>
                   {states.map((s) => (
                     <option key={s} value={s}>
                       {s}
@@ -229,9 +229,9 @@ export default function Personal() {
 
             {/* Zip and Filing Status */}
             <Grid row gap>
-              <Grid tablet={{ col: true }}>
+              <Grid tablet={{ col: 6 }}>
                 <Label htmlFor="zipcode" requiredMarker>
-                  Zip Code
+                  {t("personal.zip")}
                 </Label>
                 <TextInputMask
                   id="zipcode"
@@ -243,26 +243,9 @@ export default function Personal() {
                   required
                 />
               </Grid>
-
-              <Grid tablet={{ col: true }}>
-                <Label htmlFor="filing_status" requiredMarker>
-                  Filing Status
-                </Label>
-                <Select id="filing_status" name="filing_status" required>
-                  <option>- Select -</option>
-                  <option value="single">Single</option>
-                  <option value="married_filing_jointly">
-                    Married filing jointly
-                  </option>
-                  <option value="married_filing_separately">
-                    Married filing separately
-                  </option>
-                  <option value="head_of_household">Head of household</option>
-                </Select>
-              </Grid>
             </Grid>
 
-            <Button type="submit">Continue</Button>
+            <Button type="submit">{t("continue")}</Button>
           </Fieldset>
         </Form>
       </GridContainer>

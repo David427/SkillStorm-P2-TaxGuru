@@ -13,9 +13,11 @@ import {
   Button,
 } from "@trussworks/react-uswds";
 import { FormEvent } from "react";
+import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 
 export default function FilingInformation() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   const handleFilingInfo = (e: FormEvent<HTMLFormElement>) => {
@@ -42,8 +44,8 @@ export default function FilingInformation() {
     <main className="full-page">
       <GridContainer className="usa-section">
         <StepIndicator headingLevel="h3" ofText="of" stepText="Step">
-          <StepIndicatorStep label="Personal Information" status="complete" />
-          <StepIndicatorStep label="Filing Information" status="current" />
+          <StepIndicatorStep label={t("personal.title")} status="complete" />
+          <StepIndicatorStep label={t("filing-info.title")} status="current" />
           <StepIndicatorStep label="W-2 Information" />
           <StepIndicatorStep label="Self Employment" />
           <StepIndicatorStep label="Credits & Deductions" />
@@ -52,28 +54,28 @@ export default function FilingInformation() {
         </StepIndicator>
 
         <Form onSubmit={handleFilingInfo} className="w-full">
-          <Fieldset legend="We need a bit more information about your filing status">
+          <Fieldset legend={t("filing-info.desc")}>
             <Grid row gap>
               <Grid tablet={{ col: true }}>
                 <Label htmlFor="filing_status" requiredMarker>
-                  Filing Status
+                  {t("filing-info.status")}
                 </Label>
                 <Select id="filing_status" name="filing_status" required>
-                  <option>- Select -</option>
-                  <option value="single">Single</option>
-                  <option value="married_filing_jointly">
-                    Married filing jointly
-                  </option>
+                  <option>{t("select")}</option>
+                  <option value="single">{t("filing-info.single")}</option>
+                  {/* TODO: what is the backend expecting here for value? */}
                   <option value="married_filing_separately">
-                    Married filing separately
+                    {t("filing-info.married")}
                   </option>
-                  <option value="head_of_household">Head of household</option>
+                  <option value="head_of_household">
+                    {t("filing-info.hoh")}
+                  </option>
                 </Select>
               </Grid>
 
               <Grid tablet={{ col: true }}>
                 <Label htmlFor="dependents">
-                  How many dependents can you claim?
+                  {t("filing-info.dependents")}
                 </Label>
                 <TextInput
                   id="dependents"
@@ -86,18 +88,18 @@ export default function FilingInformation() {
 
             <Grid row>
               <Grid tablet={{ col: true }}>
-                <p>Can someone claim you as a dependent?</p>
+                <p>{t("filing-info.isDependent")}</p>
                 <Radio
                   id="dependent-yes"
                   name="dependent"
                   value="Yes"
-                  label="Yes"
+                  label={t("y")}
                 />
                 <Radio
                   id="dependent-no"
                   name="dependent"
                   value="No"
-                  label="No"
+                  label={t("n")}
                 />
               </Grid>
             </Grid>
@@ -108,9 +110,9 @@ export default function FilingInformation() {
                   to="/filing/personal"
                   className="usa-button usa-button--outline"
                 >
-                  Back
+                  {t("back")}
                 </Link>
-                <Button type="submit">Continue</Button>
+                <Button type="submit">{t("continue")}</Button>
               </ButtonGroup>
             </div>
           </Fieldset>

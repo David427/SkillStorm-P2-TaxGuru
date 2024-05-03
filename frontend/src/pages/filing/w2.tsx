@@ -54,8 +54,8 @@ export default function W2() {
     <main className="full-page">
       <GridContainer className="usa-section">
         <StepIndicator headingLevel="h3" ofText="of" stepText="Step">
-          <StepIndicatorStep label="Personal Information" status="complete" />
-          <StepIndicatorStep label="Filing Information" status="complete" />
+          <StepIndicatorStep label={t("personal.title")} status="complete" />
+          <StepIndicatorStep label={t("filing-info.title")} status="complete" />
           <StepIndicatorStep label="W-2 Information" status="current" />
           <StepIndicatorStep label="Self Employment" />
           <StepIndicatorStep label="Credits & Deductions" />

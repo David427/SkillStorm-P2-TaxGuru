@@ -1,12 +1,11 @@
 {
   "translation": {
-    "fname": "First Name",
-    "lname": "Last Name",
-    "email": "Email Address",
-    "street": "Street Address",
-    "city": "City",
-    "state": "State",
-    "zip": "Zip Code",
+    "select": "- Select -",
+    "continue": "Continue",
+    "back": "Back",
+    "skip": "Skip",
+    "y": "Yes",
+    "n": "No",
     "index": {
       "hero-heading-alt": "Act now:",
       "hero-heading": "Federal taxes are due by April 15th",
@@ -46,7 +45,31 @@
       "new": "New Password",
       "confirm": "Confirm New Password",
       "change-btn": "Change Password",
-      "save": "Save Changes"
+      "save": "Save Changes",
+      "email": "Email Address"
+    },
+    "personal": {
+      "title": "Personal Information",
+      "desc": "Enter your personal information.",
+      "fname": "First Name",
+      "lname": "Last Name",
+      "suffix": "Suffix",
+      "birthdate": "Birthdate",
+      "tel": "US Telephone Number",
+      "street": "Street Address",
+      "city": "City",
+      "state": "State",
+      "zip": "Zip Code"
+    },
+    "filing-info": {
+      "title": "Filing Information",
+      "desc": "We need a bit more information about your filing status.",
+      "status": "Filing Status",
+      "dependents": "How many dependents can you claim?",
+      "isDependent": "Can someone claim you as a dependent?",
+      "single": "Single",
+      "married": "Married filing separately",
+      "hoh": "Head of household"
     }
   }
 }
