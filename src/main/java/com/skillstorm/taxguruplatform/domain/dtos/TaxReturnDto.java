@@ -17,6 +17,7 @@ import java.math.BigDecimal;
 public class TaxReturnDto {
 
     private long id;
+    private String taxYear;
     private String filingStatus;
     private boolean dependent;
     private short claimedDependents;
@@ -24,6 +25,7 @@ public class TaxReturnDto {
     private BigDecimal totalTaxWithheld;
     private BigDecimal spouseTotalIncome;
     private BigDecimal spouseTotalTaxWithheld;
+    private BigDecimal taxableIncome;
     private BigDecimal totalTaxOwed;
     private BigDecimal returnResult;
     private FormW2 formW2;

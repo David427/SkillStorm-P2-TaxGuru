@@ -24,6 +24,7 @@ public class TaxReturn {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "tax_returns_id_seq")
     private long id;
 
+    private String taxYear;
     private String filingStatus;
     private boolean dependent;
     private short claimedDependents;
@@ -31,6 +32,7 @@ public class TaxReturn {
     private BigDecimal totalTaxWithheld;
     private BigDecimal spouseTotalIncome;
     private BigDecimal spouseTotalTaxWithheld;
+    private BigDecimal taxableIncome;
     private BigDecimal totalTaxOwed;
     private BigDecimal returnResult;
 

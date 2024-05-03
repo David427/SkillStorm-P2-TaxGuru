@@ -7,13 +7,13 @@ import java.math.BigDecimal;
 @Getter
 public enum TaxBracket {
 
-    TEN_PERCENT(new BigDecimal("0.10")),
-    TWELVE_PERCENT(new BigDecimal("0.12")),
-    TWENTY_TWO_PERCENT(new BigDecimal("0.22")),
-    TWENTY_FOUR_PERCENT(new BigDecimal("0.24")),
-    THIRTY_TWO_PERCENT(new BigDecimal("0.32")),
-    THIRTY_FIVE_PERCENT(new BigDecimal("0.35")),
-    THIRTY_SEVEN_PERCENT(new BigDecimal("0.37"));
+    BRACKET_LOWEST(new BigDecimal("0.10")),
+    BRACKET_LOW(new BigDecimal("0.12")),
+    BRACKET_MED_LOW(new BigDecimal("0.22")),
+    BRACKET_MED(new BigDecimal("0.24")),
+    BRACKET_MED_HIGH(new BigDecimal("0.32")),
+    BRACKET_HIGH(new BigDecimal("0.35")),
+    BRACKET_HIGHEST(new BigDecimal("0.37"));
 
     private final BigDecimal ratePercent;
 

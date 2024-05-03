@@ -47,6 +47,7 @@ public class TaxReturnServiceImplTests {
                 .build();
 
         TaxReturn inputTaxReturn = TaxReturn.builder()
+                .id(1)
                 .filingStatus("Single")
                 .formW2(formW2)
                 .adjustment(adjustment)
@@ -70,9 +71,9 @@ public class TaxReturnServiceImplTests {
         when(taxReturnRepository.save(ArgumentMatchers.any(TaxReturn.class))).thenReturn(outputTaxReturn);
         when(taxReturnMapper.mapTo(ArgumentMatchers.any(TaxReturn.class))).thenReturn(taxReturnDto);
 
-        BigDecimal totalIncome = taxReturnService.calculateResult(outputTaxReturn.getId()).getTotalIncome();
-        BigDecimal totalTaxWithheld = taxReturnService.calculateResult(outputTaxReturn.getId()).getTotalTaxWithheld();
-        BigDecimal totalTaxOwed = taxReturnService.calculateResult(outputTaxReturn.getId()).getTotalIncome();
+        BigDecimal totalIncome = taxReturnService.calculateResult(inputTaxReturn.getId()).getTotalIncome();
+        BigDecimal totalTaxWithheld = taxReturnService.calculateResult(inputTaxReturn.getId()).getTotalTaxWithheld();
+        BigDecimal totalTaxOwed = taxReturnService.calculateResult(inputTaxReturn.getId()).getTotalIncome();
 
         // Total income: 72600.00 - SS tax - Medicare tax = 67046.10
         assertEquals(totalIncome, new BigDecimal("67046.10"));
