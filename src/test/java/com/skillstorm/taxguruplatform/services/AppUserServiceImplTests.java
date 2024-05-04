@@ -37,23 +37,19 @@ class AppUserServiceImplTests {
 
     @Test
     void createFailAlreadyExistsEx() {
-        AppUserDto appUserDto = AppUserDto.builder()
+        AppUser appUser = AppUser.builder()
                 .username("TestUser")
                 .build();
 
         when(appUserRepository.existsByUsername(ArgumentMatchers.any(String.class))).thenReturn(true);
 
         assertThrows(AppUserAlreadyExistsException.class, () ->
-            appUserService.create(appUserDto)
+            appUserService.create(appUser)
         );
     }
 
     @Test
     void createSuccess() throws AppUserAlreadyExistsException {
-        AppUserDto inputAppUserDto = AppUserDto.builder()
-                .username("TestUser")
-                .build();
-
         AppUser inputAppUser = AppUser.builder()
                 .username("TestUser")
                 .build();
@@ -71,7 +67,7 @@ class AppUserServiceImplTests {
         when(appUserRepository.save(ArgumentMatchers.any(AppUser.class))).thenReturn(createdAppUser);
         when(appUserMapper.mapTo(ArgumentMatchers.any(AppUser.class))).thenReturn(createdAppUserDto);
 
-        assertEquals("TestUser", appUserService.create(inputAppUserDto).getUsername());
+        assertEquals("TestUser", appUserService.create(inputAppUser).getUsername());
     }
 
     @Test

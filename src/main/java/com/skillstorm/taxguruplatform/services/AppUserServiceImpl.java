@@ -30,12 +30,12 @@ public class AppUserServiceImpl implements AppUserService, UserDetailsService {
     }
 
     @Override
-    public AppUserDto create(AppUserDto appUserDto) throws AppUserAlreadyExistsException {
-        if (isExisting(appUserDto.getUsername())) {
+    public AppUserDto create(AppUser newUser) throws AppUserAlreadyExistsException {
+        if (isExisting(newUser.getUsername())) {
             throw new AppUserAlreadyExistsException("User already exists.");
         }
 
-        AppUser createdAppUser = appUserRepository.save(appUserMapper.mapFrom(appUserDto));
+        AppUser createdAppUser = appUserRepository.save(newUser);
         return appUserMapper.mapTo(createdAppUser);
     }
 

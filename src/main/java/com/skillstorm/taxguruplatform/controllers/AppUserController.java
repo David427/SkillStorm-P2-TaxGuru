@@ -1,12 +1,15 @@
 package com.skillstorm.taxguruplatform.controllers;
 
 import com.skillstorm.taxguruplatform.domain.dtos.AppUserDto;
+import com.skillstorm.taxguruplatform.domain.entities.AppUser;
 import com.skillstorm.taxguruplatform.exceptions.AppUserAlreadyExistsException;
 import com.skillstorm.taxguruplatform.exceptions.AppUserNotFoundException;
+import com.skillstorm.taxguruplatform.domain.dtos.UserCredentialsDto;
 import com.skillstorm.taxguruplatform.services.AppUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,15 +28,23 @@ import java.util.List;
 public class AppUserController {
 
     private final AppUserService appUserService;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public AppUserController(AppUserService appUserService) {
+    public AppUserController(AppUserService appUserService, PasswordEncoder passwordEncoder) {
         this.appUserService = appUserService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @PostMapping("/register")
-    public ResponseEntity<AppUserDto> createAppUser(@RequestBody AppUserDto appUserDto) throws AppUserAlreadyExistsException {
-        return new ResponseEntity<>(appUserService.create(appUserDto), HttpStatus.CREATED);
+    public ResponseEntity<AppUserDto> createAppUser(@RequestBody UserCredentialsDto userCredentialsDto) throws AppUserAlreadyExistsException {
+        AppUser newUser = AppUser.builder()
+                .username(userCredentialsDto.getUsername())
+                .password(passwordEncoder.encode(userCredentialsDto.getPassword()))
+                .userRole("USER")
+                .build();
+        AppUserDto newUserDto = appUserService.create(newUser);
+        return new ResponseEntity<>(newUserDto, HttpStatus.CREATED);
     }
 
     @GetMapping
