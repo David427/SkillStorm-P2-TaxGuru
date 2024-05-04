@@ -53,7 +53,7 @@ public class AppUserServiceImpl implements AppUserService, UserDetailsService {
 
     @Override
     public AppUserDto findByUsername(String username) throws AppUserNotFoundException {
-        Optional<AppUser> foundAppUser = appUserRepository.findById(username);
+        Optional<AppUser> foundAppUser = appUserRepository.findByUsername(username);
 
         if (foundAppUser.isPresent()) {
             return appUserMapper.mapTo(foundAppUser.get());
@@ -89,10 +89,10 @@ public class AppUserServiceImpl implements AppUserService, UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<AppUser> foundUser = appUserRepository.findById(username);
+        Optional<AppUser> foundUser = appUserRepository.findByUsername(username);
 
         if (foundUser.isEmpty()) {
-            throw new UsernameNotFoundException(username + "not found.");
+            throw new UsernameNotFoundException(username + " not found.");
         }
 
         AppUser appUser = foundUser.get();

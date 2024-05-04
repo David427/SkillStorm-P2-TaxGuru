@@ -23,8 +23,6 @@ public class TaxReturnDto {
     private short claimedDependents;
     private BigDecimal totalIncome;
     private BigDecimal totalTaxWithheld;
-    private BigDecimal spouseTotalIncome;
-    private BigDecimal spouseTotalTaxWithheld;
     private BigDecimal taxableIncome;
     private BigDecimal totalTaxOwed;
     private BigDecimal returnResult;
