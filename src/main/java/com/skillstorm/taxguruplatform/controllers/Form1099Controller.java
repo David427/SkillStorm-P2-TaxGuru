@@ -1,21 +1,15 @@
 package com.skillstorm.taxguruplatform.controllers;
 
+import com.skillstorm.taxguruplatform.domain.dtos.Form1099Dto;
+import com.skillstorm.taxguruplatform.exceptions.ForbiddenException;
 import com.skillstorm.taxguruplatform.exceptions.Form1099AlreadyExistsException;
 import com.skillstorm.taxguruplatform.exceptions.Form1099NotFoundException;
+import com.skillstorm.taxguruplatform.services.Form1099Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.skillstorm.taxguruplatform.domain.dtos.Form1099Dto;
-import com.skillstorm.taxguruplatform.services.Form1099Service;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/1099")
@@ -30,18 +24,43 @@ public class Form1099Controller {
     }
 
     @PostMapping
-    public ResponseEntity<Form1099Dto> createForm1099(@RequestBody Form1099Dto form1099Dto) throws Form1099AlreadyExistsException {
+    public ResponseEntity<Form1099Dto> createForm1099(
+            @RequestBody Form1099Dto form1099Dto,
+            @RequestParam String username,
+            Authentication auth)
+            throws Form1099AlreadyExistsException, ForbiddenException {
+        if (!username.equals(auth.getName())) {
+            throw new ForbiddenException("You are not authorized to access this endpoint.");
+        }
+
         return new ResponseEntity<>(form1099Service.create(form1099Dto), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Form1099Dto> fullUpdateForm1099(@PathVariable("id") Long id, @RequestBody Form1099Dto form1099Dto) throws Form1099NotFoundException {
+    public ResponseEntity<Form1099Dto> fullUpdateForm1099(
+            @PathVariable("id") Long id,
+            @RequestParam String username,
+            @RequestBody Form1099Dto form1099Dto,
+            Authentication auth)
+            throws Form1099NotFoundException, ForbiddenException {
+        if (!username.equals(auth.getName())) {
+            throw new ForbiddenException("You are not authorized to access this endpoint.");
+        }
+
         form1099Dto.setId(id);
         return new ResponseEntity<>(form1099Service.fullUpdate(form1099Dto), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> deleteForm1099(@PathVariable("id") Long id) throws Form1099NotFoundException {
+    public ResponseEntity<Object> deleteForm1099(
+            @PathVariable("id") Long id,
+            @RequestParam String username,
+            Authentication auth)
+            throws Form1099NotFoundException, ForbiddenException {
+        if (!username.equals(auth.getName())) {
+            throw new ForbiddenException("You are not authorized to access this endpoint.");
+        }
+
         form1099Service.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

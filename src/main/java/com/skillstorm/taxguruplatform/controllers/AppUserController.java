@@ -1,18 +1,14 @@
 package com.skillstorm.taxguruplatform.controllers;
 
 import com.skillstorm.taxguruplatform.domain.dtos.AppUserDto;
-import com.skillstorm.taxguruplatform.domain.dtos.UserCredentialsDto;
-import com.skillstorm.taxguruplatform.domain.entities.AppUser;
-import com.skillstorm.taxguruplatform.exceptions.AppUserAlreadyExistsException;
 import com.skillstorm.taxguruplatform.exceptions.AppUserNotFoundException;
+import com.skillstorm.taxguruplatform.exceptions.ForbiddenException;
 import com.skillstorm.taxguruplatform.services.AppUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/users")
@@ -20,52 +16,50 @@ import java.util.List;
 public class AppUserController {
 
     private final AppUserService appUserService;
-    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public AppUserController(AppUserService appUserService, PasswordEncoder passwordEncoder) {
+    public AppUserController(AppUserService appUserService) {
         this.appUserService = appUserService;
-        this.passwordEncoder = passwordEncoder;
     }
 
-    @PostMapping("/register")
-    public ResponseEntity<AppUserDto> createAppUser(@RequestBody UserCredentialsDto userCredentialsDto) throws AppUserAlreadyExistsException {
-        AppUser newUser = AppUser.builder()
-                .username(userCredentialsDto.getUsername())
-                .password(passwordEncoder.encode(userCredentialsDto.getPassword()))
-                .userRole("USER")
-                .build();
-        AppUserDto newUserDto = appUserService.create(newUser);
-        return new ResponseEntity<>(newUserDto, HttpStatus.CREATED);
-    }
-
-    @PostMapping("/login")
-
-    @GetMapping
-    public ResponseEntity<List<AppUserDto>> getAllAppUsers() {
-        List<AppUserDto> foundAppUsers = appUserService.findAll();
-
-        if (!foundAppUsers.isEmpty()) {
-            return new ResponseEntity<>(foundAppUsers, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    @GetMapping("/data")
+    public ResponseEntity<AppUserDto> getAppUser(
+            @RequestParam String username,
+            Authentication auth)
+            throws AppUserNotFoundException, ForbiddenException {
+        if (!username.equals(auth.getName())) {
+            throw new ForbiddenException("You are not authorized to access this endpoint.");
         }
-    }
 
-    @GetMapping("/{username}")
-    public ResponseEntity<AppUserDto> getAppUser(@PathVariable("username") String username) throws AppUserNotFoundException {
         return new ResponseEntity<>(appUserService.findByUsername(username), HttpStatus.OK);
     }
 
-    @PutMapping("/{username}")
-    public ResponseEntity<AppUserDto> fullUpdateAppUser(@PathVariable("username") String username, @RequestBody AppUserDto appUserDto) throws AppUserNotFoundException {
+    @PutMapping("/update")
+    public ResponseEntity<AppUserDto> fullUpdateAppUser(
+            @RequestParam String username,
+            @RequestBody AppUserDto appUserDto,
+            Authentication auth)
+            throws AppUserNotFoundException, ForbiddenException {
         appUserDto.setUsername(username);
+
+        if (!username.equals(auth.getName())) {
+            throw new ForbiddenException("You are not authorized to access this endpoint.");
+        }
+
         return new ResponseEntity<>(appUserService.fullUpdate(appUserDto), HttpStatus.OK);
     }
 
-    @DeleteMapping("/{username}")
-    public ResponseEntity<Object> deleteAppUser(@PathVariable("username") String username) throws AppUserNotFoundException {
+    @DeleteMapping("/delete")
+    public ResponseEntity<Object> deleteAppUser(
+            @RequestParam String username,
+            Authentication auth)
+            throws AppUserNotFoundException, ForbiddenException {
         appUserService.delete(username);
+
+        if (!username.equals(auth.getName())) {
+            throw new ForbiddenException("You are not authorized to access this endpoint.");
+        }
+
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

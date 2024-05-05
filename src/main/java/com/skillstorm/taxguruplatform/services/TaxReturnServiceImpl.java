@@ -59,7 +59,8 @@ public class TaxReturnServiceImpl implements TaxReturnService {
 
     @Override
     public boolean isExisting(Long id) {
-        return taxReturnRepository.existsById(id);
+        if (id != null) return taxReturnRepository.existsById(id);
+        return false;
     }
 
     @Override

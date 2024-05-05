@@ -13,8 +13,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -40,18 +38,6 @@ public class AppUserServiceImpl implements AppUserService, UserDetailsService {
     }
 
     @Override
-    public List<AppUserDto> findAll() {
-        List<AppUserDto> appUserDtos = new LinkedList<>();
-        List<AppUser> foundAppUsers = appUserRepository.findAll();
-
-        for (AppUser appUser : foundAppUsers) {
-            appUserDtos.add(appUserMapper.mapTo(appUser));
-        }
-
-        return appUserDtos;
-    }
-
-    @Override
     public AppUserDto findByUsername(String username) throws AppUserNotFoundException {
         Optional<AppUser> foundAppUser = appUserRepository.findByUsername(username);
 
@@ -65,12 +51,16 @@ public class AppUserServiceImpl implements AppUserService, UserDetailsService {
 
     @Override
     public AppUserDto fullUpdate(AppUserDto appUserDto) throws AppUserNotFoundException {
-        if (isExisting(appUserDto.getUsername())) {
-            AppUser updatedAppUser = appUserRepository.save(appUserMapper.mapFrom(appUserDto));
-            return appUserMapper.mapTo(updatedAppUser);
-        } else {
-            throw new AppUserNotFoundException("User not found.");
-        }
+        AppUser receivedAppUser = appUserMapper.mapFrom(appUserDto);
+        AppUser existingAppUser = appUserRepository.findByUsername(appUserDto.getUsername())
+                .orElseThrow(() -> new AppUserNotFoundException("User not found."));
+
+        // Prevent a lack of role/password in the DTO (null values) from being saved as null in the db
+        receivedAppUser.setUserRole(existingAppUser.getUserRole());
+        receivedAppUser.setPassword(existingAppUser.getPassword());
+
+        AppUser updatedAppUser = appUserRepository.save(receivedAppUser);
+        return appUserMapper.mapTo(updatedAppUser);
     }
 
     @Override

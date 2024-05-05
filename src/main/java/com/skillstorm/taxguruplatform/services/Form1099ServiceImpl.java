@@ -6,7 +6,6 @@ import com.skillstorm.taxguruplatform.exceptions.Form1099AlreadyExistsException;
 import com.skillstorm.taxguruplatform.exceptions.Form1099NotFoundException;
 import com.skillstorm.taxguruplatform.repositories.Form1099Repository;
 import com.skillstorm.taxguruplatform.utils.mappers.Mapper;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -53,7 +52,8 @@ public class Form1099ServiceImpl implements Form1099Service {
 
     @Override
     public boolean isExisting(Long id) {
-        return form1099Repository.existsById(id);
+        if (id != null) return form1099Repository.existsById(id);
+        return false;
     }
 
 }

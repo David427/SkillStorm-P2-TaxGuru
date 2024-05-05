@@ -1,27 +1,23 @@
 package com.skillstorm.taxguruplatform.services;
 
-import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentMatchers;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.springframework.boot.test.context.SpringBootTest;
-
 import com.skillstorm.taxguruplatform.domain.dtos.AppUserDto;
 import com.skillstorm.taxguruplatform.domain.entities.AppUser;
 import com.skillstorm.taxguruplatform.exceptions.AppUserAlreadyExistsException;
 import com.skillstorm.taxguruplatform.exceptions.AppUserNotFoundException;
 import com.skillstorm.taxguruplatform.repositories.AppUserRepository;
 import com.skillstorm.taxguruplatform.utils.mappers.AppUserMapperImpl;
+import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentMatchers;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest
 class AppUserServiceImplTests {
@@ -44,7 +40,7 @@ class AppUserServiceImplTests {
         when(appUserRepository.existsByUsername(ArgumentMatchers.any(String.class))).thenReturn(true);
 
         assertThrows(AppUserAlreadyExistsException.class, () ->
-            appUserService.create(appUser)
+                appUserService.create(appUser)
         );
     }
 
@@ -71,50 +67,13 @@ class AppUserServiceImplTests {
     }
 
     @Test
-    void findAllSuccess() {
-        List<AppUserDto> appUserDtos = new LinkedList<>();
-
-        AppUserDto appUserDto1 = AppUserDto.builder()
-                .username("TestUser")
-                .email("address@email.com")
-                .build();
-
-        AppUserDto appUserDto2 = AppUserDto.builder()
-                .username("TestUser")
-                .email("address@email.com")
-                .build();
-
-        List<AppUser> appUsers = new LinkedList<>();
-
-        AppUser appUser1 = AppUser.builder()
-                .username("TestUser")
-                .email("address@email.com")
-                .build();
-
-        AppUser appUser2 = AppUser.builder()
-                .username("TestUser")
-                .email("address@email.com")
-                .build();
-
-        appUserDtos.add(appUserDto1);
-        appUserDtos.add(appUserDto2);
-        appUsers.add(appUser1);
-        appUsers.add(appUser2);
-
-        when(appUserRepository.findAll()).thenReturn(appUsers);
-        appUserService.findAll();
-
-        assertEquals(2, appUserDtos.size());
-    }
-
-    @Test
     void findByUsernameFailNotFoundEx() {
         String inputUsername = "TestUser";
 
         when(appUserRepository.findByUsername(ArgumentMatchers.any(String.class))).thenReturn(Optional.empty());
 
         assertThrows(AppUserNotFoundException.class, () ->
-            appUserService.findByUsername(inputUsername)
+                appUserService.findByUsername(inputUsername)
         );
     }
 
@@ -145,7 +104,7 @@ class AppUserServiceImplTests {
         when(appUserRepository.existsByUsername(ArgumentMatchers.any(String.class))).thenReturn(false);
 
         assertThrows(AppUserNotFoundException.class, () ->
-            appUserService.fullUpdate(inputAppUserDto)
+                appUserService.fullUpdate(inputAppUserDto)
         );
     }
 
@@ -190,7 +149,7 @@ class AppUserServiceImplTests {
         verify(appUserRepository, times(0)).deleteById(nonExistingAppUser.getUsername());
 
         assertThrows(AppUserNotFoundException.class, () ->
-            appUserService.delete(nonExistingAppUser.getUsername())
+                appUserService.delete(nonExistingAppUser.getUsername())
         );
     }
 
