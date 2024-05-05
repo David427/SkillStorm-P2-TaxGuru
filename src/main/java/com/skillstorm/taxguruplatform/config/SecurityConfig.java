@@ -9,7 +9,6 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractAuthenticationFilterConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -30,19 +29,26 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-                .authorizeHttpRequests(registry -> {
-                    registry.requestMatchers("/", "/home").permitAll();
-                    registry.requestMatchers("/users/register").permitAll();
-                    registry.requestMatchers("/users/login").permitAll();
-                    registry.anyRequest().authenticated();
-                })
-                .formLogin(AbstractAuthenticationFilterConfigurer::permitAll)
-                .csrf(csrf -> {
-                    csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
-                        csrf.ignoringRequestMatchers("/", "/home");
-                        csrf.ignoringRequestMatchers("/users/register");
-                        csrf.ignoringRequestMatchers("/users/login");
-                })
+                .authorizeHttpRequests((registry) -> registry
+                        .requestMatchers("/", "/home").permitAll()
+                        .requestMatchers("/users/register").permitAll()
+                        .requestMatchers("/users/login").permitAll()
+                        .requestMatchers("/users/**").authenticated()
+                        .requestMatchers("/returns/**").authenticated()
+                        .requestMatchers("/adjustments/**").authenticated()
+                        .requestMatchers("/w2/**").authenticated()
+                        .requestMatchers("/1099/**").authenticated()
+                )
+                .formLogin((login) -> login
+                        .loginProcessingUrl("/users/login")
+                        .permitAll()
+                )
+                .csrf((csrf) -> csrf
+                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                        .ignoringRequestMatchers("/", "/home")
+                        .ignoringRequestMatchers("/users/register")
+                        .ignoringRequestMatchers("/users/login")
+                )
                 .build();
     }
 
