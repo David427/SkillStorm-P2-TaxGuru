@@ -130,7 +130,7 @@ class AppUserServiceImplTests {
                 .email("address@email.com")
                 .build();
 
-        when(appUserRepository.existsByUsername(ArgumentMatchers.any(String.class))).thenReturn(true);
+        when(appUserRepository.findByUsername(ArgumentMatchers.any(String.class))).thenReturn(Optional.of(updatedAppUser));
         when(appUserMapper.mapFrom(ArgumentMatchers.any(AppUserDto.class))).thenReturn(inputAppUser);
         when(appUserRepository.save(ArgumentMatchers.any(AppUser.class))).thenReturn(updatedAppUser);
         when(appUserMapper.mapTo(ArgumentMatchers.any(AppUser.class))).thenReturn(updatedAppUserDto);
@@ -173,7 +173,7 @@ class AppUserServiceImplTests {
         Exception exception = assertThrows(UsernameNotFoundException.class, () ->
                 appUserService.loadUserByUsername(inputUsername)
         );
-        assertEquals("TestUser not found.", exception.getMessage());
+        assertEquals("Username not found.", exception.getMessage());
     }
 
 }

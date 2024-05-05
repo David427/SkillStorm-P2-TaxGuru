@@ -7,7 +7,6 @@ import com.skillstorm.taxguruplatform.exceptions.AppUserNotFoundException;
 import com.skillstorm.taxguruplatform.repositories.AppUserRepository;
 import com.skillstorm.taxguruplatform.utils.mappers.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -79,25 +78,9 @@ public class AppUserServiceImpl implements AppUserService, UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<AppUser> foundUser = appUserRepository.findByUsername(username);
-
-        if (foundUser.isEmpty()) {
-            throw new UsernameNotFoundException(username + " not found.");
-        }
-
-        AppUser appUser = foundUser.get();
-        boolean enabled = true;
-        boolean accountNonExpired = true;
-        boolean credentialsNonExpired = true;
-        boolean accountNonLocked = true;
-
-        return new User(
-                appUser.getUsername(),
-                appUser.getPassword(),
-                enabled, accountNonExpired,
-                credentialsNonExpired,
-                accountNonLocked,
-                appUser.getAuthorities());
+        return appUserRepository.findByUsername(username).orElseThrow(
+                () -> new UsernameNotFoundException("Username not found.")
+        );
     }
 
 }
