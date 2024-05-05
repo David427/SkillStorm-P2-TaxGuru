@@ -43,7 +43,7 @@ public class AdjustmentServiceImpl implements AdjustmentService {
     }
 
     @Override
-    public void delete(long id) throws AdjustmentNotFoundException {
+    public void delete(Long id) throws AdjustmentNotFoundException {
         if (isExisting(id)) {
             adjustmentRepository.deleteById(id);
         } else {
@@ -52,7 +52,7 @@ public class AdjustmentServiceImpl implements AdjustmentService {
     }
 
     @Override
-    public boolean isExisting(long id) {
+    public boolean isExisting(Long id) {
         return adjustmentRepository.existsById(id);
     }
 

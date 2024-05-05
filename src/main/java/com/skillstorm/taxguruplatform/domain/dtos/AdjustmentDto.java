@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class AdjustmentDto {
 
-    private long id;
-    private boolean stdDeduction;
+    private Long id;
+    private Boolean stdDeduction;
 
 }

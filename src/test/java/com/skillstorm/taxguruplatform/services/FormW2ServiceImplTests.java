@@ -34,6 +34,7 @@ class FormW2ServiceImplTests {
     @Test
     void createFailAlreadyExistsEx() {
         FormW2Dto formW2Dto = FormW2Dto.builder()
+                .id(1L)
                 .build();
 
         when(formW2Repository.existsById(ArgumentMatchers.any(Long.class))).thenReturn(true);
@@ -52,11 +53,11 @@ class FormW2ServiceImplTests {
                 .build();
 
         FormW2 createdFormW2 = FormW2.builder()
-                .id(1)
+                .id(1L)
                 .build();
 
         FormW2Dto createdFormW2Dto = FormW2Dto.builder()
-                .id(1)
+                .id(1L)
                 .build();
 
         when(formW2Repository.existsById(ArgumentMatchers.any(Long.class))).thenReturn(false);
@@ -70,7 +71,7 @@ class FormW2ServiceImplTests {
     @Test
     void fullUpdateFailNotFoundEx() {
         FormW2Dto inputFormW2Dto = FormW2Dto.builder()
-                .id(1)
+                .id(1L)
                 .build();
 
         when(formW2Repository.existsById(ArgumentMatchers.any(Long.class))).thenReturn(false);
@@ -83,22 +84,22 @@ class FormW2ServiceImplTests {
     @Test
     void fullUpdateSuccess() throws FormW2NotFoundException {
         FormW2Dto inputFormW2Dto = FormW2Dto.builder()
-                .id(1)
+                .id(1L)
                 .income(new BigDecimal("50000.00"))
                 .build();
 
         FormW2 inputFormW2 = FormW2.builder()
-                .id(1)
+                .id(1L)
                 .income(new BigDecimal("50000.00"))
                 .build();
 
         FormW2 updatedFormW2 = FormW2.builder()
-                .id(1)
+                .id(1L)
                 .income(new BigDecimal("50000.00"))
                 .build();
 
         FormW2Dto updatedFormW2Dto = FormW2Dto.builder()
-                .id(1)
+                .id(1L)
                 .income(new BigDecimal("50000.00"))
                 .build();
 
@@ -114,7 +115,7 @@ class FormW2ServiceImplTests {
     @Test
     void deleteFailNotFoundEx() {
         FormW2 nonExistingFormW2 = FormW2.builder()
-                .id(1)
+                .id(1L)
                 .build();
 
         when(formW2Repository.existsById(ArgumentMatchers.any(Long.class))).thenReturn(false);
@@ -128,7 +129,7 @@ class FormW2ServiceImplTests {
     @Test
     void deleteSuccess() throws FormW2NotFoundException {
         FormW2 existingFormW2 = FormW2.builder()
-                .id(1)
+                .id(1L)
                 .build();
 
         when(formW2Repository.existsById(ArgumentMatchers.any(Long.class))).thenReturn(true);

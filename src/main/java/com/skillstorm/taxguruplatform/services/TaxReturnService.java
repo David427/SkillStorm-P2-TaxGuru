@@ -11,10 +11,10 @@ public interface TaxReturnService {
 
     TaxReturnDto fullUpdate(TaxReturnDto taxReturnDto) throws TaxReturnNotFoundException;
 
-    void delete(long id) throws TaxReturnNotFoundException;
+    void delete(Long id) throws TaxReturnNotFoundException;
 
-    boolean isExisting(long id);
+    boolean isExisting(Long id);
 
-    TaxReturnDto calculateResult(long id) throws TaxReturnNotFoundException, ResultCalculationException;
+    TaxReturnDto calculateResult(Long id) throws TaxReturnNotFoundException, ResultCalculationException;
 
 }

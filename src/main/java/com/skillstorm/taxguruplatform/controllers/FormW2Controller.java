@@ -35,13 +35,13 @@ public class FormW2Controller {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<FormW2Dto> fullUpdateFormW2(@PathVariable("id") long id, @RequestBody FormW2Dto formW2Dto) throws FormW2NotFoundException {
+    public ResponseEntity<FormW2Dto> fullUpdateFormW2(@PathVariable("id") Long id, @RequestBody FormW2Dto formW2Dto) throws FormW2NotFoundException {
         formW2Dto.setId(id);
         return new ResponseEntity<>(formW2Service.fullUpdate(formW2Dto), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> deleteFormW2(@PathVariable("id") long id) throws FormW2NotFoundException {
+    public ResponseEntity<Object> deleteFormW2(@PathVariable("id") Long id) throws FormW2NotFoundException {
         formW2Service.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

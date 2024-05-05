@@ -43,7 +43,7 @@ public class FormW2ServiceImpl implements FormW2Service {
     }
 
     @Override
-    public void delete(long id) throws FormW2NotFoundException {
+    public void delete(Long id) throws FormW2NotFoundException {
         if (isExisting(id)) {
             formW2Repository.deleteById(id);
         } else {
@@ -52,7 +52,7 @@ public class FormW2ServiceImpl implements FormW2Service {
     }
 
     @Override
-    public boolean isExisting(long id) {
+    public boolean isExisting(Long id) {
         return formW2Repository.existsById(id);
     }
 

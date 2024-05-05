@@ -43,7 +43,7 @@ public class Form1099ServiceImpl implements Form1099Service {
     }
 
     @Override
-    public void delete(long id) throws Form1099NotFoundException {
+    public void delete(Long id) throws Form1099NotFoundException {
         if (isExisting(id)) {
             form1099Repository.deleteById(id);
         } else {
@@ -52,7 +52,7 @@ public class Form1099ServiceImpl implements Form1099Service {
     }
 
     @Override
-    public boolean isExisting(long id) {
+    public boolean isExisting(Long id) {
         return form1099Repository.existsById(id);
     }
 

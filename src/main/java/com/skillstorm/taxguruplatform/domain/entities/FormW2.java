@@ -22,7 +22,7 @@ public class FormW2 {
             allocationSize = 1
     )
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "form_w2_data_id_seq")
-    private long id;
+    private Long id;
 
     private String eid;
     private String empName;

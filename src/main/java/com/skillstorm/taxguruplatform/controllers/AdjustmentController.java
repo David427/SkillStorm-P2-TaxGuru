@@ -35,13 +35,13 @@ public class AdjustmentController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<AdjustmentDto> fullUpdateAdjustmentData(@PathVariable("id") long id, @RequestBody AdjustmentDto adjustmentDto) throws AdjustmentNotFoundException {
+    public ResponseEntity<AdjustmentDto> fullUpdateAdjustmentData(@PathVariable("id") Long id, @RequestBody AdjustmentDto adjustmentDto) throws AdjustmentNotFoundException {
         adjustmentDto.setId(id);
         return new ResponseEntity<>(adjustmentService.fullUpdate(adjustmentDto), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> deleteAdjustmentData(@PathVariable("id") long id) throws AdjustmentNotFoundException {
+    public ResponseEntity<Object> deleteAdjustmentData(@PathVariable("id") Long id) throws AdjustmentNotFoundException {
         adjustmentService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

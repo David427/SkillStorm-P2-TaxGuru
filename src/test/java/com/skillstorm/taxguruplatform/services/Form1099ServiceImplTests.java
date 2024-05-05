@@ -35,6 +35,7 @@ class Form1099ServiceImplTests {
     @Test
     void createFailAlreadyExistsEx() {
         Form1099Dto form1099Dto = Form1099Dto.builder()
+                .id(1L)
                 .build();
 
         when(form1099Repository.existsById(ArgumentMatchers.any(Long.class))).thenReturn(true);
@@ -53,11 +54,11 @@ class Form1099ServiceImplTests {
                 .build();
 
         Form1099 createdForm1099 = Form1099.builder()
-                .id(1)
+                .id(1L)
                 .build();
 
         Form1099Dto createdForm1099Dto = Form1099Dto.builder()
-                .id(1)
+                .id(1L)
                 .build();
 
         when(form1099Repository.existsById(ArgumentMatchers.any(Long.class))).thenReturn(false);
@@ -71,7 +72,7 @@ class Form1099ServiceImplTests {
     @Test
     void fullUpdateFailNotFoundEx() {
         Form1099Dto inputForm1099Dto = Form1099Dto.builder()
-                .id(1)
+                .id(1L)
                 .build();
 
         when(form1099Repository.existsById(ArgumentMatchers.any(Long.class))).thenReturn(false);
@@ -84,22 +85,22 @@ class Form1099ServiceImplTests {
     @Test
     void fullUpdateSuccess() throws Form1099NotFoundException {
         Form1099Dto inputForm1099Dto = Form1099Dto.builder()
-                .id(1)
+                .id(1L)
                 .income(new BigDecimal("50000.00"))
                 .build();
 
         Form1099 inputForm1099 = Form1099.builder()
-                .id(1)
+                .id(1L)
                 .income(new BigDecimal("50000.00"))
                 .build();
 
         Form1099 updatedForm1099 = Form1099.builder()
-                .id(1)
+                .id(1L)
                 .income(new BigDecimal("50000.00"))
                 .build();
 
         Form1099Dto updatedForm1099Dto = Form1099Dto.builder()
-                .id(1)
+                .id(1L)
                 .income(new BigDecimal("50000.00"))
                 .build();
 
@@ -115,7 +116,7 @@ class Form1099ServiceImplTests {
     @Test
     void deleteFailNotFoundEx() {
         Form1099 nonExistingForm1099 = Form1099.builder()
-                .id(1)
+                .id(1L)
                 .build();
 
         when(form1099Repository.existsById(ArgumentMatchers.any(Long.class))).thenReturn(false);
@@ -129,7 +130,7 @@ class Form1099ServiceImplTests {
     @Test
     void deleteSuccess() throws Form1099NotFoundException {
         Form1099 existingForm1099 = Form1099.builder()
-                .id(1)
+                .id(1L)
                 .build();
 
         when(form1099Repository.existsById(ArgumentMatchers.any(Long.class))).thenReturn(true);

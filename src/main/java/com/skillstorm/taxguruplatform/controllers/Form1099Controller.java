@@ -35,13 +35,13 @@ public class Form1099Controller {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Form1099Dto> fullUpdateForm1099(@PathVariable("id") long id, @RequestBody Form1099Dto form1099Dto) throws Form1099NotFoundException {
+    public ResponseEntity<Form1099Dto> fullUpdateForm1099(@PathVariable("id") Long id, @RequestBody Form1099Dto form1099Dto) throws Form1099NotFoundException {
         form1099Dto.setId(id);
         return new ResponseEntity<>(form1099Service.fullUpdate(form1099Dto), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> deleteForm1099(@PathVariable("id") long id) throws Form1099NotFoundException {
+    public ResponseEntity<Object> deleteForm1099(@PathVariable("id") Long id) throws Form1099NotFoundException {
         form1099Service.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

@@ -37,8 +37,7 @@ class TaxReturnServiceImplTests {
     @Test
     void createFailAlreadyExistsEx() {
         TaxReturnDto inputTaxReturnDto = TaxReturnDto.builder()
-                .id(1)
-                .filingStatus("Single")
+                .id(1L)
                 .build();
 
         when(taxReturnRepository.existsById(ArgumentMatchers.any(Long.class))).thenReturn(true);
@@ -57,11 +56,11 @@ class TaxReturnServiceImplTests {
                 .build();
 
         TaxReturn createdTaxReturn = TaxReturn.builder()
-                .id(1)
+                .id(1L)
                 .build();
 
         TaxReturnDto createdTaxReturnDto = TaxReturnDto.builder()
-                .id(1)
+                .id(1L)
                 .build();
 
         when(taxReturnRepository.existsById(ArgumentMatchers.any(Long.class))).thenReturn(false);
@@ -75,7 +74,7 @@ class TaxReturnServiceImplTests {
     @Test
     void fullUpdateFailNotFoundEx() {
         TaxReturnDto inputTaxReturnDto = TaxReturnDto.builder()
-                .id(1)
+                .id(1L)
                 .build();
 
         when(taxReturnRepository.existsById(ArgumentMatchers.any(Long.class))).thenReturn(false);
@@ -88,22 +87,22 @@ class TaxReturnServiceImplTests {
     @Test
     void fullUpdateSuccess() throws TaxReturnNotFoundException {
         TaxReturnDto inputTaxReturnDto = TaxReturnDto.builder()
-                .id(1)
+                .id(1L)
                 .filingStatus("Head of Household")
                 .build();
 
         TaxReturn inputTaxReturn = TaxReturn.builder()
-                .id(1)
+                .id(1L)
                 .filingStatus("Head of Household")
                 .build();
 
         TaxReturn updatedTaxReturn = TaxReturn.builder()
-                .id(1)
+                .id(1L)
                 .filingStatus("Head of Household")
                 .build();
 
         TaxReturnDto updatedTaxReturnDto = TaxReturnDto.builder()
-                .id(1)
+                .id(1L)
                 .filingStatus("Head of Household")
                 .build();
 
@@ -119,7 +118,7 @@ class TaxReturnServiceImplTests {
     @Test
     void deleteSuccess() throws TaxReturnNotFoundException {
         TaxReturn existingTaxReturn = TaxReturn.builder()
-                .id(1)
+                .id(1L)
                 .build();
 
         when(taxReturnRepository.existsById(ArgumentMatchers.any(Long.class))).thenReturn(true);
@@ -130,7 +129,7 @@ class TaxReturnServiceImplTests {
     @Test
     void deleteFailNotFoundEx() {
         TaxReturn nonExistingTaxReturn = TaxReturn.builder()
-                .id(1)
+                .id(1L)
                 .build();
 
         when(taxReturnRepository.existsById(ArgumentMatchers.any(Long.class))).thenReturn(false);
@@ -155,7 +154,7 @@ class TaxReturnServiceImplTests {
     @Test
     void calculateResultFailNoFilingStatusEx() {
         TaxReturn taxReturn = TaxReturn.builder()
-                .id(1)
+                .id(1L)
                 .build();
 
         when(taxReturnRepository.findById(ArgumentMatchers.any(Long.class))).thenReturn(Optional.of(taxReturn));
@@ -186,7 +185,7 @@ class TaxReturnServiceImplTests {
                 .build();
 
         TaxReturn taxReturn = TaxReturn.builder()
-                .id(1)
+                .id(1L)
                 .formW2(formW2)
                 .build();
 
@@ -254,7 +253,7 @@ class TaxReturnServiceImplTests {
                 .build();
 
         TaxReturn taxReturn = TaxReturn.builder()
-                .id(1)
+                .id(1L)
                 .formW2(formW2)
                 .build();
 
@@ -268,7 +267,7 @@ class TaxReturnServiceImplTests {
                 .build();
 
         TaxReturn taxReturn = TaxReturn.builder()
-                .id(1)
+                .id(1L)
                 .form1099(form1099)
                 .build();
 

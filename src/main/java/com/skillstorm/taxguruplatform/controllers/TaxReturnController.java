@@ -29,18 +29,18 @@ public class TaxReturnController {
     }
 
     @GetMapping("/{id}/result")
-    public ResponseEntity<TaxReturnDto> calculateResult(@PathVariable("id") long id) throws TaxReturnNotFoundException, ResultCalculationException {
+    public ResponseEntity<TaxReturnDto> calculateResult(@PathVariable("id") Long id) throws TaxReturnNotFoundException, ResultCalculationException {
         return new ResponseEntity<>(taxReturnService.calculateResult(id), HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<TaxReturnDto> fullUpdateTaxReturn(@PathVariable("id") long id, @RequestBody TaxReturnDto taxReturnDto) throws TaxReturnNotFoundException {
+    public ResponseEntity<TaxReturnDto> fullUpdateTaxReturn(@PathVariable("id") Long id, @RequestBody TaxReturnDto taxReturnDto) throws TaxReturnNotFoundException {
         taxReturnDto.setId(id);
         return new ResponseEntity<>(taxReturnService.fullUpdate(taxReturnDto), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> deleteTaxReturn(@PathVariable("id") long id) throws TaxReturnNotFoundException {
+    public ResponseEntity<Object> deleteTaxReturn(@PathVariable("id") Long id) throws TaxReturnNotFoundException {
         taxReturnService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

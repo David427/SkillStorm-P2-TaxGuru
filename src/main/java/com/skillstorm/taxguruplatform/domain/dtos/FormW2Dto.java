@@ -1,7 +1,5 @@
 package com.skillstorm.taxguruplatform.domain.dtos;
 
-import com.skillstorm.taxguruplatform.domain.entities.TaxReturn;
-import com.skillstorm.taxguruplatform.utils.enums.State;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,7 +13,7 @@ import java.math.BigDecimal;
 @Builder
 public class FormW2Dto {
 
-    private long id;
+    private Long id;
     private String eid;
     private String empName;
     private String empStreetAddress;

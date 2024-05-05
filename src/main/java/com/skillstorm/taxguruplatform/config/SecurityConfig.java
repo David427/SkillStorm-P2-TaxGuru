@@ -9,14 +9,11 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractAuthenticationFilterConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
-
-import java.security.SecureRandom;
-
-import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @EnableWebSecurity
@@ -32,24 +29,21 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests((authorizeHttpRequests) ->
-                authorizeHttpRequests
-                        .requestMatchers("/users/register").permitAll()
-                        .requestMatchers("/users/login").permitAll()
-                        .requestMatchers("/users/**").authenticated()
-                        .requestMatchers("/returns/**").authenticated()
-                        .requestMatchers("/1099/**").authenticated()
-                        .requestMatchers("/w2/**").authenticated()
-                        .requestMatchers("/adjustments/**").authenticated()
-        ).formLogin(withDefaults());
-
-        http.csrf((csrf) ->
-                csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-                        .ignoringRequestMatchers("/users/register")
-                        .ignoringRequestMatchers("/users/login")
-        );
-
-        return http.build();
+        return http
+                .authorizeHttpRequests(registry -> {
+                    registry.requestMatchers("/", "/home").permitAll();
+                    registry.requestMatchers("/users/register").permitAll();
+                    registry.requestMatchers("/users/login").permitAll();
+                    registry.anyRequest().authenticated();
+                })
+                .formLogin(AbstractAuthenticationFilterConfigurer::permitAll)
+                .csrf(csrf -> {
+                    csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
+                        csrf.ignoringRequestMatchers("/", "/home");
+                        csrf.ignoringRequestMatchers("/users/register");
+                        csrf.ignoringRequestMatchers("/users/login");
+                })
+                .build();
     }
 
     @Bean
@@ -62,7 +56,7 @@ public class SecurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(10, new SecureRandom());
+        return new BCryptPasswordEncoder(10);
     }
 
 }

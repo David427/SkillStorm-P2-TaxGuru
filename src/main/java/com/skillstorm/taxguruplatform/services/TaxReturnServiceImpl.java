@@ -49,7 +49,7 @@ public class TaxReturnServiceImpl implements TaxReturnService {
     }
 
     @Override
-    public void delete(long id) throws TaxReturnNotFoundException {
+    public void delete(Long id) throws TaxReturnNotFoundException {
         if (isExisting(id)) {
             taxReturnRepository.deleteById(id);
         } else {
@@ -58,12 +58,12 @@ public class TaxReturnServiceImpl implements TaxReturnService {
     }
 
     @Override
-    public boolean isExisting(long id) {
+    public boolean isExisting(Long id) {
         return taxReturnRepository.existsById(id);
     }
 
     @Override
-    public TaxReturnDto calculateResult(long id) throws TaxReturnNotFoundException, ResultCalculationException {
+    public TaxReturnDto calculateResult(Long id) throws TaxReturnNotFoundException, ResultCalculationException {
         Optional<TaxReturn> foundTaxReturn = taxReturnRepository.findById(id);
 
         if (foundTaxReturn.isEmpty()) {
@@ -152,11 +152,11 @@ public class TaxReturnServiceImpl implements TaxReturnService {
         }
 
         if (filingStatus.equals("Single") || filingStatus.equals("Married")) {
-            if (taxReturn.getAdjustment().isStdDeduction()) {
+            if (taxReturn.getAdjustment().getStdDeduction()) {
                 return totalIncome.subtract(deductionSingle2023);
             }
         } else if (filingStatus.equals("Head of Household")) {
-            if (taxReturn.getAdjustment().isStdDeduction()) {
+            if (taxReturn.getAdjustment().getStdDeduction()) {
                 return totalIncome.subtract(deductionHoh2023);
             }
         }

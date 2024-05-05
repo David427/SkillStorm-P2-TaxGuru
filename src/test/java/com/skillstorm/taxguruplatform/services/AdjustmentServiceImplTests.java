@@ -33,6 +33,7 @@ class AdjustmentServiceImplTests {
     @Test
     void createFailAlreadyExistsEx() {
         AdjustmentDto adjustmentDto = AdjustmentDto.builder()
+                .id(1L)
                 .build();
 
         when(adjustmentRepository.existsById(ArgumentMatchers.any(Long.class))).thenReturn(true);
@@ -51,11 +52,11 @@ class AdjustmentServiceImplTests {
                 .build();
 
         Adjustment createdAdjustment = Adjustment.builder()
-                .id(1)
+                .id(1L)
                 .build();
 
         AdjustmentDto createdAdjustmentDto = AdjustmentDto.builder()
-                .id(1)
+                .id(1L)
                 .build();
 
         when(adjustmentRepository.existsById(ArgumentMatchers.any(Long.class))).thenReturn(false);
@@ -69,7 +70,7 @@ class AdjustmentServiceImplTests {
     @Test
     void fullUpdateFailNotFoundEx() {
         AdjustmentDto inputAdjustmentDto = AdjustmentDto.builder()
-                .id(1)
+                .id(1L)
                 .build();
 
         when(adjustmentRepository.existsById(ArgumentMatchers.any(Long.class))).thenReturn(false);
@@ -82,22 +83,22 @@ class AdjustmentServiceImplTests {
     @Test
     void fullUpdateSuccess() throws AdjustmentNotFoundException {
         AdjustmentDto inputAdjustmentDto = AdjustmentDto.builder()
-                .id(1)
+                .id(1L)
                 .stdDeduction(true)
                 .build();
 
         Adjustment inputAdjustment = Adjustment.builder()
-                .id(1)
+                .id(1L)
                 .stdDeduction(true)
                 .build();
 
         Adjustment updatedAdjustment = Adjustment.builder()
-                .id(1)
+                .id(1L)
                 .stdDeduction(true)
                 .build();
 
         AdjustmentDto updatedAdjustmentDto = AdjustmentDto.builder()
-                .id(1)
+                .id(1L)
                 .stdDeduction(true)
                 .build();
 
@@ -107,13 +108,13 @@ class AdjustmentServiceImplTests {
         when(adjustmentMapper.mapTo(ArgumentMatchers.any(Adjustment.class))).thenReturn(updatedAdjustmentDto);
 
         assertEquals(1, adjustmentService.fullUpdate(inputAdjustmentDto).getId());
-        assertTrue(adjustmentService.fullUpdate(inputAdjustmentDto).isStdDeduction());
+        assertTrue(adjustmentService.fullUpdate(inputAdjustmentDto).getStdDeduction());
     }
 
     @Test
     void deleteFailNotFoundEx() {
         Adjustment nonExistingAdjustment = Adjustment.builder()
-                .id(1)
+                .id(1L)
                 .build();
 
         when(adjustmentRepository.existsById(ArgumentMatchers.any(Long.class))).thenReturn(false);
@@ -127,7 +128,7 @@ class AdjustmentServiceImplTests {
     @Test
     void deleteSuccess() throws AdjustmentNotFoundException {
         Adjustment existingAdjustment = Adjustment.builder()
-                .id(1)
+                .id(1L)
                 .build();
 
         when(adjustmentRepository.existsById(ArgumentMatchers.any(Long.class))).thenReturn(true);
