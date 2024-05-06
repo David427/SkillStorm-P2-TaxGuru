@@ -51,7 +51,7 @@ mvn clean package -DskipTests
 
 3. Start the containers using docker compose:
 ```bash
-# start all containers (--build is only necessary the first time)
+# start all containers (--build is only necessary the first time or after any changes)
 docker compose up -d --build
 
 # start only the frontend / backend / db
