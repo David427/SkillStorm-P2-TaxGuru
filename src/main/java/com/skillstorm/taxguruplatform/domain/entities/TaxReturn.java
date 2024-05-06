@@ -27,11 +27,12 @@ public class TaxReturn {
     private String taxYear;
     private String filingStatus;
     private Boolean dependent;
-    private Short claimedDependents;
-    private BigDecimal totalIncome;
-    private BigDecimal totalTaxWithheld;
+    private BigDecimal spouseAgi;
+    private BigDecimal spouseTaxWithheld;
+    private BigDecimal adjGrossIncome;
+    private BigDecimal taxWithheld;
     private BigDecimal taxableIncome;
-    private BigDecimal totalTaxOwed;
+    private BigDecimal taxLiability;
     private BigDecimal returnResult;
 
     @OneToOne

@@ -19,7 +19,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.math.BigDecimal;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
@@ -43,10 +44,10 @@ class TaxReturnServiceImplTests {
         when(taxReturnRepository.existsById(ArgumentMatchers.any(Long.class))).thenReturn(true);
 
         assertThrows(TaxReturnAlreadyExistsException.class, () ->
-            taxReturnService.create(inputTaxReturnDto)
+                taxReturnService.create(inputTaxReturnDto)
         );
     }
-    
+
     @Test
     void createSuccess() throws TaxReturnAlreadyExistsException {
         TaxReturnDto inputTaxReturnDto = TaxReturnDto.builder()
@@ -80,7 +81,7 @@ class TaxReturnServiceImplTests {
         when(taxReturnRepository.existsById(ArgumentMatchers.any(Long.class))).thenReturn(false);
 
         assertThrows(TaxReturnNotFoundException.class, () ->
-            taxReturnService.fullUpdate(inputTaxReturnDto)
+                taxReturnService.fullUpdate(inputTaxReturnDto)
         );
     }
 
@@ -136,7 +137,7 @@ class TaxReturnServiceImplTests {
         verify(taxReturnRepository, times(0)).deleteById(nonExistingTaxReturn.getId());
 
         assertThrows(TaxReturnNotFoundException.class, () ->
-            taxReturnService.delete(nonExistingTaxReturn.getId())
+                taxReturnService.delete(nonExistingTaxReturn.getId())
         );
     }
 
@@ -147,7 +148,7 @@ class TaxReturnServiceImplTests {
         when(taxReturnRepository.findById(ArgumentMatchers.any(Long.class))).thenReturn(Optional.empty());
 
         assertThrows(TaxReturnNotFoundException.class, () ->
-            taxReturnService.calculateResult(id)
+                taxReturnService.calculateResult(id)
         );
     }
 
@@ -160,24 +161,24 @@ class TaxReturnServiceImplTests {
         when(taxReturnRepository.findById(ArgumentMatchers.any(Long.class))).thenReturn(Optional.of(taxReturn));
 
         Exception exception = assertThrows(ResultCalculationException.class, () ->
-            taxReturnService.calculateResult(taxReturn.getId())
+                taxReturnService.calculateResult(taxReturn.getId())
         );
         assertEquals("Filing status not found.", exception.getMessage());
     }
 
     @Test
-    void calculateTotalIncomeFailNoIncomeFoundEx() {
+    void calculateAdjGrossIncomeFailNoIncomeFoundEx() {
         TaxReturn taxReturn = TaxReturn.builder()
                 .build();
 
         Exception exception = assertThrows(ResultCalculationException.class, () ->
-            taxReturnService.calculateTotalIncome(taxReturn)
+                taxReturnService.calculateAdjGrossIncome(taxReturn)
         );
         assertEquals("No income found.", exception.getMessage());
     }
 
     @Test
-    void calculateTotalIncomeW2Only() throws ResultCalculationException {
+    void calculateAdjGrossIncomeSingleW2Only() throws ResultCalculationException {
         FormW2 formW2 = FormW2.builder()
                 .income(new BigDecimal("72600.00"))
                 .ssTaxWithheld(new BigDecimal("4501.20"))
@@ -185,15 +186,14 @@ class TaxReturnServiceImplTests {
                 .build();
 
         TaxReturn taxReturn = TaxReturn.builder()
-                .id(1L)
                 .formW2(formW2)
                 .build();
 
-        assertEquals(new BigDecimal("67046.10"), taxReturnService.calculateTotalIncome(taxReturn));
+        assertEquals(new BigDecimal("67046.10"), taxReturnService.calculateAdjGrossIncome(taxReturn));
     }
 
     @Test
-    void calculateTotalIncome1099Only() throws ResultCalculationException {
+    void calculateAdjGrossIncomeSingle1099Only() throws ResultCalculationException {
         Form1099 form1099 = Form1099.builder()
                 .income(new BigDecimal("72600.00"))
                 .build();
@@ -207,11 +207,11 @@ class TaxReturnServiceImplTests {
                 .adjustment(adjustment)
                 .build();
 
-        assertEquals(new BigDecimal("61492.20000"), taxReturnService.calculateTotalIncome(taxReturn));
+        assertEquals(new BigDecimal("61492.20000"), taxReturnService.calculateAdjGrossIncome(taxReturn));
     }
 
     @Test
-    void calculateTotalIncomeW2And1099() throws ResultCalculationException {
+    void calculateAdjGrossIncomeSingleW2And1099() throws ResultCalculationException {
         Form1099 form1099 = Form1099.builder()
                 .income(new BigDecimal("5800.00"))
                 .build();
@@ -232,22 +232,83 @@ class TaxReturnServiceImplTests {
                 .adjustment(adjustment)
                 .build();
 
-        assertEquals(new BigDecimal("72846.10"), taxReturnService.calculateTotalIncome(taxReturn));
+        assertEquals(new BigDecimal("72846.10"), taxReturnService.calculateAdjGrossIncome(taxReturn));
     }
 
     @Test
-    void calculateTotalTaxWithheldFailNoIncomeFoundEx() {
+    void calculateAdjGrossIncomeMarriedW2Only() throws ResultCalculationException {
+        FormW2 formW2 = FormW2.builder()
+                .income(new BigDecimal("72600.00"))
+                .ssTaxWithheld(new BigDecimal("4501.20"))
+                .mediTaxWithheld(new BigDecimal("1052.70"))
+                .build();
+
+        TaxReturn taxReturn = TaxReturn.builder()
+                .spouseAgi(new BigDecimal("20000.00"))
+                .formW2(formW2)
+                .build();
+
+        assertEquals(new BigDecimal("87046.10"), taxReturnService.calculateAdjGrossIncome(taxReturn));
+    }
+
+    @Test
+    void calculateAdjGrossIncomeMarried1099Only() throws ResultCalculationException {
+        Form1099 form1099 = Form1099.builder()
+                .income(new BigDecimal("72600.00"))
+                .build();
+
+        Adjustment adjustment = Adjustment.builder()
+                .stdDeduction(true)
+                .build();
+
+        TaxReturn taxReturn = TaxReturn.builder()
+                .spouseAgi(new BigDecimal("20000.00"))
+                .form1099(form1099)
+                .adjustment(adjustment)
+                .build();
+
+        assertEquals(new BigDecimal("81492.20000"), taxReturnService.calculateAdjGrossIncome(taxReturn));
+    }
+
+    @Test
+    void calculateAdjGrossIncomeMarriedW2And1099() throws ResultCalculationException {
+        Form1099 form1099 = Form1099.builder()
+                .income(new BigDecimal("5800.00"))
+                .build();
+
+        FormW2 formW2 = FormW2.builder()
+                .income(new BigDecimal("72600.00"))
+                .ssTaxWithheld(new BigDecimal("4501.20"))
+                .mediTaxWithheld(new BigDecimal("1052.70"))
+                .build();
+
+        Adjustment adjustment = Adjustment.builder()
+                .stdDeduction(true)
+                .build();
+
+        TaxReturn taxReturn = TaxReturn.builder()
+                .spouseAgi(new BigDecimal("20000.00"))
+                .form1099(form1099)
+                .formW2(formW2)
+                .adjustment(adjustment)
+                .build();
+
+        assertEquals(new BigDecimal("92846.10"), taxReturnService.calculateAdjGrossIncome(taxReturn));
+    }
+
+    @Test
+    void calculateTaxWithheldFailNoIncomeFoundEx() {
         TaxReturn taxReturn = TaxReturn.builder()
                 .build();
 
         Exception exception = assertThrows(ResultCalculationException.class, () ->
-            taxReturnService.calculateTotalTaxWithheld(taxReturn)
+                taxReturnService.calculateTaxWithheld(taxReturn)
         );
         assertEquals("No income found.", exception.getMessage());
     }
 
     @Test
-    void calculateTotalTaxWithheldW2Only() throws ResultCalculationException {
+    void calculateTaxWithheldSingleW2Only() throws ResultCalculationException {
         FormW2 formW2 = FormW2.builder()
                 .fedTaxWithheld(new BigDecimal("5000.00"))
                 .build();
@@ -257,11 +318,11 @@ class TaxReturnServiceImplTests {
                 .formW2(formW2)
                 .build();
 
-        assertEquals(new BigDecimal("5000.00"), taxReturnService.calculateTotalTaxWithheld(taxReturn));
+        assertEquals(new BigDecimal("5000.00"), taxReturnService.calculateTaxWithheld(taxReturn));
     }
 
     @Test
-    void calculateTotalTaxWithheld1099Only() throws ResultCalculationException {
+    void calculateTaxWithheldSingle1099Only() throws ResultCalculationException {
         Form1099 form1099 = Form1099.builder()
                 .fedTaxWithheld(new BigDecimal("5000.00"))
                 .build();
@@ -271,11 +332,11 @@ class TaxReturnServiceImplTests {
                 .form1099(form1099)
                 .build();
 
-        assertEquals(new BigDecimal("5000.00"), taxReturnService.calculateTotalTaxWithheld(taxReturn));
+        assertEquals(new BigDecimal("5000.00"), taxReturnService.calculateTaxWithheld(taxReturn));
     }
 
     @Test
-    void calculateTotalTaxWithheldW2And1099() throws ResultCalculationException {
+    void calculateTaxWithheldSingleW2And1099() throws ResultCalculationException {
         Form1099 form1099 = Form1099.builder()
                 .fedTaxWithheld(new BigDecimal("5000.00"))
                 .build();
@@ -289,7 +350,54 @@ class TaxReturnServiceImplTests {
                 .formW2(formW2)
                 .build();
 
-        assertEquals(new BigDecimal("7000.00"), taxReturnService.calculateTotalTaxWithheld(taxReturn));
+        assertEquals(new BigDecimal("7000.00"), taxReturnService.calculateTaxWithheld(taxReturn));
+    }
+
+    @Test
+    void calculateTaxWithheldMarriedW2Only() throws ResultCalculationException {
+        FormW2 formW2 = FormW2.builder()
+                .fedTaxWithheld(new BigDecimal("5000.00"))
+                .build();
+
+        TaxReturn taxReturn = TaxReturn.builder()
+                .spouseTaxWithheld(new BigDecimal("2500.00"))
+                .formW2(formW2)
+                .build();
+
+        assertEquals(new BigDecimal("7500.00"), taxReturnService.calculateTaxWithheld(taxReturn));
+    }
+
+    @Test
+    void calculateTaxWithheldMarried1099Only() throws ResultCalculationException {
+        Form1099 form1099 = Form1099.builder()
+                .fedTaxWithheld(new BigDecimal("5000.00"))
+                .build();
+
+        TaxReturn taxReturn = TaxReturn.builder()
+                .spouseTaxWithheld(new BigDecimal("2500.00"))
+                .form1099(form1099)
+                .build();
+
+        assertEquals(new BigDecimal("7500.00"), taxReturnService.calculateTaxWithheld(taxReturn));
+    }
+
+    @Test
+    void calculateTaxWithheldMarriedW2And1099() throws ResultCalculationException {
+        Form1099 form1099 = Form1099.builder()
+                .fedTaxWithheld(new BigDecimal("5000.00"))
+                .build();
+
+        FormW2 formW2 = FormW2.builder()
+                .fedTaxWithheld(new BigDecimal("2000.00"))
+                .build();
+
+        TaxReturn taxReturn = TaxReturn.builder()
+                .spouseTaxWithheld(new BigDecimal("2500.00"))
+                .form1099(form1099)
+                .formW2(formW2)
+                .build();
+
+        assertEquals(new BigDecimal("9500.00"), taxReturnService.calculateTaxWithheld(taxReturn));
     }
 
     @Test
@@ -301,7 +409,7 @@ class TaxReturnServiceImplTests {
                 .build();
 
         Exception exception = assertThrows(ResultCalculationException.class, () ->
-            taxReturnService.calculateTaxableIncome(taxReturn, totalIncome)
+                taxReturnService.calculateTaxableIncome(taxReturn, totalIncome)
         );
         assertEquals("Adjustment data not found.", exception.getMessage());
     }
@@ -320,14 +428,14 @@ class TaxReturnServiceImplTests {
                 .build();
 
         Exception exception = assertThrows(ResultCalculationException.class, () ->
-            taxReturnService.calculateTaxableIncome(taxReturn, totalIncome)
+                taxReturnService.calculateTaxableIncome(taxReturn, totalIncome)
         );
         assertEquals("Invalid filing status.", exception.getMessage());
     }
 
 
     @Test
-    void calculateTaxableIncomeSingleOrMarried() throws ResultCalculationException {
+    void calculateTaxableIncomeSingleOrMfs() throws ResultCalculationException {
         BigDecimal totalIncome = new BigDecimal("50000.00");
 
         Adjustment adjustment = Adjustment.builder()
@@ -339,13 +447,35 @@ class TaxReturnServiceImplTests {
                 .adjustment(adjustment)
                 .build();
 
-        TaxReturn taxReturnMarried = TaxReturn.builder()
-                .filingStatus("Married")
+        TaxReturn taxReturnMfs = TaxReturn.builder()
+                .filingStatus("Married, Filing Separately")
                 .adjustment(adjustment)
                 .build();
 
         assertEquals(new BigDecimal("36150.00"), taxReturnService.calculateTaxableIncome(taxReturnSingle, totalIncome));
-        assertEquals(new BigDecimal("36150.00"), taxReturnService.calculateTaxableIncome(taxReturnMarried, totalIncome));
+        assertEquals(new BigDecimal("36150.00"), taxReturnService.calculateTaxableIncome(taxReturnMfs, totalIncome));
+    }
+
+    @Test
+    void calculateTaxableIncomeMarriedOrQss() throws ResultCalculationException {
+        BigDecimal totalIncome = new BigDecimal("80000.00");
+
+        Adjustment adjustment = Adjustment.builder()
+                .stdDeduction(true)
+                .build();
+
+        TaxReturn taxReturnMarried = TaxReturn.builder()
+                .filingStatus("Married, Filing Jointly")
+                .adjustment(adjustment)
+                .build();
+
+        TaxReturn taxReturnQss = TaxReturn.builder()
+                .filingStatus("Qualifying Surviving Spouse")
+                .adjustment(adjustment)
+                .build();
+
+        assertEquals(new BigDecimal("52300.00"), taxReturnService.calculateTaxableIncome(taxReturnMarried, totalIncome));
+        assertEquals(new BigDecimal("52300.00"), taxReturnService.calculateTaxableIncome(taxReturnQss, totalIncome));
     }
 
     @Test
@@ -365,36 +495,52 @@ class TaxReturnServiceImplTests {
     }
 
     @Test
-    void calculateTotalTaxOwedSingle() {
+    void calculateTaxLiabilitySingle() {
         BigDecimal taxableIncome = new BigDecimal("600000.00");
 
         TaxReturn taxReturn = TaxReturn.builder()
                 .filingStatus("Single")
                 .build();
 
-        assertEquals(new BigDecimal("182331.7327"), taxReturnService.calculateTotalTaxOwed(taxReturn, taxableIncome));
+        assertEquals(new BigDecimal("182331.7327"), taxReturnService.calculateTaxLiability(taxReturn, taxableIncome));
     }
 
     @Test
-    void calculateTotalTaxOwedMarried() {
+    void calculateTaxLiabilityMarriedFilingSeparately() {
         BigDecimal taxableIncome = new BigDecimal("350000.00");
 
         TaxReturn taxReturn = TaxReturn.builder()
-                .filingStatus("Married")
+                .filingStatus("Married, Filing Separately")
                 .build();
 
-        assertEquals(new BigDecimal("94456.7327"), taxReturnService.calculateTotalTaxOwed(taxReturn, taxableIncome));
+        assertEquals(new BigDecimal("94456.7327"), taxReturnService.calculateTaxLiability(taxReturn, taxableIncome));
     }
 
     @Test
-    void calculateTotalTaxOwedHeadOfHousehold() {
+    void calculateTaxLiabilityMarriedFilingJointlyOrQss() {
+        BigDecimal taxableIncome = new BigDecimal("700000.00");
+
+        TaxReturn taxReturnMarried = TaxReturn.builder()
+                .filingStatus("Married, Filing Jointly")
+                .build();
+
+        TaxReturn taxReturnQss = TaxReturn.builder()
+                .filingStatus("Qualifying Surviving Spouse")
+                .build();
+
+        assertEquals(new BigDecimal("188913.7327"), taxReturnService.calculateTaxLiability(taxReturnMarried, taxableIncome));
+        assertEquals(new BigDecimal("188913.7327"), taxReturnService.calculateTaxLiability(taxReturnQss, taxableIncome));
+    }
+
+    @Test
+    void calculateTaxLiabilityHeadOfHousehold() {
         BigDecimal taxableIncome = new BigDecimal("580000.00");
 
         TaxReturn taxReturn = TaxReturn.builder()
                 .filingStatus("Head of Household")
                 .build();
 
-        assertEquals(new BigDecimal("173326.2327"), taxReturnService.calculateTotalTaxOwed(taxReturn, taxableIncome));
+        assertEquals(new BigDecimal("173326.2327"), taxReturnService.calculateTaxLiability(taxReturn, taxableIncome));
     }
 
 }

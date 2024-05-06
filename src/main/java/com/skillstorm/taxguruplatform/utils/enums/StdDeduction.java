@@ -7,10 +7,9 @@ import java.math.BigDecimal;
 @Getter
 public enum StdDeduction {
 
-    SINGLE_2023(new BigDecimal("13850.00")),
-    HOH_2023(new BigDecimal("20800.00")),
-    SINGLE_2022(new BigDecimal("12950.00")),
-    HOH_2022(new BigDecimal("19400.00"));
+    SINGLE_MFS_2023(new BigDecimal("13850.00")),
+    MARRIED_QSS_2023(new BigDecimal("27700")),
+    HOH_2023(new BigDecimal("20800.00"));
 
     private final BigDecimal deduction;
 

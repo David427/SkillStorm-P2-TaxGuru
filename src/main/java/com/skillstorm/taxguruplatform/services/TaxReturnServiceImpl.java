@@ -1,6 +1,8 @@
 package com.skillstorm.taxguruplatform.services;
 
 import com.skillstorm.taxguruplatform.domain.dtos.TaxReturnDto;
+import com.skillstorm.taxguruplatform.domain.entities.Form1099;
+import com.skillstorm.taxguruplatform.domain.entities.FormW2;
 import com.skillstorm.taxguruplatform.domain.entities.TaxReturn;
 import com.skillstorm.taxguruplatform.exceptions.ResultCalculationException;
 import com.skillstorm.taxguruplatform.exceptions.TaxReturnAlreadyExistsException;
@@ -77,27 +79,30 @@ public class TaxReturnServiceImpl implements TaxReturnService {
 
         TaxReturn taxReturn = foundTaxReturn.get();
 
-        BigDecimal totalIncome = calculateTotalIncome(taxReturn);
-        BigDecimal totalTaxWithheld = calculateTotalTaxWithheld(taxReturn);
-        BigDecimal taxableIncome = calculateTaxableIncome(taxReturn, totalIncome);
-        BigDecimal totalTaxOwed = calculateTotalTaxOwed(taxReturn, taxableIncome);
-        BigDecimal result = totalTaxOwed.subtract(totalTaxWithheld);
+        BigDecimal adjGrossIncome = calculateAdjGrossIncome(taxReturn);
+        BigDecimal taxWithheld = calculateTaxWithheld(taxReturn);
+        BigDecimal taxableIncome = calculateTaxableIncome(taxReturn, adjGrossIncome);
+        BigDecimal taxLiability = calculateTaxLiability(taxReturn, taxableIncome);
+        BigDecimal result = taxLiability.subtract(taxWithheld);
 
-        taxReturn.setTotalIncome(totalIncome);
-        taxReturn.setTotalTaxWithheld(totalTaxWithheld);
+        taxReturn.setAdjGrossIncome(adjGrossIncome);
+        taxReturn.setTaxWithheld(taxWithheld);
         taxReturn.setTaxableIncome(taxableIncome);
-        taxReturn.setTotalTaxOwed(totalTaxOwed);
+        taxReturn.setTaxLiability(taxLiability);
         taxReturn.setReturnResult(result);
 
         taxReturnRepository.save(taxReturn);
         return taxReturnMapper.mapTo(taxReturn);
     }
 
-    public BigDecimal calculateTotalIncome(TaxReturn taxReturn) throws ResultCalculationException {
+    public BigDecimal calculateAdjGrossIncome(TaxReturn taxReturn) throws ResultCalculationException {
+        Optional<FormW2> formW2 = Optional.ofNullable(taxReturn.getFormW2());
+        Optional<Form1099> form1099 = Optional.ofNullable(taxReturn.getForm1099());
+        Optional<BigDecimal> spouseAgi = Optional.ofNullable(taxReturn.getSpouseAgi());
         BigDecimal independentSsTaxRate = SsMedicareTaxRate.SS_TAX_RATE.getTaxRate();
         BigDecimal independentMediTaxRate = SsMedicareTaxRate.MEDICARE_TAX_RATE.getTaxRate();
 
-        if (taxReturn.getFormW2() == null && taxReturn.getForm1099() == null) {
+        if (formW2.isEmpty() && form1099.isEmpty()) {
             throw new ResultCalculationException("No income found.");
         }
 
@@ -106,66 +111,113 @@ public class TaxReturnServiceImpl implements TaxReturnService {
          *  - For W2s, the employer pays half of the rate.
          *  - If someone has a W2 and a 1099, they only pay half of the rate.
          */
-        if (taxReturn.getFormW2() != null && taxReturn.getForm1099() == null) {
-            return taxReturn.getFormW2().getIncome()
-                    .subtract(taxReturn.getFormW2().getSsTaxWithheld())
-                    .subtract(taxReturn.getFormW2().getMediTaxWithheld());
+        if (formW2.isPresent() && form1099.isEmpty()) {
+            if (spouseAgi.isPresent()) {
+                return formW2.get().getIncome()
+                        .subtract(formW2.get().getSsTaxWithheld())
+                        .subtract(formW2.get().getMediTaxWithheld())
+                        .add(spouseAgi.get());
+            } else {
+                return formW2.get().getIncome()
+                        .subtract(formW2.get().getSsTaxWithheld())
+                        .subtract(formW2.get().getMediTaxWithheld());
+            }
+        } else if (formW2.isEmpty()) {
+            if (spouseAgi.isPresent()) {
+                return form1099.get().getIncome()
+                        .subtract(form1099.get().getIncome().multiply(independentSsTaxRate))
+                        .subtract(form1099.get().getIncome().multiply(independentMediTaxRate))
+                        .add(spouseAgi.get());
+            } else {
+                return form1099.get().getIncome()
+                        .subtract(form1099.get().getIncome().multiply(independentSsTaxRate))
+                        .subtract(form1099.get().getIncome().multiply(independentMediTaxRate));
+            }
+        } else {
+            if (spouseAgi.isPresent()) {
+                return taxReturn.getFormW2().getIncome()
+                        .add(taxReturn.getForm1099().getIncome())
+                        .subtract(taxReturn.getFormW2().getSsTaxWithheld())
+                        .subtract(taxReturn.getFormW2().getMediTaxWithheld())
+                        .add(spouseAgi.get());
+            } else {
+                return taxReturn.getFormW2().getIncome()
+                        .add(taxReturn.getForm1099().getIncome())
+                        .subtract(taxReturn.getFormW2().getSsTaxWithheld())
+                        .subtract(taxReturn.getFormW2().getMediTaxWithheld());
+            }
         }
-
-        if (taxReturn.getFormW2() == null) {
-            BigDecimal form1099Income = taxReturn.getForm1099().getIncome();
-            return taxReturn.getForm1099().getIncome()
-                    .subtract(form1099Income.multiply(independentSsTaxRate))
-                    .subtract(form1099Income.multiply(independentMediTaxRate));
-        }
-
-        return taxReturn.getFormW2().getIncome()
-                .add(taxReturn.getForm1099().getIncome())
-                .subtract(taxReturn.getFormW2().getSsTaxWithheld())
-                .subtract(taxReturn.getFormW2().getMediTaxWithheld());
-
     }
 
-    public BigDecimal calculateTotalTaxWithheld(TaxReturn taxReturn) throws ResultCalculationException {
-        if (taxReturn.getFormW2() == null && taxReturn.getForm1099() == null) {
+    public BigDecimal calculateTaxWithheld(TaxReturn taxReturn) throws ResultCalculationException {
+        Optional<FormW2> formW2 = Optional.ofNullable(taxReturn.getFormW2());
+        Optional<Form1099> form1099 = Optional.ofNullable(taxReturn.getForm1099());
+        Optional<BigDecimal> spouseTaxWithheld = Optional.ofNullable(taxReturn.getSpouseTaxWithheld());
+
+        if (formW2.isEmpty() && form1099.isEmpty()) {
             throw new ResultCalculationException("No income found.");
         }
 
-        if (taxReturn.getFormW2() != null && taxReturn.getForm1099() == null) {
-            return taxReturn.getFormW2().getFedTaxWithheld();
+        if (formW2.isPresent() && form1099.isEmpty()) {
+            if (spouseTaxWithheld.isPresent()) {
+                return formW2.get().getFedTaxWithheld()
+                        .add(spouseTaxWithheld.get());
+            } else {
+                return formW2.get().getFedTaxWithheld();
+            }
+        } else if (formW2.isEmpty()) {
+            if (spouseTaxWithheld.isPresent()) {
+                return form1099.get().getFedTaxWithheld()
+                        .add(spouseTaxWithheld.get());
+            } else {
+                return form1099.get().getFedTaxWithheld();
+            }
+        } else {
+            if (spouseTaxWithheld.isPresent()) {
+                return formW2.get().getFedTaxWithheld()
+                        .add(form1099.get().getFedTaxWithheld())
+                        .add(spouseTaxWithheld.get());
+            } else {
+                return formW2.get().getFedTaxWithheld()
+                        .add(form1099.get().getFedTaxWithheld());
+            }
         }
-
-        if (taxReturn.getFormW2() == null) {
-            return taxReturn.getForm1099().getFedTaxWithheld();
-        }
-
-        return taxReturn.getFormW2().getFedTaxWithheld()
-                .add(taxReturn.getForm1099().getFedTaxWithheld());
     }
 
     public BigDecimal calculateTaxableIncome(TaxReturn taxReturn, BigDecimal totalIncome) throws ResultCalculationException {
+
+        // Filing status should never be null!
         String filingStatus = taxReturn.getFilingStatus();
-        BigDecimal deductionSingle2023 = StdDeduction.SINGLE_2023.getDeduction();
+        BigDecimal deductionSingle2023 = StdDeduction.SINGLE_MFS_2023.getDeduction();
+        BigDecimal deductionMarried2023 = StdDeduction.MARRIED_QSS_2023.getDeduction();
         BigDecimal deductionHoh2023 = StdDeduction.HOH_2023.getDeduction();
 
         if (taxReturn.getAdjustment() == null) {
             throw new ResultCalculationException("Adjustment data not found.");
         }
 
-        if (filingStatus.equals("Single") || filingStatus.equals("Married")) {
-            if (taxReturn.getAdjustment().getStdDeduction()) {
-                return totalIncome.subtract(deductionSingle2023);
+        switch (filingStatus) {
+            case "Single", "Married, Filing Separately" -> {
+                if (taxReturn.getAdjustment().getStdDeduction()) {
+                    return totalIncome.subtract(deductionSingle2023);
+                }
             }
-        } else if (filingStatus.equals("Head of Household")) {
-            if (taxReturn.getAdjustment().getStdDeduction()) {
-                return totalIncome.subtract(deductionHoh2023);
+            case "Married, Filing Jointly", "Qualifying Surviving Spouse" -> {
+                if (taxReturn.getAdjustment().getStdDeduction()) {
+                    return totalIncome.subtract(deductionMarried2023);
+                }
+            }
+            case "Head of Household" -> {
+                if (taxReturn.getAdjustment().getStdDeduction()) {
+                    return totalIncome.subtract(deductionHoh2023);
+                }
             }
         }
 
         throw new ResultCalculationException("Invalid filing status.");
     }
 
-    public BigDecimal calculateTotalTaxOwed(TaxReturn taxReturn, BigDecimal taxableIncome) {
+    public BigDecimal calculateTaxLiability(TaxReturn taxReturn, BigDecimal taxableIncome) {
         String filingStatus = taxReturn.getFilingStatus();
         BigDecimal bracket1 = TaxBracket.BRACKET_LOWEST.getRatePercent();
         BigDecimal bracket2 = TaxBracket.BRACKET_LOW.getRatePercent();
@@ -226,7 +278,7 @@ public class TaxReturnServiceImpl implements TaxReturnService {
                     taxedAmount = taxedAmount.add(bracketAmount.multiply(bracket1));
                 }
             }
-            case "Married" -> {
+            case "Married, Filing Separately" -> {
                 if (taxableIncome.doubleValue() >= 346876.00) {
                     bracketAmount = taxableIncome.subtract(new BigDecimal("346875.99"));
                     taxedAmount = taxedAmount.add(bracketAmount.multiply(bracket7));
@@ -264,6 +316,48 @@ public class TaxReturnServiceImpl implements TaxReturnService {
                 }
 
                 if (remainingAmount.doubleValue() <= 11000.99) {
+                    bracketAmount = remainingAmount;
+                    taxedAmount = taxedAmount.add(bracketAmount.multiply(bracket1));
+                }
+            }
+            case "Married, Filing Jointly", "Qualifying Surviving Spouse" -> {
+                if (taxableIncome.doubleValue() >= 693751.00) {
+                    bracketAmount = taxableIncome.subtract(new BigDecimal("693750.99"));
+                    taxedAmount = taxedAmount.add(bracketAmount.multiply(bracket7));
+                    remainingAmount = taxableIncome.subtract(bracketAmount);
+                }
+
+                if (remainingAmount.doubleValue() <= 693750.99 && remainingAmount.doubleValue() >= 462501.00) {
+                    bracketAmount = remainingAmount.subtract(new BigDecimal("462500.99"));
+                    taxedAmount = taxedAmount.add(bracketAmount.multiply(bracket6));
+                    remainingAmount = remainingAmount.subtract(bracketAmount);
+                }
+
+                if (remainingAmount.doubleValue() <= 462500.99 && remainingAmount.doubleValue() >= 364201.00) {
+                    bracketAmount = remainingAmount.subtract(new BigDecimal("364200.99"));
+                    taxedAmount = taxedAmount.add(bracketAmount.multiply(bracket5));
+                    remainingAmount = remainingAmount.subtract(bracketAmount);
+                }
+
+                if (remainingAmount.doubleValue() <= 364200.99 && remainingAmount.doubleValue() >= 190751.00) {
+                    bracketAmount = remainingAmount.subtract(new BigDecimal("190750.99"));
+                    taxedAmount = taxedAmount.add(bracketAmount.multiply(bracket4));
+                    remainingAmount = remainingAmount.subtract(bracketAmount);
+                }
+
+                if (remainingAmount.doubleValue() <= 190750.99 && remainingAmount.doubleValue() >= 89451.00) {
+                    bracketAmount = remainingAmount.subtract(new BigDecimal("89450.99"));
+                    taxedAmount = taxedAmount.add(bracketAmount.multiply(bracket3));
+                    remainingAmount = remainingAmount.subtract(bracketAmount);
+                }
+
+                if (remainingAmount.doubleValue() <= 89450.99 && remainingAmount.doubleValue() >= 22001.00) {
+                    bracketAmount = remainingAmount.subtract(new BigDecimal("22000.99"));
+                    taxedAmount = taxedAmount.add(bracketAmount.multiply(bracket2));
+                    remainingAmount = remainingAmount.subtract(bracketAmount);
+                }
+
+                if (remainingAmount.doubleValue() <= 22000.99) {
                     bracketAmount = remainingAmount;
                     taxedAmount = taxedAmount.add(bracketAmount.multiply(bracket1));
                 }
