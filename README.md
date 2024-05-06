@@ -15,7 +15,6 @@ Project to build a Federal tax preparation service deployed on AWS.
     - JUnit
     - React with TypeScript
     - Jest
-    - Redux
     - Trussworks
     - i18n
     - Aurora v1 (Amazon's RDB)
@@ -23,12 +22,11 @@ Project to build a Federal tax preparation service deployed on AWS.
     - Spring Security
     - OAuth2 (JWT)
     - Docker
-    - Kubernetes
     - GitHub
 
 # **Non-Functional (Bonus) Requirements**
 - Create an account page where users can view and update account, personal, and financial info.
-- Configure up OAuth2 social login (using Google as an authorization server).
+- Configure OAuth2 social login (using Google as an authorization server).
 
 ## **Process Flow**
 1. Personal information | Full name, date of birth, SSN, email, phone, address, etc.
@@ -39,9 +37,9 @@ Project to build a Federal tax preparation service deployed on AWS.
 6. Review page | Display all saved info and allow the user to make corrections. Submit the tax return.
 7. Results page | Show the final refund or amount owed and the breakdown of the taxes.
 
-# How to Build and Start the project containers
+# How to Build and Start the Project Containers
 
-> all commands are run from the root project directory
+> All commands are run from the root project directory
 
 1. Package the java project using the following command:
 ```bash
