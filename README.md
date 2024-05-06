@@ -30,7 +30,7 @@ Project to build a Federal tax preparation service deployed on AWS.
 
 ## **Process Flow**
 1. Personal information | Full name, date of birth, SSN, email, phone, address, etc.
-2. Financial information | Income, employment details, etc.
+2. Financial information | Claim dependents, enter spouse income/tax withheld if filing jointly, etc.
 3. W2 info | Optional. Enter W2 details.
 4. 1099-MISC info | Optional. Enter 1099-MISC details to represent a self-employed individual.
 5. Credits & deductions | Enter possible adjustments to taxable income.
