@@ -39,3 +39,27 @@ Project to build a Federal tax preparation service deployed on AWS.
 2. Financial information | Income, employment details, etc.
 3. Review page | Display all saved info and allow the user to make corrections. Submit the tax return.
 4. Results page | Show the final refund or amount owed and the breakdown of the taxes.
+
+# How to Build and Start the project containers
+
+> all commands are run from the root project directory
+
+1. Package the java project using the following command:
+```bash
+mvn clean package -DskipTests
+```
+
+2. Start the containers using docker compose:
+```bash
+# start all containers (--build is only necessary the first time)
+docker compose up -d --build
+
+# start only the frontend / backend / db
+docker compose up -d frontend
+
+# stop all containers
+docker compose down
+
+# stop specific container
+docker compose down backend
+```

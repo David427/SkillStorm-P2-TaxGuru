@@ -1,0 +1,116 @@
+{
+  "translation": {
+    "select": "- Select -",
+    "continue": "Continue",
+    "back": "Back",
+    "skip": "Skip",
+    "y": "Yes",
+    "n": "No",
+    "index": {
+      "hero-heading-alt": "Act now:",
+      "hero-heading": "Federal taxes are due by April 15th",
+      "hero-desc": "We'll walk you through our free federal tax tool, to ensure you complete your taxes on time and with ease.",
+      "hero-cta": "Get Started Today",
+      "tagline": "File Your Taxes For Free",
+      "point-1": "TaxGuru is your reliable companion for filing your federal taxes effortlessly. Say goodbye to the stress of tax season and embrace a seamless experience with our platform.",
+      "point-2": "Our platform uses the latest IRS guidelines to calculate your returns with precision, ensuring you get every dollar you're entitled to, and providing you with peace-of-mind."
+    },
+    "auth": {
+      "login": "Log in",
+      "login-desc": "Access your account.",
+      "username": "Username",
+      "password": "Password",
+      "show-password": "Show Password",
+      "hide-password": "Hide Password",
+      "no-account": "Don't have an account?",
+      "create-account1": "Create your account now →",
+      "tagline": "Get started today and file your federal taxes with ease.",
+      "signup": "Create Account",
+      "signup-desc": "Get started with an account.",
+      "required": "indicates a required field",
+      "confirm-password": "Confirm Password",
+      "existing-account": "Already have an account?",
+      "tagline-desc": "We'll walk you through the process to ensure 100% accuracy and a maximum refund.",
+      "point-1": "Free Federal Filing",
+      "point-1-desc": "We believe you should have easy and free access to file your federal taxes. That's why we created a seamless platform to allow you to file at no cost.",
+      "point-2": "Industry Grade Security",
+      "point-2-desc": "We prioritize your data's safety with top-notch security measures to ensure your information stays confidential and protected from unauthorized access."
+    },
+    "account": {
+      "greeting": "Welcome, ",
+      "desc1": "View and manage your account details",
+      "change": "Change Password",
+      "desc2": "Change your existing password",
+      "current": "Current Password",
+      "new": "New Password",
+      "confirm": "Confirm New Password",
+      "change-btn": "Change Password",
+      "save": "Save Changes",
+      "email": "Email Address"
+    },
+    "personal": {
+      "title": "Personal Information",
+      "desc": "Enter your personal information.",
+      "fname": "First Name",
+      "lname": "Last Name",
+      "suffix": "Suffix",
+      "birthdate": "Birthdate",
+      "tel": "US Telephone Number",
+      "street": "Street Address",
+      "city": "City",
+      "state": "State",
+      "zip": "Zip Code"
+    },
+    "filing-info": {
+      "title": "Filing Information",
+      "desc": "We need a bit more information about your filing status.",
+      "status": "Filing Status",
+      "dependents": "How many dependents can you claim?",
+      "isDependent": "Can someone claim you as a dependent?",
+      "single": "Single",
+      "married": "Married filing separately",
+      "hoh": "Head of household"
+    },
+    "w2": {
+      "hint": "Box {{hint}} on W-2 Form",
+      "title": "W-2 Information",
+      "desc": "If you don't have any W-2 information to enter, you can skip this section.",
+      "ein": "Employer ID Number (EIN)",
+      "ename": "Employer Name",
+      "estreet": "Employer Street Address",
+      "ecity": "Employer City",
+      "estate": "Employer State",
+      "ezip": "Employer Zip Code",
+      "wages": "Wages, tips, and other compensation",
+      "federal-withheld": "Federal Income Tax Withheld",
+      "social-withheld": "Social Security Tax Withheld",
+      "medicare-withheld": "Medicare Tax Withheld"
+    },
+    "1099": {
+      "hint": "Box {{hint}} on Form 1099-NEC",
+      "title": "Self Employment",
+      "desc": "This information can be found on form 1099-NEC. If you don't have any self employment income to enter, you can skip this section.",
+      "payerTIN": "Payer's TIN",
+      "recipientTIN": "Recipient's TIN",
+      "nec": "Non-Employee Compensation"
+    },
+    "deductions": {
+      "title": "Credits & Deductions",
+      "desc": "Let's help you get the highest possible refund.",
+      "interest": "Mortgage Interest Paid",
+      "taxes": "Property Taxes Paid",
+      "donations": "Check or Cash Donations",
+      "nonCash": "Total Non-Cash Donations"
+    },
+    "review": {
+      "title": "Review",
+      "desc": "Review the information and ensure it is correct. If you see any errors, click the section header to edit the values.",
+      "dependents": "Dependents",
+      "wages": "Wages"
+    },
+    "results": {
+      "title": "Results",
+      "desc": ""
+    }
+  }
+}
