@@ -6,7 +6,6 @@ import com.skillstorm.taxguruplatform.exceptions.AdjustmentAlreadyExistsExceptio
 import com.skillstorm.taxguruplatform.exceptions.AdjustmentNotFoundException;
 import com.skillstorm.taxguruplatform.repositories.AdjustmentRepository;
 import com.skillstorm.taxguruplatform.utils.mappers.Mapper;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -43,7 +42,7 @@ public class AdjustmentServiceImpl implements AdjustmentService {
     }
 
     @Override
-    public void delete(long id) throws AdjustmentNotFoundException {
+    public void delete(Long id) throws AdjustmentNotFoundException {
         if (isExisting(id)) {
             adjustmentRepository.deleteById(id);
         } else {
@@ -52,8 +51,9 @@ public class AdjustmentServiceImpl implements AdjustmentService {
     }
 
     @Override
-    public boolean isExisting(long id) {
-        return adjustmentRepository.existsById(id);
+    public boolean isExisting(Long id) {
+        if (id != null) return adjustmentRepository.existsById(id);
+        return false;
     }
 
 }

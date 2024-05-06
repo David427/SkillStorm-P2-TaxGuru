@@ -1,6 +1,5 @@
 package com.skillstorm.taxguruplatform.domain.entities;
 
-import com.skillstorm.taxguruplatform.utils.enums.State;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

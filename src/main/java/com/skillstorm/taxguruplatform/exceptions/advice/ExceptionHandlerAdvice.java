@@ -9,6 +9,11 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class ExceptionHandlerAdvice {
 
+    @ExceptionHandler(ForbiddenException.class)
+    public ResponseEntity<String> handleEntityAlreadyExists(ForbiddenException e) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
+    }
+
     @ExceptionHandler(AppUserAlreadyExistsException.class)
     public ResponseEntity<String> handleEntityAlreadyExists(AppUserAlreadyExistsException e) {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
@@ -17,6 +22,11 @@ public class ExceptionHandlerAdvice {
     @ExceptionHandler(AppUserNotFoundException.class)
     public ResponseEntity<String> handleEntityNotFound(AppUserNotFoundException e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+    }
+
+    @ExceptionHandler(AppUserAuthException.class)
+    public ResponseEntity<String> handleAuthenticationFailed(AppUserAuthException e) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
     }
 
     @ExceptionHandler(TaxReturnAlreadyExistsException.class)

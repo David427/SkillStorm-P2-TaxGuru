@@ -22,7 +22,7 @@ public class Form1099 {
             allocationSize = 1
     )
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "form_1099_data_id_seq")
-    private long id;
+    private Long id;
 
     private String accountNum;
     private BigDecimal income;

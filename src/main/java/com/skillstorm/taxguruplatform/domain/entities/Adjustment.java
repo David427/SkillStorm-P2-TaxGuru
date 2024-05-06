@@ -20,8 +20,8 @@ public class Adjustment {
             allocationSize = 1
     )
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "adjustments_id_seq")
-    private long id;
+    private Long id;
 
-    private boolean stdDeduction;
+    private Boolean stdDeduction;
 
 }

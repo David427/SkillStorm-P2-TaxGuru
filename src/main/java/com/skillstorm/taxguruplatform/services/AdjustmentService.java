@@ -10,8 +10,8 @@ public interface AdjustmentService {
 
     AdjustmentDto fullUpdate(AdjustmentDto adjustmentDto) throws AdjustmentNotFoundException;
 
-    void delete(long id) throws AdjustmentNotFoundException;
+    void delete(Long id) throws AdjustmentNotFoundException;
 
-    boolean isExisting(long id);
+    boolean isExisting(Long id);
 
 }

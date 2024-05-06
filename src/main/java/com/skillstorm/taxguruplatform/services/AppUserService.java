@@ -1,16 +1,13 @@
 package com.skillstorm.taxguruplatform.services;
 
 import com.skillstorm.taxguruplatform.domain.dtos.AppUserDto;
+import com.skillstorm.taxguruplatform.domain.entities.AppUser;
 import com.skillstorm.taxguruplatform.exceptions.AppUserAlreadyExistsException;
 import com.skillstorm.taxguruplatform.exceptions.AppUserNotFoundException;
 
-import java.util.List;
-
 public interface AppUserService {
 
-    AppUserDto create(AppUserDto appUserDto) throws AppUserAlreadyExistsException;
-
-    List<AppUserDto> findAll();
+    AppUserDto create(AppUser newUser) throws AppUserAlreadyExistsException;
 
     AppUserDto findByUsername(String username) throws AppUserNotFoundException;
 

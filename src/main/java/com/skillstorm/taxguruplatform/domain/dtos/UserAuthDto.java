@@ -9,9 +9,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class AdjustmentDto {
+public class UserAuthDto {
 
-    private Long id;
-    private Boolean stdDeduction;
+    private String username;
+    private String password;
+    private String jwt;
 
 }

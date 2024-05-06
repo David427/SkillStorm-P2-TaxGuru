@@ -7,14 +7,11 @@ import com.skillstorm.taxguruplatform.exceptions.AppUserNotFoundException;
 import com.skillstorm.taxguruplatform.repositories.AppUserRepository;
 import com.skillstorm.taxguruplatform.utils.mappers.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -30,30 +27,18 @@ public class AppUserServiceImpl implements AppUserService, UserDetailsService {
     }
 
     @Override
-    public AppUserDto create(AppUserDto appUserDto) throws AppUserAlreadyExistsException {
-        if (isExisting(appUserDto.getUsername())) {
+    public AppUserDto create(AppUser newUser) throws AppUserAlreadyExistsException {
+        if (isExisting(newUser.getUsername())) {
             throw new AppUserAlreadyExistsException("User already exists.");
         }
 
-        AppUser createdAppUser = appUserRepository.save(appUserMapper.mapFrom(appUserDto));
+        AppUser createdAppUser = appUserRepository.save(newUser);
         return appUserMapper.mapTo(createdAppUser);
     }
 
     @Override
-    public List<AppUserDto> findAll() {
-        List<AppUserDto> appUserDtos = new LinkedList<>();
-        List<AppUser> foundAppUsers = appUserRepository.findAll();
-
-        for (AppUser appUser : foundAppUsers) {
-            appUserDtos.add(appUserMapper.mapTo(appUser));
-        }
-
-        return appUserDtos;
-    }
-
-    @Override
     public AppUserDto findByUsername(String username) throws AppUserNotFoundException {
-        Optional<AppUser> foundAppUser = appUserRepository.findById(username);
+        Optional<AppUser> foundAppUser = appUserRepository.findByUsername(username);
 
         if (foundAppUser.isPresent()) {
             return appUserMapper.mapTo(foundAppUser.get());
@@ -65,12 +50,16 @@ public class AppUserServiceImpl implements AppUserService, UserDetailsService {
 
     @Override
     public AppUserDto fullUpdate(AppUserDto appUserDto) throws AppUserNotFoundException {
-        if (isExisting(appUserDto.getUsername())) {
-            AppUser updatedAppUser = appUserRepository.save(appUserMapper.mapFrom(appUserDto));
-            return appUserMapper.mapTo(updatedAppUser);
-        } else {
-            throw new AppUserNotFoundException("User not found.");
-        }
+        AppUser receivedAppUser = appUserMapper.mapFrom(appUserDto);
+        AppUser existingAppUser = appUserRepository.findByUsername(appUserDto.getUsername())
+                .orElseThrow(() -> new AppUserNotFoundException("User not found."));
+
+        // Prevent a lack of role/password in the DTO (null values) from being saved as null in the db
+        receivedAppUser.setUserRole(existingAppUser.getUserRole());
+        receivedAppUser.setPassword(existingAppUser.getPassword());
+
+        AppUser updatedAppUser = appUserRepository.save(receivedAppUser);
+        return appUserMapper.mapTo(updatedAppUser);
     }
 
     @Override
@@ -89,25 +78,9 @@ public class AppUserServiceImpl implements AppUserService, UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<AppUser> foundUser = appUserRepository.findById(username);
-
-        if (foundUser.isEmpty()) {
-            throw new UsernameNotFoundException(username + "not found.");
-        }
-
-        AppUser appUser = foundUser.get();
-        boolean enabled = true;
-        boolean accountNonExpired = true;
-        boolean credentialsNonExpired = true;
-        boolean accountNonLocked = true;
-
-        return new User(
-                appUser.getUsername(),
-                appUser.getPassword(),
-                enabled, accountNonExpired,
-                credentialsNonExpired,
-                accountNonLocked,
-                appUser.getAuthorities());
+        return appUserRepository.findByUsername(username).orElseThrow(
+                () -> new UsernameNotFoundException("Username not found.")
+        );
     }
 
 }

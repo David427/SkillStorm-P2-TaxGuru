@@ -6,7 +6,6 @@ import com.skillstorm.taxguruplatform.exceptions.FormW2AlreadyExistsException;
 import com.skillstorm.taxguruplatform.exceptions.FormW2NotFoundException;
 import com.skillstorm.taxguruplatform.repositories.FormW2Repository;
 import com.skillstorm.taxguruplatform.utils.mappers.Mapper;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -43,7 +42,7 @@ public class FormW2ServiceImpl implements FormW2Service {
     }
 
     @Override
-    public void delete(long id) throws FormW2NotFoundException {
+    public void delete(Long id) throws FormW2NotFoundException {
         if (isExisting(id)) {
             formW2Repository.deleteById(id);
         } else {
@@ -52,8 +51,9 @@ public class FormW2ServiceImpl implements FormW2Service {
     }
 
     @Override
-    public boolean isExisting(long id) {
-        return formW2Repository.existsById(id);
+    public boolean isExisting(Long id) {
+        if (id != null) return formW2Repository.existsById(id);
+        return false;
     }
 
 }

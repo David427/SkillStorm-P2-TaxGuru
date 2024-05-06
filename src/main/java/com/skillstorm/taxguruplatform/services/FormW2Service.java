@@ -10,8 +10,8 @@ public interface FormW2Service {
 
     FormW2Dto fullUpdate(FormW2Dto formW2Dto) throws FormW2NotFoundException;
 
-    void delete(long id) throws FormW2NotFoundException;
+    void delete(Long id) throws FormW2NotFoundException;
 
-    boolean isExisting(long id);
+    boolean isExisting(Long id);
 
 }

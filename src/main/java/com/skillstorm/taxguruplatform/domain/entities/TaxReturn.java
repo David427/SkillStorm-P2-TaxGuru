@@ -22,18 +22,17 @@ public class TaxReturn {
             allocationSize = 1
     )
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "tax_returns_id_seq")
-    private long id;
+    private Long id;
 
     private String taxYear;
     private String filingStatus;
-    private boolean dependent;
-    private short claimedDependents;
-    private BigDecimal totalIncome;
-    private BigDecimal totalTaxWithheld;
-    private BigDecimal spouseTotalIncome;
-    private BigDecimal spouseTotalTaxWithheld;
+    private Boolean dependent;
+    private BigDecimal spouseAgi;
+    private BigDecimal spouseTaxWithheld;
+    private BigDecimal adjGrossIncome;
+    private BigDecimal taxWithheld;
     private BigDecimal taxableIncome;
-    private BigDecimal totalTaxOwed;
+    private BigDecimal taxLiability;
     private BigDecimal returnResult;
 
     @OneToOne
