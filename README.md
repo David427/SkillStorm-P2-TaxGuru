@@ -41,12 +41,15 @@ Project to build a Federal tax preparation service deployed on AWS.
 
 > All commands are run from the root project directory
 
-1. Package the java project using the following command:
+1. Create a `.env` file in the root project directory
+   - Update the values found in `.env.example` and docker will set those values as environment variables for the containers
+
+2. Package the java project using the following command:
 ```bash
 mvn clean package -DskipTests
 ```
 
-2. Start the containers using docker compose:
+3. Start the containers using docker compose:
 ```bash
 # start all containers (--build is only necessary the first time)
 docker compose up -d --build
