@@ -15,7 +15,7 @@ export default function Login() {
   const { t } = useTranslation();
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const formData = {
@@ -25,7 +25,14 @@ export default function Login() {
       password: e.currentTarget.elements.password.value,
     };
 
-    console.log(formData);
+    const res = await fetch("http://localhost:8080/auth/login", {
+      method: "POST",
+      body: JSON.stringify(formData),
+    });
+
+    const data = await res.json();
+    console.log(data);
+
     e.currentTarget.reset();
   };
 

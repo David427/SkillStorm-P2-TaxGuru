@@ -21,26 +21,29 @@ import FilingInformation from "./pages/filing/filling-information.tsx";
 import { HeaderNav } from "./components/header.tsx";
 
 import "./i18n.ts";
+import { AuthProvider } from "./contexts/auth-context.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <BrowserRouter>
-      <HeaderNav />
-      <Routes>
-        <Route path="/" element={<App />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<SignUp />} />
-        <Route path="/account" element={<Account />} />
-        <Route path="/filing/personal" element={<Personal />} />
-        <Route
-          path="/filing/filing-information"
-          element={<FilingInformation />}
-        />
-        <Route path="/filing/w2" element={<W2 />} />
-        <Route path="/filing/self-employment" element={<SelfEmployment />} />
-        <Route path="/filing/deductions" element={<Deductions />} />
-        <Route path="/filing/review" element={<Review />} />
-      </Routes>
-    </BrowserRouter>
+    <AuthProvider>
+      <BrowserRouter>
+        <HeaderNav />
+        <Routes>
+          <Route path="/" element={<App />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/account" element={<Account />} />
+          <Route path="/filing/personal" element={<Personal />} />
+          <Route
+            path="/filing/filing-information"
+            element={<FilingInformation />}
+          />
+          <Route path="/filing/w2" element={<W2 />} />
+          <Route path="/filing/self-employment" element={<SelfEmployment />} />
+          <Route path="/filing/deductions" element={<Deductions />} />
+          <Route path="/filing/review" element={<Review />} />
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
   </React.StrictMode>
 );
