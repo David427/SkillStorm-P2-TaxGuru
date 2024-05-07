@@ -1,24 +1,87 @@
+import type { User } from "../types";
+
 import {
   Form,
   Grid,
+  Alert,
   Label,
   Button,
   Select,
   Fieldset,
   TextInput,
+  ButtonGroup,
   GridContainer,
 } from "@trussworks/react-uswds";
-import { FormEvent } from "react";
+import { FormEvent, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { states } from "../states";
+import { useAuth } from "../contexts/auth-context";
+import { Navigate, useNavigate } from "react-router-dom";
 
 export default function Account() {
-  const { t } = useTranslation();
-  const username = "Clemente";
+  const navigate = useNavigate();
 
-  const handleAccountSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const { jwt, user, setUser, username, logout } = useAuth();
+
+  const { t } = useTranslation();
+
+  const [okMsg, setOkMsg] = useState<string | null>(null);
+  const [errMsg, setErrMsg] = useState<string | null>(null);
+
+  const handleAccountSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    setErrMsg(null);
+    setOkMsg(null);
+
+    const formData = {
+      suffix: user?.suffix,
+      dateOfBirth: user?.dateOfBirth,
+      ssn: user?.ssn,
+      phoneNumber: user?.phoneNumber,
+      // @ts-expect-error untyped form elements but we need the values
+      firstName: e.currentTarget.elements.first_name.value,
+      // @ts-expect-error untyped form elements but we need the values
+      lastName: e.currentTarget.elements.last_name.value,
+      // @ts-expect-error untyped form elements but we need the values
+      email: e.currentTarget.elements.email.value,
+      // @ts-expect-error untyped form elements but we need the values
+      streetAddress: e.currentTarget.elements.street_address.value,
+      // @ts-expect-error untyped form elements but we need the values
+      city: e.currentTarget.elements.city.value,
+      // @ts-expect-error untyped form elements but we need the values
+      userState: e.currentTarget.elements.state.value,
+      // @ts-expect-error untyped form elements but we need the values
+      zipCode: e.currentTarget.elements.zipcode.value,
+    };
+
+    const res = await fetch(
+      `http://localhost:8080/users/update?username=${username}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jwt}`,
+        },
+        body: JSON.stringify(formData),
+      }
+    );
+
+    if (res.ok) {
+      const data: User = await res.json();
+      setUser(data);
+      setOkMsg("Updated profile");
+    } else {
+      console.log("Error: ", res.status);
+      if (res.headers.get("content-type")?.includes("application/json")) {
+        const data = await res.json();
+        setErrMsg(data.error);
+      } else if (res.headers.get("content-type")?.includes("text/plain")) {
+        const text = await res.text();
+        setErrMsg(text);
+      }
+    }
 
     return;
   };
@@ -29,13 +92,29 @@ export default function Account() {
     return;
   };
 
+  // redirect them to the login page if they are not logged in
+  if (!jwt) {
+    return <Navigate to="/login" />;
+  }
+
   return (
     <main className="full-page">
       <div className="bg-base-lightest">
         <GridContainer className="usa-section">
+          {okMsg && (
+            <Alert type="success" headingLevel="h4" slim>
+              Successfully updated profile
+            </Alert>
+          )}
+          {errMsg && (
+            <Alert type="error" headingLevel="h4" slim>
+              Error updating profile: {errMsg}
+            </Alert>
+          )}
+
           <h1>
             {t("account.greeting")}
-            {username}
+            {user?.firstName ?? username}
           </h1>
 
           <Form onSubmit={handleAccountSubmit} className="w-full">
@@ -48,7 +127,7 @@ export default function Account() {
                     id="first_name"
                     name="first_name"
                     type="text"
-                    defaultValue={"Clemente"}
+                    defaultValue={user?.firstName ?? undefined}
                     autoComplete="given-name"
                   />
                 </Grid>
@@ -59,7 +138,7 @@ export default function Account() {
                     id="last_name"
                     name="last_name"
                     type="text"
-                    defaultValue={"Solorio"}
+                    defaultValue={user?.lastName ?? undefined}
                     autoComplete="family-name"
                   />
                 </Grid>
@@ -70,7 +149,7 @@ export default function Account() {
                     id="email"
                     name="email"
                     type="email"
-                    defaultValue={"clem@taxguru.com"}
+                    defaultValue={user?.email ?? undefined}
                     autoComplete="email"
                   />
                 </Grid>
@@ -84,7 +163,7 @@ export default function Account() {
                     name="street_address"
                     type="text"
                     autoComplete="street-address"
-                    defaultValue={"123 Park Ln"}
+                    defaultValue={user?.streetAddress ?? undefined}
                   />
                 </Grid>
 
@@ -94,7 +173,7 @@ export default function Account() {
                     id="city"
                     name="city"
                     type="text"
-                    defaultValue={"Anaheim"}
+                    defaultValue={user?.city ?? undefined}
                   />
                 </Grid>
               </Grid>
@@ -102,8 +181,12 @@ export default function Account() {
               <Grid row gap>
                 <Grid tablet={{ col: true }}>
                   <Label htmlFor="state">{t("personal.state")}</Label>
-                  <Select id="state" name="state">
-                    <option>- Select -</option>
+                  <Select
+                    id="state"
+                    name="state"
+                    defaultValue={user?.userState ?? undefined}
+                  >
+                    <option>{t("select")}</option>
                     {states.map((s) => (
                       <option key={s} value={s}>
                         {s}
@@ -119,11 +202,24 @@ export default function Account() {
                     name="zipcode"
                     type="text"
                     autoComplete="postal-code"
+                    defaultValue={user?.zipCode ?? undefined}
                   />
                 </Grid>
               </Grid>
 
-              <Button type="submit">{t("account.save")}</Button>
+              <ButtonGroup type="default">
+                <Button type="submit">{t("account.save")}</Button>
+                <Button
+                  type="button"
+                  onClick={() => {
+                    logout();
+                    navigate("/");
+                  }}
+                  secondary
+                >
+                  {t("logout")}
+                </Button>
+              </ButtonGroup>
             </Fieldset>
           </Form>
         </GridContainer>

@@ -16,11 +16,13 @@ import {
 } from "@trussworks/react-uswds";
 import { FormEvent, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../contexts/auth-context";
+import { Link, useNavigate, Navigate } from "react-router-dom";
 
 export default function SignUp() {
   const navigate = useNavigate();
 
+  const { jwt } = useAuth();
   const { t } = useTranslation();
 
   const [error, setError] = useState<string | null>(null);
@@ -67,6 +69,11 @@ export default function SignUp() {
       }
     }
   };
+
+  // redirect to account page if they are signed in
+  if (jwt) {
+    return <Navigate to="/account" />;
+  }
 
   return (
     <main className="full-page">

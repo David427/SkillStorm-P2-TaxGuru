@@ -13,13 +13,13 @@ import {
 import { useTranslation } from "react-i18next";
 import { useAuth } from "../contexts/auth-context";
 import { FormEvent, useRef, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, Navigate } from "react-router-dom";
 
 export default function Login() {
   const navigate = useNavigate();
 
-  const { setJwt } = useAuth();
   const { t } = useTranslation();
+  const { jwt, setJwt, setUsername } = useAuth();
 
   const [error, setError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
@@ -46,6 +46,7 @@ export default function Login() {
     if (res.ok) {
       const data: AuthResponse = await res.json();
       if (data.jwt) setJwt(data.jwt);
+      setUsername(formData.username);
       navigate("/");
     } else {
       const text = await res.text();
@@ -53,6 +54,11 @@ export default function Login() {
       setError(text);
     }
   };
+
+  // redirect them to the account page if they are already signed in.
+  if (jwt) {
+    return <Navigate to="/account" />;
+  }
 
   return (
     <main className="full-page">
