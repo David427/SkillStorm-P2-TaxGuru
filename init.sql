@@ -35,7 +35,14 @@ CREATE TABLE form_w2_data (
 
 CREATE TABLE adjustments (
   id SERIAL PRIMARY KEY,
-  std_deduction boolean
+  std_deduction BOOLEAN,
+  claimed_dependents SMALLINT,
+  earned_income_credit BOOLEAN,
+  eitc_amount NUMERIC,
+  child_credit_amount NUMERIC,
+  retirement_work_plan BOOLEAN,
+  ira_contribution NUMERIC,
+  retirement_credit_amount NUMERIC
 );
 
 CREATE TABLE tax_returns (
