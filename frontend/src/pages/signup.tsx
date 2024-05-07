@@ -2,6 +2,7 @@ import {
   Grid,
   Form,
   Icon,
+  Alert,
   Label,
   Button,
   IconList,
@@ -13,16 +14,21 @@ import {
   IconListTitle,
   IconListContent,
 } from "@trussworks/react-uswds";
-import { Link } from "react-router-dom";
 import { FormEvent, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function SignUp() {
+  const navigate = useNavigate();
+
   const { t } = useTranslation();
+
+  const [error, setError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setError(null);
 
     const formData = {
       // @ts-expect-error untyped form elements but we need the values
@@ -33,14 +39,54 @@ export default function SignUp() {
       password_confirm: e.currentTarget.elements.password_confirm.value,
     };
 
-    console.log(formData);
-    e.currentTarget.reset();
+    // check that passwords match
+    if (formData.password !== formData.password_confirm) {
+      setError("Passwords do not match");
+      return;
+    }
+
+    const res = await fetch("http://localhost:8080/auth/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        username: formData.username,
+        password: formData.password,
+      }),
+    });
+
+    if (res.ok) {
+      // no need to get the response json since we need the user to log in again
+      navigate("/login");
+    } else {
+      if (res.headers.get("content-type")?.includes("application/json")) {
+        const data = await res.json();
+        setError(data.error);
+      } else if (res.headers.get("content-type")?.includes("text/plain")) {
+        const text = await res.text();
+        setError(text);
+      }
+    }
   };
 
   return (
     <main className="full-page">
       <div className="bg-base-lightest">
         <GridContainer className="usa-section">
+          {/* Error Alert */}
+          <Grid row className="flex-justify-center margin-bottom-205">
+            <Grid col={12}>
+              {error && (
+                <Alert
+                  type="error"
+                  heading="Error Logging In"
+                  headingLevel="h4"
+                >
+                  {error}
+                </Alert>
+              )}
+            </Grid>
+          </Grid>
+
           <Grid row className="margin-x-neg-205 flex-justify-center">
             <Grid
               col={12}

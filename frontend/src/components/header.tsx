@@ -20,7 +20,6 @@ const navItems = [
   </Link>,
   <LanguageSelector
     className="usa-button--unstyled usa-nav__link language-selector"
-    label="Languages"
     langs={[
       {
         attr: "en",
@@ -51,7 +50,6 @@ const authenticatedNavItems = [
   </Link>,
   <LanguageSelector
     className="usa-button--unstyled usa-nav__link language-selector"
-    label="Languages"
     langs={[
       {
         attr: "en",

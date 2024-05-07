@@ -1,22 +1,34 @@
+import type { AuthResponse } from "../types";
+
 import {
   Grid,
   Form,
+  Alert,
   Label,
   Button,
   Fieldset,
   TextInput,
   GridContainer,
 } from "@trussworks/react-uswds";
-import { Link } from "react-router-dom";
-import { FormEvent, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useAuth } from "../contexts/auth-context";
+import { FormEvent, useRef, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function Login() {
+  const navigate = useNavigate();
+
+  const { setJwt } = useAuth();
   const { t } = useTranslation();
+
+  const [error, setError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
+
+  const formRef = useRef<HTMLFormElement | null>(null);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setError(null);
 
     const formData = {
       // @ts-expect-error untyped form elements but we need the values
@@ -27,24 +39,45 @@ export default function Login() {
 
     const res = await fetch("http://localhost:8080/auth/login", {
       method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(formData),
     });
 
-    const data = await res.json();
-    console.log(data);
+    if (res.ok) {
+      const data: AuthResponse = await res.json();
+      if (data.jwt) setJwt(data.jwt);
+      navigate("/");
+    } else {
+      const text = await res.text();
 
-    e.currentTarget.reset();
+      setError(text);
+    }
   };
 
   return (
     <main className="full-page">
       <div className="bg-base-lightest">
         <GridContainer className="usa-section">
+          {/* Error Alert */}
+          <Grid row className="flex-justify-center margin-bottom-205">
+            <Grid col={12} tablet={{ col: 8 }} desktop={{ col: 6 }}>
+              {error && (
+                <Alert
+                  type="error"
+                  heading="Error Logging In"
+                  headingLevel="h4"
+                >
+                  {error}
+                </Alert>
+              )}
+            </Grid>
+          </Grid>
+
           <Grid row className="flex-justify-center">
             <Grid col={12} tablet={{ col: 8 }} desktop={{ col: 6 }}>
               <div className="bg-white padding-y-3 padding-x-5 border border-base-lightest">
                 <h1 className="margin-bottom-0">{t("auth.login")}</h1>
-                <Form onSubmit={handleSubmit}>
+                <Form onSubmit={handleSubmit} ref={formRef}>
                   <Fieldset legend={t("auth.login-desc")} legendStyle="default">
                     <Label htmlFor="username">{t("auth.username")}</Label>
                     <TextInput

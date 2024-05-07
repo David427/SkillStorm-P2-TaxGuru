@@ -64,3 +64,9 @@ export interface User {
   phoneNumber: string | null;
   taxReturn: TaxReturn | null;
 }
+
+export interface AuthResponse {
+  username: string;
+  password: string;
+  jwt: string | null;
+}
