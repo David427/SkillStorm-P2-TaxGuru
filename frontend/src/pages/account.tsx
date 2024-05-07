@@ -12,10 +12,10 @@ import {
   ButtonGroup,
   GridContainer,
 } from "@trussworks/react-uswds";
+import { states } from "../states";
+import { valueOrNull } from "../lib/utils";
 import { FormEvent, useState } from "react";
 import { useTranslation } from "react-i18next";
-
-import { states } from "../states";
 import { useAuth } from "../contexts/auth-context";
 import { Navigate, useNavigate } from "react-router-dom";
 
@@ -41,19 +41,19 @@ export default function Account() {
       ssn: user?.ssn,
       phoneNumber: user?.phoneNumber,
       // @ts-expect-error untyped form elements but we need the values
-      firstName: e.currentTarget.elements.first_name.value,
+      firstName: valueOrNull(e.currentTarget.elements.first_name.value),
       // @ts-expect-error untyped form elements but we need the values
-      lastName: e.currentTarget.elements.last_name.value,
+      lastName: valueOrNull(e.currentTarget.elements.last_name.value),
       // @ts-expect-error untyped form elements but we need the values
-      email: e.currentTarget.elements.email.value,
+      email: valueOrNull(e.currentTarget.elements.email.value),
       // @ts-expect-error untyped form elements but we need the values
-      streetAddress: e.currentTarget.elements.street_address.value,
+      streetAddress: valueOrNull(e.currentTarget.elements.street_address.value),
       // @ts-expect-error untyped form elements but we need the values
-      city: e.currentTarget.elements.city.value,
+      city: valueOrNull(e.currentTarget.elements.city.value),
       // @ts-expect-error untyped form elements but we need the values
-      userState: e.currentTarget.elements.state.value,
+      userState: valueOrNull(e.currentTarget.elements.state.value, t("select")),
       // @ts-expect-error untyped form elements but we need the values
-      zipCode: e.currentTarget.elements.zipcode.value,
+      zipCode: valueOrNull(e.currentTarget.elements.zipcode.value),
     };
 
     const res = await fetch(
