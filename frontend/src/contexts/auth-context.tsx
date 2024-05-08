@@ -12,26 +12,31 @@ import {
 import Cookies from "js-cookie";
 
 interface Authorization {
+  loading: boolean;
   jwt: string | null;
   user: User | null;
   username: string | null;
   setJwt: Dispatch<SetStateAction<string | null>>;
   setUser: Dispatch<SetStateAction<User | null>>;
   setUsername: Dispatch<SetStateAction<string | null>>;
+  updateUser: (user: User) => Promise<void>;
   logout: () => void;
 }
 
 const AuthContext = createContext<Authorization>({
+  loading: false,
   jwt: null,
   user: null,
   username: null,
   setJwt: () => {},
   setUser: () => {},
   setUsername: () => {},
+  updateUser: () => Promise.resolve(),
   logout: () => {},
 });
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+  const [loading, setLoading] = useState(true);
   const [jwt, setJwt] = useState<string | null>(null);
   const [user, setUser] = useState<User | null>(null);
   const [username, setUsername] = useState<string | null>(null);
@@ -59,7 +64,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       headers: { Authorization: `Bearer ${jwt}` },
     }).then((res) => {
       if (res.ok) {
-        res.json().then((data: User) => setUser(data));
+        res.json().then((data: User) => {
+          setUser(data);
+          setLoading(false);
+        });
       }
     });
 
@@ -73,6 +81,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       sameSite: "strict",
       expires: 1, // 1 day from now
     });
+    setLoading(false);
   }, [jwt, username]);
 
   useEffect(() => {
@@ -86,9 +95,40 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     Cookies.remove("username");
   };
 
+  /**
+   * Update the User object and persist the result to the database through an API call
+   *
+   * @param {User} user the updated user object
+   */
+  const updateUser = async (user: User) => {
+    const res = await fetch(
+      `http://localhost:8080/users/update?username=${user.username}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jwt}`,
+        },
+        body: JSON.stringify(user),
+      }
+    );
+    const updatedUser = await res.json();
+    setUser(updatedUser);
+  };
+
   return (
     <AuthContext.Provider
-      value={{ jwt, user, username, setJwt, setUser, setUsername, logout }}
+      value={{
+        loading,
+        jwt,
+        user,
+        username,
+        setJwt,
+        setUser,
+        updateUser,
+        setUsername,
+        logout,
+      }}
     >
       {children}
     </AuthContext.Provider>

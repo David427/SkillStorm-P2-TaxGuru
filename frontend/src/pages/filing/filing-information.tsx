@@ -1,6 +1,9 @@
+import type { TaxReturn, User } from "../../types";
+
 import {
   Form,
   Grid,
+  Alert,
   Label,
   Radio,
   Button,
@@ -12,33 +15,90 @@ import {
   StepIndicator,
   StepIndicatorStep,
 } from "@trussworks/react-uswds";
-import { FormEvent } from "react";
+import { FormEvent, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../../contexts/auth-context";
+import { Link, useNavigate, Navigate } from "react-router-dom";
 
 export default function FilingInformation() {
-  const { t } = useTranslation();
   const navigate = useNavigate();
 
-  const handleFilingInfo = (e: FormEvent<HTMLFormElement>) => {
+  const { t } = useTranslation();
+  const { loading, jwt, user, updateUser } = useAuth();
+
+  const [error, setError] = useState<string | null>(null);
+  const [filingValue, setFilingValue] = useState(
+    user?.taxReturn?.filingStatus ?? t("select")
+  );
+
+  const handleFilingInfo = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     // @ts-expect-error untyped form elements but we need the values
     const isDependent = e.currentTarget.elements.dependent.value === "Yes";
 
+    const spouseAgi =
+      filingValue === "Married, Filing Jointly"
+        ? // @ts-expect-error untyped form elements but we need the values
+          e.currentTarget.elements.spouseAgi.value
+        : null;
+
+    const spouseTaxWithheld =
+      filingValue === "Married, Filing Jointly"
+        ? // @ts-expect-error untyped form elements but we need the values
+          e.currentTarget.elements.spouseTaxWithheld.value
+        : null;
+
     const formData = {
       // @ts-expect-error untyped form elements but we need the values
       filingStatus: e.currentTarget.elements.filing_status.value,
-      // @ts-expect-error untyped form elements but we need the values
-      dependents: e.currentTarget.elements.dependents.value,
-      isDependent,
+      dependent: isDependent,
+      spouseAgi,
+      spouseTaxWithheld,
     };
 
-    console.log(formData);
-    return;
+    const res = await fetch(
+      `http://localhost:8080/return?username=${user?.username}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jwt}`,
+        },
+        body: JSON.stringify(formData),
+      }
+    );
 
-    navigate("/filing/w2");
+    if (res.ok) {
+      const data: TaxReturn = await res.json();
+
+      // now we need to use this data to update the user object
+      const updatedUser = {
+        ...user,
+        taxReturn: data,
+      } as User;
+      await updateUser(updatedUser);
+      navigate("/filing/w2");
+    } else {
+      console.log("Error: ", res.status, res.statusText);
+      if (res.headers.get("content-type")?.includes("application/json")) {
+        const data = await res.json();
+        setError(data.error);
+      } else if (res.headers.get("content-type")?.includes("text/plain")) {
+        const text = await res.text();
+        setError(text);
+      }
+    }
+    return;
   };
+
+  if (loading) {
+    return <h1>Loading...</h1>;
+  }
+
+  if (!jwt && !loading) {
+    return <Navigate to="/login" />;
+  }
 
   return (
     <main className="full-page">
@@ -53,25 +113,44 @@ export default function FilingInformation() {
           <StepIndicatorStep label={t("results.title")} />
         </StepIndicator>
 
+        {error && (
+          <Alert type="error" headingLevel="h4" slim>
+            {error}
+          </Alert>
+        )}
+
         <Form onSubmit={handleFilingInfo} className="w-full">
           <Fieldset legend={t("filing-info.desc")}>
             <Grid row gap>
-              <Grid tablet={{ col: true }}>
+              <Grid tablet={{ col: 6 }}>
                 <Label htmlFor="filing_status" requiredMarker>
                   {t("filing-info.status")}
                 </Label>
-                <Select id="filing_status" name="filing_status" required>
+                <Select
+                  id="filing_status"
+                  name="filing_status"
+                  value={filingValue}
+                  onChange={(e) => setFilingValue(e.target.value)}
+                  required
+                >
                   <option>{t("select")}</option>
                   <option value="Single">{t("filing-info.single")}</option>
-                  {/* TODO: what is the backend expecting here for value? */}
-                  <option value="Married">{t("filing-info.married")}</option>
+                  <option value="Married, Filing Separately">
+                    {t("filing-info.married-sep")}
+                  </option>
+                  <option value="Married, Filing Jointly">
+                    {t("filing-info.married-jointly")}
+                  </option>
+                  <option value="Qualifying Surviving Spouse">
+                    {t("filing-info.widow")}
+                  </option>
                   <option value="Head of Household">
                     {t("filing-info.hoh")}
                   </option>
                 </Select>
               </Grid>
 
-              <Grid tablet={{ col: true }}>
+              {/* <Grid tablet={{ col: true }}>
                 <Label htmlFor="dependents" requiredMarker>
                   {t("filing-info.dependents")}
                 </Label>
@@ -82,8 +161,39 @@ export default function FilingInformation() {
                   defaultValue={0}
                   required
                 />
-              </Grid>
+              </Grid> */}
             </Grid>
+
+            {filingValue === "Married, Filing Jointly" && (
+              <Grid row gap>
+                <Grid tablet={{ col: true }}>
+                  <Label htmlFor="spouseAgi" requiredMarker>
+                    Spouse Income
+                  </Label>
+                  <TextInput
+                    id="spouseAgi"
+                    name="spouseAgi"
+                    type="number"
+                    defaultValue={user?.taxReturn?.spouseAgi ?? undefined}
+                    required
+                  />
+                </Grid>
+
+                <Grid tablet={{ col: true }}>
+                  <Label htmlFor="spouseTaxWithheld" requiredMarker>
+                    Spouse Federal Tax Withheld
+                  </Label>
+                  <TextInput
+                    id="spouseTaxWithheld"
+                    name="spouseTaxWithheld"
+                    type="number"
+                    defaultValue={
+                      user?.taxReturn?.spouseTaxWithheld ?? undefined
+                    }
+                  />
+                </Grid>
+              </Grid>
+            )}
 
             <Grid row>
               <Grid tablet={{ col: true }}>

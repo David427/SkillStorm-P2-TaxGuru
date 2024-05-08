@@ -38,7 +38,7 @@ export default function Personal() {
   const navigate = useNavigate();
 
   const { t } = useTranslation();
-  const { jwt, user, setUser } = useAuth();
+  const { loading, jwt, user, setUser } = useAuth();
 
   const [error, setError] = useState<string | null>(null);
 
@@ -100,7 +100,11 @@ export default function Personal() {
     }
   };
 
-  if (!jwt) {
+  if (loading) {
+    return <h1>Loading...</h1>;
+  }
+
+  if (!jwt && !loading) {
     return <Navigate to="/login" />;
   }
 

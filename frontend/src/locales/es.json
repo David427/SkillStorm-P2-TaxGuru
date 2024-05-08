@@ -68,7 +68,9 @@
       "dependents": "¿Cuántos dependientes puede reclamar?",
       "isDependent": "¿Alguien puede reclamarlo como dependiente?",
       "single": "Soltero",
-      "married": "Casado que presenta por separado",
+      "married-sep": "Casado que presenta por separado",
+      "married-jointly": "Casado con declaración conjunta",
+      "widow": "Esposo/a sobreviviente calificada/o",
       "hoh": "Jefe de familia"
     },
     "w2": {
