@@ -66,6 +66,10 @@ export default function Personal() {
       userState: e.currentTarget.elements.state.value,
       // @ts-expect-error untyped form elements but we need the values
       zipCode: e.currentTarget.elements.zipcode.value,
+      // these fields aren't included in the form, but we don't want to accidentally override them
+      username: user?.username,
+      email: user?.email,
+      taxReturn: user?.taxReturn,
     };
 
     const res = await fetch(

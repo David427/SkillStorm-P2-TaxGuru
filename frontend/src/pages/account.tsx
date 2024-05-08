@@ -40,6 +40,7 @@ export default function Account() {
       dateOfBirth: user?.dateOfBirth,
       ssn: user?.ssn,
       phoneNumber: user?.phoneNumber,
+      taxReturn: user?.taxReturn,
       // @ts-expect-error untyped form elements but we need the values
       firstName: valueOrNull(e.currentTarget.elements.first_name.value),
       // @ts-expect-error untyped form elements but we need the values

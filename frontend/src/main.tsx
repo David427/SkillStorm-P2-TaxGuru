@@ -16,7 +16,7 @@ import Review from "./pages/filing/review.tsx";
 import Personal from "./pages/filing/personal.tsx";
 import Deductions from "./pages/filing/deductions.tsx";
 import SelfEmployment from "./pages/filing/self-employment.tsx";
-import FilingInformation from "./pages/filing/filling-information.tsx";
+import FilingInformation from "./pages/filing/filing-information.tsx";
 
 import { HeaderNav } from "./components/header.tsx";
 
