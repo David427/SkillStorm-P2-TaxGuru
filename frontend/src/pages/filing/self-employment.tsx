@@ -1,8 +1,12 @@
+import type { Form1099, TaxReturn } from "../../types";
+
 import {
   Form,
   Grid,
+  Alert,
   Label,
   Button,
+  Select,
   Fieldset,
   TextInput,
   ButtonGroup,
@@ -11,32 +15,91 @@ import {
   TextInputMask,
   StepIndicatorStep,
 } from "@trussworks/react-uswds";
-import { FormEvent } from "react";
-
+import { states } from "../../states";
+import { FormEvent, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../../contexts/auth-context";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 
 export default function SelfEmployment() {
-  const { t } = useTranslation();
   const navigate = useNavigate();
 
-  const handleSelfEmploymentInfo = (e: FormEvent<HTMLFormElement>) => {
+  const { t } = useTranslation();
+  const { loading, jwt, user, updateReturn } = useAuth();
+
+  const [error, setError] = useState<string | null>(null);
+
+  const handleSelfEmploymentInfo = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const formData = {
       // @ts-expect-error untyped form elements but we need the values
-      payerTIN: e.currentTarget.elements.payer_tin.value,
+      accountNum: e.currentTarget.elements.accountNum.value,
       // @ts-expect-error untyped form elements but we need the values
-      recipientTIN: e.currentTarget.elements.recipient_tin.value,
+      payerName: e.currentTarget.elements.payerName.value,
       // @ts-expect-error untyped form elements but we need the values
-      nec: e.currentTarget.elements.nec.value,
+      payerState: e.currentTarget.elements.payerState.value,
       // @ts-expect-error untyped form elements but we need the values
-      withheld: e.currentTarget.elements.withheld.value,
+      payerZipCode: e.currentTarget.elements.payerZipCode.value,
+      // @ts-expect-error untyped form elements but we need the values
+      income: e.currentTarget.elements.income.value,
+      // @ts-expect-error untyped form elements but we need the values
+      fedTaxWithheld: e.currentTarget.elements.fedTaxWithheld.value,
     };
 
-    console.log(formData);
-    navigate("/filing/deductions");
+    let res: Response;
+
+    if (user?.taxReturn?.form1099?.id) {
+      res = await fetch(
+        `http://localhost:8080/1099/${user.taxReturn.form1099.id}?username=${user.username}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jwt}`,
+          },
+          body: JSON.stringify(formData),
+        }
+      );
+    } else {
+      res = await fetch(
+        `http://localhost:8080/1099?username=${user?.username}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jwt}`,
+          },
+          body: JSON.stringify(formData),
+        }
+      );
+    }
+
+    if (res.ok) {
+      const form1099: Form1099 = await res.json();
+      const updatedReturn = { ...user?.taxReturn, form1099 } as TaxReturn;
+      await updateReturn(updatedReturn);
+
+      navigate("/filing/deductions");
+    } else {
+      console.log("Error", res.status, res.statusText);
+      if (res.headers.get("content-type")?.includes("application/json")) {
+        const data = await res.json();
+        setError(data.error);
+      } else if (res.headers.get("content-type")?.includes("text/plain")) {
+        const text = await res.text();
+        setError(text);
+      }
+    }
   };
+
+  if (loading) {
+    return <h1>Loading...</h1>;
+  }
+
+  if (!jwt && !loading) {
+    return <Navigate to="/login" />;
+  }
 
   return (
     <main className="full-page">
@@ -51,77 +114,103 @@ export default function SelfEmployment() {
           <StepIndicatorStep label={t("results.title")} />
         </StepIndicator>
 
+        {error && (
+          <Alert type="error" headingLevel="h4" slim>
+            {error}
+          </Alert>
+        )}
+
         <Form onSubmit={handleSelfEmploymentInfo} className="w-full">
           <Fieldset legend={t("1099.desc")}>
-            {/* Payer and Recipient TIN */}
+            {/* Account Number and Payer Name */}
             <Grid row gap>
               <Grid tablet={{ col: true }}>
-                <Label id="label-payer-tin" htmlFor="payer_tin" requiredMarker>
-                  {t("1099.payerTIN")}
+                <Label htmlFor="accountNum" requiredMarker>
+                  {t("1099.accountNum")}
                 </Label>
                 <TextInputMask
-                  id="payer_tin"
-                  name="payer_tin"
+                  id="accountNum"
+                  name="accountNum"
                   type="text"
-                  aria-labelledby="label-payer-tin"
-                  mask="__-_______"
-                  pattern="^\d{2}-\d{7}"
+                  mask="__________"
+                  pattern="^\d{10}"
+                  defaultValue={user?.taxReturn?.form1099?.accountNum}
                   required
                 />
               </Grid>
 
               <Grid tablet={{ col: true }}>
-                <Label
-                  id="label-recipient-tin"
-                  htmlFor="recipient_tin"
-                  requiredMarker
-                >
-                  {t("1099.recipientTIN")}
+                <Label htmlFor="payerName" requiredMarker>
+                  {t("1099.payerName")}
                 </Label>
-                <TextInputMask
-                  id="recipient_tin"
-                  name="recipient_tin"
+                <TextInput
+                  id="payerName"
+                  name="payerName"
                   type="text"
-                  aria-labelledby="label-recipient-tin"
-                  mask="___-__-____"
-                  pattern="\d{3}-\d{2}-\d{4}"
+                  defaultValue={user?.taxReturn?.form1099?.payerName}
                   required
                 />
               </Grid>
             </Grid>
 
-            {/* NEC */}
+            {/* Payer State & Zip Code */}
             <Grid row gap>
               <Grid tablet={{ col: true }}>
-                <Label htmlFor="label-nec" requiredMarker>
-                  {t("1099.nec")}
+                <Label htmlFor="payerState" requiredMarker>
+                  {t("1099.payerState")}
                 </Label>
-                <span id="hint-nec" className="usa-hint">
-                  {t("1099.hint", { hint: "1" })}
-                </span>
-                <TextInput
-                  id="nec"
-                  name="nec"
+                <Select
+                  id="payerState"
+                  name="payerState"
+                  defaultValue={user?.taxReturn?.form1099?.payerState}
+                  required
+                >
+                  <option>{t("select")}</option>
+                  {states.map((s) => (
+                    <option key={s} value={s}>
+                      {s}
+                    </option>
+                  ))}
+                </Select>
+              </Grid>
+              <Grid tablet={{ col: true }}>
+                <Label htmlFor="payerZipCode" requiredMarker>
+                  {t("1099.payerZipCode")}
+                </Label>
+                <TextInputMask
+                  id="payerZipCode"
+                  name="payerZipCode"
                   type="number"
-                  aria-describedby="hint-nec"
-                  aria-labelledby="label-nec"
+                  mask="_____"
+                  pattern="^\d{5}"
+                  defaultValue={user?.taxReturn?.form1099?.payerZipCode}
+                  required
+                />
+              </Grid>
+            </Grid>
+            <Grid row gap>
+              <Grid tablet={{ col: true }}>
+                <Label htmlFor="income" requiredMarker>
+                  {t("1099.income")}
+                </Label>
+                <TextInput
+                  id="income"
+                  name="income"
+                  type="number"
+                  defaultValue={user?.taxReturn?.form1099?.income}
                   required
                 />
               </Grid>
 
               <Grid tablet={{ col: true }}>
-                <Label id="label-withheld" htmlFor="withheld" requiredMarker>
+                <Label htmlFor="fedTaxWithheld" requiredMarker>
                   {t("w2.federal-withheld")}
                 </Label>
-                <span id="hint-withheld" className="usa-hint">
-                  {t("1099.hint", { hint: "4" })}
-                </span>
                 <TextInput
-                  id="withheld"
-                  name="withheld"
+                  id="fedTaxWithheld"
+                  name="fedTaxWithheld"
                   type="number"
-                  aria-describedby="hint-withheld"
-                  aria-labelledby="label-withheld"
+                  defaultValue={user?.taxReturn?.form1099?.fedTaxWithheld}
                   required
                 />
               </Grid>

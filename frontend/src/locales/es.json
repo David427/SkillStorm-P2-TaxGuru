@@ -89,12 +89,14 @@
       "medicare-withheld": "Impuesto sobre Medicare Retenido"
     },
     "1099": {
-      "hint": "Casilla {{hint}} en el Formulario 1099-NEC",
+      "hint": "Casilla {{hint}} en el Formulario 1099",
       "title": "Trabajo por cuenta propia",
-      "desc": "Esta información se puede encontrar en el formulario 1099-NEC. Si no tiene ingresos por trabajo por cuenta propia para ingresar, puede omitir esta sección.",
-      "payerTIN": "TIN del pagador",
-      "recipientTIN": "TIN del receptor",
-      "nec": "Compensación a no empleados"
+      "desc": "Esta información se puede encontrar en el formulario 1099. Si no tiene ingresos por trabajo por cuenta propia para ingresar, puede omitir esta sección.",
+      "accountNum": "Número de cuenta",
+      "payerName": "Nombre del pagador",
+      "payerState": "Estado del pagador",
+      "payerZipCode": "Código postal del pagador",
+      "income": "Ingresos"
     },
     "deductions": {
       "title": "Créditos y Deducciones",

@@ -12,7 +12,7 @@ import {
 } from "@trussworks/react-uswds";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "../contexts/auth-context";
-import { FormEvent, useRef, useState } from "react";
+import { FormEvent, useState } from "react";
 import { Link, useNavigate, Navigate } from "react-router-dom";
 
 export default function Login() {
@@ -23,8 +23,6 @@ export default function Login() {
 
   const [error, setError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
-
-  const formRef = useRef<HTMLFormElement | null>(null);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -83,7 +81,7 @@ export default function Login() {
             <Grid col={12} tablet={{ col: 8 }} desktop={{ col: 6 }}>
               <div className="bg-white padding-y-3 padding-x-5 border border-base-lightest">
                 <h1 className="margin-bottom-0">{t("auth.login")}</h1>
-                <Form onSubmit={handleSubmit} ref={formRef}>
+                <Form onSubmit={handleSubmit}>
                   <Fieldset legend={t("auth.login-desc")} legendStyle="default">
                     <Label htmlFor="username">{t("auth.username")}</Label>
                     <TextInput

@@ -55,17 +55,30 @@ export default function W2() {
       mediTaxWithheld: e.currentTarget.elements.medicare_withheld.value,
     };
 
-    const res = await fetch(
-      `http://localhost:8080/w2?username=${user?.username}`,
-      {
+    let res: Response;
+    if (user?.taxReturn?.formW2?.id) {
+      // existing w2 so update it
+      res = await fetch(
+        `http://localhost:8080/w2/${user.taxReturn.formW2.id}?username=${user.username}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jwt}`,
+          },
+          body: JSON.stringify(formData),
+        }
+      );
+    } else {
+      res = await fetch(`http://localhost:8080/w2?username=${user?.username}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${jwt}`,
         },
         body: JSON.stringify(formData),
-      }
-    );
+      });
+    }
 
     if (res.ok) {
       const w2Data: FormW2 = await res.json();
