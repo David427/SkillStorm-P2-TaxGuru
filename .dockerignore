@@ -32,3 +32,6 @@ out/
 # Unit test reports, coverage data
 test-output/
 coverage/
+
+# Environment
+.env
