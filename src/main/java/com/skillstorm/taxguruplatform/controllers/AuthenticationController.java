@@ -6,13 +6,11 @@ import com.skillstorm.taxguruplatform.exceptions.AppUserAuthException;
 import com.skillstorm.taxguruplatform.exceptions.AppUserNotFoundException;
 import com.skillstorm.taxguruplatform.services.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
+@CrossOrigin
 public class AuthenticationController {
 
     private final AuthService authService;

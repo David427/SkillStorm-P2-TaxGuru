@@ -1,6 +1,7 @@
 package com.skillstorm.taxguruplatform.services;
 
 import com.skillstorm.taxguruplatform.domain.dtos.TaxReturnDto;
+import com.skillstorm.taxguruplatform.domain.entities.Adjustment;
 import com.skillstorm.taxguruplatform.domain.entities.Form1099;
 import com.skillstorm.taxguruplatform.domain.entities.FormW2;
 import com.skillstorm.taxguruplatform.domain.entities.TaxReturn;
@@ -8,6 +9,7 @@ import com.skillstorm.taxguruplatform.exceptions.ResultCalculationException;
 import com.skillstorm.taxguruplatform.exceptions.TaxReturnAlreadyExistsException;
 import com.skillstorm.taxguruplatform.exceptions.TaxReturnNotFoundException;
 import com.skillstorm.taxguruplatform.repositories.TaxReturnRepository;
+import com.skillstorm.taxguruplatform.utils.enums.Credits;
 import com.skillstorm.taxguruplatform.utils.enums.SsMedicareTaxRate;
 import com.skillstorm.taxguruplatform.utils.enums.StdDeduction;
 import com.skillstorm.taxguruplatform.utils.enums.TaxBracket;
@@ -17,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class TaxReturnServiceImpl implements TaxReturnService {
@@ -68,22 +71,41 @@ public class TaxReturnServiceImpl implements TaxReturnService {
     @Override
     public TaxReturnDto calculateResult(Long id) throws TaxReturnNotFoundException, ResultCalculationException {
         Optional<TaxReturn> foundTaxReturn = taxReturnRepository.findById(id);
+        Set<String> validFilingStatuses = Set.of(
+                "Single",
+                "Married, Filing Separately",
+                "Married, Filing Jointly",
+                "Qualifying Surviving Spouse",
+                "Head of Household"
+        );
 
         if (foundTaxReturn.isEmpty()) {
             throw new TaxReturnNotFoundException("Tax return not found.");
         }
-
         if (foundTaxReturn.get().getFilingStatus() == null) {
             throw new ResultCalculationException("Filing status not found.");
+        }
+
+        if (!validFilingStatuses.contains(foundTaxReturn.get().getFilingStatus())) {
+            throw new ResultCalculationException("Invalid filing status.");
+        }
+
+        if (foundTaxReturn.get().getAdjustment() == null) {
+            throw new ResultCalculationException("Adjustment data not found.");
         }
 
         TaxReturn taxReturn = foundTaxReturn.get();
 
         BigDecimal adjGrossIncome = calculateAdjGrossIncome(taxReturn);
         BigDecimal taxWithheld = calculateTaxWithheld(taxReturn);
+
+        // Credits reduce the amount of tax due; deductions reduce taxable income
+        Adjustment calculatedAdj = calculateCredits(taxReturn, adjGrossIncome);
+        taxReturn.setAdjustment(calculatedAdj);
+
         BigDecimal taxableIncome = calculateTaxableIncome(taxReturn, adjGrossIncome);
         BigDecimal taxLiability = calculateTaxLiability(taxReturn, taxableIncome);
-        BigDecimal result = taxLiability.subtract(taxWithheld);
+        BigDecimal result = taxWithheld.subtract(taxLiability.abs());
 
         taxReturn.setAdjGrossIncome(adjGrossIncome);
         taxReturn.setTaxWithheld(taxWithheld);
@@ -184,9 +206,163 @@ public class TaxReturnServiceImpl implements TaxReturnService {
         }
     }
 
-    public BigDecimal calculateTaxableIncome(TaxReturn taxReturn, BigDecimal totalIncome) throws ResultCalculationException {
+    public Adjustment calculateCredits(TaxReturn taxReturn, BigDecimal adjGrossIncome) throws ResultCalculationException {
+        String filingStatus = taxReturn.getFilingStatus();
+        Integer claimedDependents = taxReturn.getAdjustment().getClaimedDependents();
+        Boolean retirementWorkPlan = taxReturn.getAdjustment().getRetirementWorkPlan();
+        BigDecimal iraContribution = taxReturn.getAdjustment().getIraContribution();
+        BigDecimal eitcAgiLimit0Deps = Credits.EITC_0DEP.getAgiLimit();
+        BigDecimal eitcAgiLimit1Deps = Credits.EITC_1DEP.getAgiLimit();
+        BigDecimal eitcAgiLimit2Deps = Credits.EITC_2DEP.getAgiLimit();
+        BigDecimal eitcAgiLimit3Deps = Credits.EITC_3DEP.getAgiLimit();
+        BigDecimal eitcAgiLimitMfj0Deps = Credits.EITC_MFJ_0DEP.getAgiLimit();
+        BigDecimal eitcAgiLimitMfj1Deps = Credits.EITC_MFJ_1DEP.getAgiLimit();
+        BigDecimal eitcAgiLimitMfj2Deps = Credits.EITC_MFJ_2DEP.getAgiLimit();
+        BigDecimal eitcAgiLimitMfj3Deps = Credits.EITC_MFJ_3DEP.getAgiLimit();
+        BigDecimal eitcCredit0Deps = Credits.EITC_0DEP.getCreditAmount();
+        BigDecimal eitcCredit1Deps = Credits.EITC_1DEP.getCreditAmount();
+        BigDecimal eitcCredit2Deps = Credits.EITC_2DEP.getCreditAmount();
+        BigDecimal eitcCredit3Deps = Credits.EITC_3DEP.getCreditAmount();
+        BigDecimal childCreditAgiLimit = Credits.CHILD_CREDIT.getAgiLimit();
+        BigDecimal childCreditAgiLimitMfj = Credits.CHILD_CREDIT_MFJ.getAgiLimit();
+        BigDecimal childCreditAmount = Credits.CHILD_CREDIT.getCreditAmount();
+        BigDecimal iraWorkPlanAgiLimit = Credits.IRA_WORK_PLAN.getAgiLimit();
+        BigDecimal iraWorkPlanAgiLimitMfj = Credits.IRA_WORK_PLAN_MFJ.getAgiLimit();
+        BigDecimal iraContributionLimit = Credits.IRA_WORK_PLAN_MFJ.getMaxCredit();
+        Adjustment calculatedAdj = taxReturn.getAdjustment();
 
-        // Filing status should never be null!
+        if (claimedDependents == null) {
+            throw new ResultCalculationException("Invalid number of claimed dependents.");
+        }
+
+        if (retirementWorkPlan == null) {
+            throw new ResultCalculationException("Invalid retirement work plan status.");
+        }
+
+        if (iraContribution == null) {
+            throw new ResultCalculationException("Invalid IRA contribution amount.");
+        }
+
+        // EITC
+        switch (filingStatus) {
+            case "Married, Filing Jointly" -> {
+                if (claimedDependents == 0 && adjGrossIncome.doubleValue() <= eitcAgiLimitMfj0Deps.doubleValue()) {
+                    calculatedAdj.setEitcAmount(eitcCredit0Deps);
+                    calculatedAdj.setEarnedIncomeCredit(true);
+                } else if (adjGrossIncome.doubleValue() >= eitcAgiLimitMfj0Deps.doubleValue()) {
+                    calculatedAdj.setEitcAmount(new BigDecimal("0.00"));
+                    calculatedAdj.setEarnedIncomeCredit(false);
+                }
+
+                if (claimedDependents == 1 && adjGrossIncome.doubleValue() <= eitcAgiLimitMfj1Deps.doubleValue()) {
+                    calculatedAdj.setEitcAmount(eitcCredit1Deps);
+                    calculatedAdj.setEarnedIncomeCredit(true);
+                } else if (adjGrossIncome.doubleValue() >= eitcAgiLimitMfj1Deps.doubleValue()) {
+                    calculatedAdj.setEitcAmount(new BigDecimal("0.00"));
+                    calculatedAdj.setEarnedIncomeCredit(false);
+                }
+
+                if (claimedDependents == 2 && adjGrossIncome.doubleValue() <= eitcAgiLimitMfj2Deps.doubleValue()) {
+                    calculatedAdj.setEitcAmount(eitcCredit2Deps);
+                    calculatedAdj.setEarnedIncomeCredit(true);
+                } else if (adjGrossIncome.doubleValue() >= eitcAgiLimitMfj2Deps.doubleValue()) {
+                    calculatedAdj.setEitcAmount(new BigDecimal("0.00"));
+                    calculatedAdj.setEarnedIncomeCredit(false);
+                }
+
+                if (claimedDependents >= 3 && adjGrossIncome.doubleValue() <= eitcAgiLimitMfj3Deps.doubleValue()) {
+                    calculatedAdj.setEitcAmount(eitcCredit3Deps);
+                    calculatedAdj.setEarnedIncomeCredit(true);
+                } else if (adjGrossIncome.doubleValue() >= eitcAgiLimitMfj3Deps.doubleValue()) {
+                    calculatedAdj.setEitcAmount(new BigDecimal("0.00"));
+                    calculatedAdj.setEarnedIncomeCredit(false);
+                }
+            }
+            case "Single", "Married, Filing Separately", "Head of Household", "Qualifying Surviving Spouse" -> {
+                if (claimedDependents == 0 && adjGrossIncome.doubleValue() <= eitcAgiLimit0Deps.doubleValue()) {
+                    calculatedAdj.setEitcAmount(eitcCredit0Deps);
+                    calculatedAdj.setEarnedIncomeCredit(true);
+                } else if (adjGrossIncome.doubleValue() >= eitcAgiLimit0Deps.doubleValue()) {
+                    calculatedAdj.setEitcAmount(new BigDecimal("0.00"));
+                    calculatedAdj.setEarnedIncomeCredit(false);
+                }
+
+                if (claimedDependents == 1 && adjGrossIncome.doubleValue() <= eitcAgiLimit1Deps.doubleValue()) {
+                    calculatedAdj.setEitcAmount(eitcCredit1Deps);
+                    calculatedAdj.setEarnedIncomeCredit(true);
+                } else if (adjGrossIncome.doubleValue() >= eitcAgiLimit1Deps.doubleValue()) {
+                    calculatedAdj.setEitcAmount(new BigDecimal("0.00"));
+                    calculatedAdj.setEarnedIncomeCredit(false);
+                }
+
+                if (claimedDependents == 2 && adjGrossIncome.doubleValue() <= eitcAgiLimit2Deps.doubleValue()) {
+                    calculatedAdj.setEitcAmount(eitcCredit2Deps);
+                    calculatedAdj.setEarnedIncomeCredit(true);
+                } else if (adjGrossIncome.doubleValue() >= eitcAgiLimit2Deps.doubleValue()) {
+                    calculatedAdj.setEitcAmount(new BigDecimal("0.00"));
+                    calculatedAdj.setEarnedIncomeCredit(false);
+                }
+
+                if (claimedDependents >= 3 && adjGrossIncome.doubleValue() <= eitcAgiLimit3Deps.doubleValue()) {
+                    calculatedAdj.setEitcAmount(eitcCredit3Deps);
+                    calculatedAdj.setEarnedIncomeCredit(true);
+                } else if (adjGrossIncome.doubleValue() >= eitcAgiLimit3Deps.doubleValue()) {
+                    calculatedAdj.setEitcAmount(new BigDecimal("0.00"));
+                    calculatedAdj.setEarnedIncomeCredit(false);
+                }
+            }
+        }
+
+        // CHILD TAX CREDIT
+        if (filingStatus.equals("Married, Filing Jointly")) {
+            if (adjGrossIncome.doubleValue() <= childCreditAgiLimitMfj.doubleValue()) {
+                calculatedAdj.setChildCreditAmount(childCreditAmount.multiply(BigDecimal.valueOf(claimedDependents)));
+            }
+        } else {
+            if (adjGrossIncome.doubleValue() <= childCreditAgiLimit.doubleValue()) {
+                calculatedAdj.setChildCreditAmount(childCreditAmount.multiply(BigDecimal.valueOf(claimedDependents)));
+            }
+        }
+
+        // RETIREMENT CREDIT
+        if (iraContribution.doubleValue() == 0) {
+            calculatedAdj.setRetirementCreditAmount(new BigDecimal("0.00"));
+        } else if (filingStatus.equals("Married, Filing Jointly") && retirementWorkPlan) {
+            if (adjGrossIncome.doubleValue() <= iraWorkPlanAgiLimitMfj.doubleValue()) {
+                if (iraContribution.doubleValue() <= iraContributionLimit.doubleValue()) {
+                    calculatedAdj.setRetirementCreditAmount(iraContribution);
+                } else {
+                    throw new ResultCalculationException("IRA contribution exceeded " + iraContributionLimit.doubleValue() + ".");
+                }
+            } else {
+                calculatedAdj.setRetirementCreditAmount(new BigDecimal("0.00"));
+            }
+        } else if (retirementWorkPlan) {
+            if (adjGrossIncome.doubleValue() <= iraWorkPlanAgiLimit.doubleValue()) {
+                if (iraContribution.doubleValue() <= iraContributionLimit.doubleValue()) {
+                    calculatedAdj.setRetirementCreditAmount(iraContribution);
+                } else {
+                    throw new ResultCalculationException("IRA contribution exceeded " + iraContributionLimit.doubleValue() + ".");
+                }
+            } else {
+                calculatedAdj.setRetirementCreditAmount(new BigDecimal("0.00"));
+            }
+        } else {
+            if (adjGrossIncome.doubleValue() <= iraWorkPlanAgiLimit.doubleValue()) {
+                if (iraContribution.doubleValue() <= iraContributionLimit.doubleValue()) {
+                    calculatedAdj.setRetirementCreditAmount(iraContribution);
+                } else {
+                    throw new ResultCalculationException("IRA contribution exceeded " + iraContributionLimit.doubleValue() + ".");
+                }
+            } else {
+                calculatedAdj.setRetirementCreditAmount(new BigDecimal("0.00"));
+            }
+        }
+
+        return calculatedAdj;
+    }
+
+    public BigDecimal calculateTaxableIncome(TaxReturn taxReturn, BigDecimal totalIncome) throws ResultCalculationException {
         String filingStatus = taxReturn.getFilingStatus();
         BigDecimal deductionSingle2023 = StdDeduction.SINGLE_MFS_2023.getDeduction();
         BigDecimal deductionMarried2023 = StdDeduction.MARRIED_QSS_2023.getDeduction();
@@ -219,6 +395,7 @@ public class TaxReturnServiceImpl implements TaxReturnService {
 
     public BigDecimal calculateTaxLiability(TaxReturn taxReturn, BigDecimal taxableIncome) {
         String filingStatus = taxReturn.getFilingStatus();
+        Adjustment creditedAdjustment = taxReturn.getAdjustment();
         BigDecimal bracket1 = TaxBracket.BRACKET_LOWEST.getRatePercent();
         BigDecimal bracket2 = TaxBracket.BRACKET_LOW.getRatePercent();
         BigDecimal bracket3 = TaxBracket.BRACKET_MED_LOW.getRatePercent();
@@ -277,6 +454,11 @@ public class TaxReturnServiceImpl implements TaxReturnService {
                     bracketAmount = remainingAmount;
                     taxedAmount = taxedAmount.add(bracketAmount.multiply(bracket1));
                 }
+
+                taxedAmount = taxedAmount
+                        .subtract(creditedAdjustment.getEitcAmount())
+                        .subtract(creditedAdjustment.getChildCreditAmount())
+                        .subtract(creditedAdjustment.getRetirementCreditAmount());
             }
             case "Married, Filing Separately" -> {
                 if (taxableIncome.doubleValue() >= 346876.00) {
@@ -319,6 +501,12 @@ public class TaxReturnServiceImpl implements TaxReturnService {
                     bracketAmount = remainingAmount;
                     taxedAmount = taxedAmount.add(bracketAmount.multiply(bracket1));
                 }
+
+                taxedAmount = taxedAmount
+                        .subtract(creditedAdjustment.getEitcAmount())
+                        .subtract(creditedAdjustment.getChildCreditAmount())
+                        .subtract(creditedAdjustment.getRetirementCreditAmount());
+
             }
             case "Married, Filing Jointly", "Qualifying Surviving Spouse" -> {
                 if (taxableIncome.doubleValue() >= 693751.00) {
@@ -361,6 +549,11 @@ public class TaxReturnServiceImpl implements TaxReturnService {
                     bracketAmount = remainingAmount;
                     taxedAmount = taxedAmount.add(bracketAmount.multiply(bracket1));
                 }
+
+                taxedAmount = taxedAmount
+                        .subtract(creditedAdjustment.getEitcAmount())
+                        .subtract(creditedAdjustment.getChildCreditAmount())
+                        .subtract(creditedAdjustment.getRetirementCreditAmount());
             }
             case "Head of Household" -> {
                 if (taxableIncome.doubleValue() >= 578101.00) {
@@ -403,6 +596,11 @@ public class TaxReturnServiceImpl implements TaxReturnService {
                     bracketAmount = remainingAmount;
                     taxedAmount = taxedAmount.add(bracketAmount.multiply(bracket1));
                 }
+
+                taxedAmount = taxedAmount
+                        .subtract(creditedAdjustment.getEitcAmount())
+                        .subtract(creditedAdjustment.getChildCreditAmount())
+                        .subtract(creditedAdjustment.getRetirementCreditAmount());
             }
         }
 

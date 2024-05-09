@@ -19,8 +19,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.math.BigDecimal;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
@@ -401,6 +400,266 @@ class TaxReturnServiceImplTests {
     }
 
     @Test
+    void calculateCreditsFailNoClaimedDependentsEx() {
+        BigDecimal adjGrossIncome = new BigDecimal("50000.00");
+
+        Adjustment adjustment = new Adjustment();
+
+        TaxReturn taxReturn = TaxReturn.builder()
+                .adjustment(adjustment)
+                .build();
+
+        Exception exception = assertThrows(ResultCalculationException.class, () ->
+                taxReturnService.calculateCredits(taxReturn, adjGrossIncome)
+        );
+        assertEquals("Invalid number of claimed dependents.", exception.getMessage());
+    }
+
+    @Test
+    void calculateCreditsFailNoWorkPlanEx() {
+        BigDecimal adjGrossIncome = new BigDecimal("50000.00");
+
+        Adjustment adjustment = Adjustment.builder()
+                .claimedDependents(2)
+                .build();
+
+        TaxReturn taxReturn = TaxReturn.builder()
+                .adjustment(adjustment)
+                .build();
+
+        Exception exception = assertThrows(ResultCalculationException.class, () ->
+                taxReturnService.calculateCredits(taxReturn, adjGrossIncome)
+        );
+        assertEquals("Invalid retirement work plan status.", exception.getMessage());
+    }
+
+    @Test
+    void calculateCreditsFailNoIraContributionEx() {
+        BigDecimal adjGrossIncome = new BigDecimal("50000.00");
+
+        Adjustment adjustment = Adjustment.builder()
+                .claimedDependents(2)
+                .retirementWorkPlan(true)
+                .build();
+
+        TaxReturn taxReturn = TaxReturn.builder()
+                .adjustment(adjustment)
+                .build();
+
+        Exception exception = assertThrows(ResultCalculationException.class, () ->
+                taxReturnService.calculateCredits(taxReturn, adjGrossIncome)
+        );
+        assertEquals("Invalid IRA contribution amount.", exception.getMessage());
+    }
+
+    @Test
+    void calculateCreditsEitcSingle() throws ResultCalculationException {
+        BigDecimal adjGrossIncome0Dep = new BigDecimal("15000.00");
+        BigDecimal adjGrossIncome1Dep = new BigDecimal("40000.00");
+        BigDecimal adjGrossIncome2Dep = new BigDecimal("48000.00");
+        BigDecimal adjGrossIncome3Dep = new BigDecimal("52000.00");
+
+        Adjustment adjustment0Dep = Adjustment.builder()
+                .claimedDependents(0)
+                .retirementWorkPlan(true)
+                .iraContribution(new BigDecimal("0.00"))
+                .build();
+        Adjustment adjustment1Dep = Adjustment.builder()
+                .claimedDependents(1)
+                .retirementWorkPlan(true)
+                .iraContribution(new BigDecimal("0.00"))
+                .build();
+        Adjustment adjustment2Dep = Adjustment.builder()
+                .claimedDependents(2)
+                .retirementWorkPlan(true)
+                .iraContribution(new BigDecimal("0.00"))
+                .build();
+        Adjustment adjustment3Dep = Adjustment.builder()
+                .claimedDependents(3)
+                .retirementWorkPlan(true)
+                .iraContribution(new BigDecimal("0.00"))
+                .build();
+
+        TaxReturn taxReturn0Dep = TaxReturn.builder()
+                .filingStatus("Single")
+                .adjustment(adjustment0Dep)
+                .build();
+        TaxReturn taxReturn1Dep = TaxReturn.builder()
+                .filingStatus("Single")
+                .adjustment(adjustment1Dep)
+                .build();
+        TaxReturn taxReturn2Dep = TaxReturn.builder()
+                .filingStatus("Single")
+                .adjustment(adjustment2Dep)
+                .build();
+        TaxReturn taxReturn3Dep = TaxReturn.builder()
+                .filingStatus("Single")
+                .adjustment(adjustment3Dep)
+                .build();
+
+        assertEquals(new BigDecimal("600.00"), taxReturnService.calculateCredits(taxReturn0Dep, adjGrossIncome0Dep).getEitcAmount());
+        assertEquals(new BigDecimal("3995.00"), taxReturnService.calculateCredits(taxReturn1Dep, adjGrossIncome1Dep).getEitcAmount());
+        assertEquals(new BigDecimal("6604.00"), taxReturnService.calculateCredits(taxReturn2Dep, adjGrossIncome2Dep).getEitcAmount());
+        assertEquals(new BigDecimal("7430.00"), taxReturnService.calculateCredits(taxReturn3Dep, adjGrossIncome3Dep).getEitcAmount());
+        assertTrue(taxReturnService.calculateCredits(taxReturn0Dep, adjGrossIncome0Dep).getEarnedIncomeCredit());
+        assertTrue(taxReturnService.calculateCredits(taxReturn1Dep, adjGrossIncome1Dep).getEarnedIncomeCredit());
+        assertTrue(taxReturnService.calculateCredits(taxReturn2Dep, adjGrossIncome2Dep).getEarnedIncomeCredit());
+        assertTrue(taxReturnService.calculateCredits(taxReturn3Dep, adjGrossIncome3Dep).getEarnedIncomeCredit());
+    }
+
+    @Test
+    void calculateCreditsEitcMfj() throws ResultCalculationException {
+        BigDecimal adjGrossIncome0Dep = new BigDecimal("23000.00");
+        BigDecimal adjGrossIncome1Dep = new BigDecimal("50000.00");
+        BigDecimal adjGrossIncome2Dep = new BigDecimal("57000.00");
+        BigDecimal adjGrossIncome3Dep = new BigDecimal("62000.00");
+
+        Adjustment adjustment0Dep = Adjustment.builder()
+                .claimedDependents(0)
+                .retirementWorkPlan(true)
+                .iraContribution(new BigDecimal("0.00"))
+                .build();
+        Adjustment adjustment1Dep = Adjustment.builder()
+                .claimedDependents(1)
+                .retirementWorkPlan(true)
+                .iraContribution(new BigDecimal("0.00"))
+                .build();
+        Adjustment adjustment2Dep = Adjustment.builder()
+                .claimedDependents(2)
+                .retirementWorkPlan(true)
+                .iraContribution(new BigDecimal("0.00"))
+                .build();
+        Adjustment adjustment3Dep = Adjustment.builder()
+                .claimedDependents(3)
+                .retirementWorkPlan(true)
+                .iraContribution(new BigDecimal("0.00"))
+                .build();
+
+        TaxReturn taxReturn0Dep = TaxReturn.builder()
+                .filingStatus("Married, Filing Jointly")
+                .adjustment(adjustment0Dep)
+                .build();
+        TaxReturn taxReturn1Dep = TaxReturn.builder()
+                .filingStatus("Married, Filing Jointly")
+                .adjustment(adjustment1Dep)
+                .build();
+        TaxReturn taxReturn2Dep = TaxReturn.builder()
+                .filingStatus("Married, Filing Jointly")
+                .adjustment(adjustment2Dep)
+                .build();
+        TaxReturn taxReturn3Dep = TaxReturn.builder()
+                .filingStatus("Married, Filing Jointly")
+                .adjustment(adjustment3Dep)
+                .build();
+
+        assertEquals(new BigDecimal("600.00"), taxReturnService.calculateCredits(taxReturn0Dep, adjGrossIncome0Dep).getEitcAmount());
+        assertEquals(new BigDecimal("3995.00"), taxReturnService.calculateCredits(taxReturn1Dep, adjGrossIncome1Dep).getEitcAmount());
+        assertEquals(new BigDecimal("6604.00"), taxReturnService.calculateCredits(taxReturn2Dep, adjGrossIncome2Dep).getEitcAmount());
+        assertEquals(new BigDecimal("7430.00"), taxReturnService.calculateCredits(taxReturn3Dep, adjGrossIncome3Dep).getEitcAmount());
+        assertTrue(taxReturnService.calculateCredits(taxReturn0Dep, adjGrossIncome0Dep).getEarnedIncomeCredit());
+        assertTrue(taxReturnService.calculateCredits(taxReturn1Dep, adjGrossIncome1Dep).getEarnedIncomeCredit());
+        assertTrue(taxReturnService.calculateCredits(taxReturn2Dep, adjGrossIncome2Dep).getEarnedIncomeCredit());
+        assertTrue(taxReturnService.calculateCredits(taxReturn3Dep, adjGrossIncome3Dep).getEarnedIncomeCredit());
+    }
+
+    @Test
+    void calculateCreditsChildTaxCredit() throws ResultCalculationException {
+        BigDecimal adjGrossIncomeSingle = new BigDecimal("200000.00");
+        BigDecimal adjGrossIncomeMfj = new BigDecimal("400000.00");
+
+        Adjustment adjustment0Dep = Adjustment.builder()
+                .claimedDependents(0)
+                .retirementWorkPlan(true)
+                .iraContribution(new BigDecimal("0.00"))
+                .build();
+        Adjustment adjustment1Dep = Adjustment.builder()
+                .claimedDependents(1)
+                .retirementWorkPlan(true)
+                .iraContribution(new BigDecimal("0.00"))
+                .build();
+        Adjustment adjustment5Dep = Adjustment.builder()
+                .claimedDependents(5)
+                .retirementWorkPlan(true)
+                .iraContribution(new BigDecimal("0.00"))
+                .build();
+
+        TaxReturn taxReturn0Dep = TaxReturn.builder()
+                .filingStatus("Single")
+                .adjustment(adjustment0Dep)
+                .build();
+        TaxReturn taxReturn1Dep = TaxReturn.builder()
+                .filingStatus("Single")
+                .adjustment(adjustment1Dep)
+                .build();
+        TaxReturn taxReturn5Dep = TaxReturn.builder()
+                .filingStatus("Single")
+                .adjustment(adjustment5Dep)
+                .build();
+
+        assertEquals(new BigDecimal("0.00"), taxReturnService.calculateCredits(taxReturn0Dep, adjGrossIncomeSingle).getChildCreditAmount());
+        assertEquals(new BigDecimal("2000.00"), taxReturnService.calculateCredits(taxReturn1Dep, adjGrossIncomeSingle).getChildCreditAmount());
+        assertEquals(new BigDecimal("10000.00"), taxReturnService.calculateCredits(taxReturn5Dep, adjGrossIncomeSingle).getChildCreditAmount());
+        assertEquals(new BigDecimal("0.00"), taxReturnService.calculateCredits(taxReturn0Dep, adjGrossIncomeMfj).getChildCreditAmount());
+        assertEquals(new BigDecimal("2000.00"), taxReturnService.calculateCredits(taxReturn1Dep, adjGrossIncomeMfj).getChildCreditAmount());
+        assertEquals(new BigDecimal("10000.00"), taxReturnService.calculateCredits(taxReturn5Dep, adjGrossIncomeMfj).getChildCreditAmount());
+    }
+
+    @Test
+    void calculateCreditsRetirementFailIraContributionTooHighEx() {
+        BigDecimal adjGrossIncomeSingle = new BigDecimal("65000.00");
+        BigDecimal adjGrossIncomeMfj = new BigDecimal("112000.00");
+
+        Adjustment adjustment = Adjustment.builder()
+                .claimedDependents(0)
+                .retirementWorkPlan(true)
+                .iraContribution(new BigDecimal("10000.00"))
+                .build();
+
+        TaxReturn taxReturn = TaxReturn.builder()
+                .filingStatus("Single")
+                .adjustment(adjustment)
+                .build();
+        TaxReturn taxReturnMfj = TaxReturn.builder()
+                .filingStatus("Married, Filing Jointly")
+                .adjustment(adjustment)
+                .build();
+
+        Exception exception = assertThrows(ResultCalculationException.class, () ->
+                taxReturnService.calculateCredits(taxReturn, adjGrossIncomeSingle)
+        );
+        assertEquals("IRA contribution exceeded 6500.0.", exception.getMessage());
+
+        Exception exceptionMfj = assertThrows(ResultCalculationException.class, () ->
+                taxReturnService.calculateCredits(taxReturnMfj, adjGrossIncomeMfj)
+        );
+        assertEquals("IRA contribution exceeded 6500.0.", exceptionMfj.getMessage());
+    }
+
+    @Test
+    void calculateCreditsRetirementCreditWorkPlan() throws ResultCalculationException {
+        BigDecimal adjGrossIncomeSingle = new BigDecimal("65000.00");
+        BigDecimal adjGrossIncomeMfj = new BigDecimal("112000.00");
+
+        Adjustment adjustment = Adjustment.builder()
+                .claimedDependents(0)
+                .retirementWorkPlan(true)
+                .iraContribution(new BigDecimal("4000.00"))
+                .build();
+
+        TaxReturn taxReturn = TaxReturn.builder()
+                .filingStatus("Single")
+                .adjustment(adjustment)
+                .build();
+        TaxReturn taxReturnMfj = TaxReturn.builder()
+                .filingStatus("Married, Filing Jointly")
+                .adjustment(adjustment)
+                .build();
+
+        assertEquals(new BigDecimal("4000.00"), taxReturnService.calculateCredits(taxReturn, adjGrossIncomeSingle).getRetirementCreditAmount());
+        assertEquals(new BigDecimal("4000.00"), taxReturnService.calculateCredits(taxReturnMfj, adjGrossIncomeMfj).getRetirementCreditAmount());
+    }
+
+    @Test
     void calculateTaxableIncomeFailNoAdjustmentEx() {
         BigDecimal totalIncome = new BigDecimal("10000.00");
 
@@ -498,49 +757,82 @@ class TaxReturnServiceImplTests {
     void calculateTaxLiabilitySingle() {
         BigDecimal taxableIncome = new BigDecimal("600000.00");
 
-        TaxReturn taxReturn = TaxReturn.builder()
-                .filingStatus("Single")
+        Adjustment adjustment = Adjustment.builder()
+                .stdDeduction(true)
+                .eitcAmount(new BigDecimal("600.00"))
+                .childCreditAmount(new BigDecimal("2000.00"))
+                .retirementCreditAmount(new BigDecimal("400.00"))
                 .build();
 
-        assertEquals(new BigDecimal("182331.7327"), taxReturnService.calculateTaxLiability(taxReturn, taxableIncome));
+        TaxReturn taxReturn = TaxReturn.builder()
+                .filingStatus("Single")
+                .adjustment(adjustment)
+                .build();
+
+        assertEquals(new BigDecimal("179331.7327"), taxReturnService.calculateTaxLiability(taxReturn, taxableIncome));
     }
 
     @Test
     void calculateTaxLiabilityMarriedFilingSeparately() {
         BigDecimal taxableIncome = new BigDecimal("350000.00");
 
-        TaxReturn taxReturn = TaxReturn.builder()
-                .filingStatus("Married, Filing Separately")
+        Adjustment adjustment = Adjustment.builder()
+                .stdDeduction(true)
+                .eitcAmount(new BigDecimal("600.00"))
+                .childCreditAmount(new BigDecimal("2000.00"))
+                .retirementCreditAmount(new BigDecimal("400.00"))
                 .build();
 
-        assertEquals(new BigDecimal("94456.7327"), taxReturnService.calculateTaxLiability(taxReturn, taxableIncome));
+        TaxReturn taxReturn = TaxReturn.builder()
+                .filingStatus("Married, Filing Separately")
+                .adjustment(adjustment)
+                .build();
+
+        assertEquals(new BigDecimal("91456.7327"), taxReturnService.calculateTaxLiability(taxReturn, taxableIncome));
     }
 
     @Test
     void calculateTaxLiabilityMarriedFilingJointlyOrQss() {
         BigDecimal taxableIncome = new BigDecimal("700000.00");
 
+        Adjustment adjustment = Adjustment.builder()
+                .stdDeduction(true)
+                .eitcAmount(new BigDecimal("600.00"))
+                .childCreditAmount(new BigDecimal("2000.00"))
+                .retirementCreditAmount(new BigDecimal("400.00"))
+                .build();
+
         TaxReturn taxReturnMarried = TaxReturn.builder()
                 .filingStatus("Married, Filing Jointly")
+                .adjustment(adjustment)
                 .build();
 
         TaxReturn taxReturnQss = TaxReturn.builder()
                 .filingStatus("Qualifying Surviving Spouse")
+                .adjustment(adjustment)
                 .build();
 
-        assertEquals(new BigDecimal("188913.7327"), taxReturnService.calculateTaxLiability(taxReturnMarried, taxableIncome));
-        assertEquals(new BigDecimal("188913.7327"), taxReturnService.calculateTaxLiability(taxReturnQss, taxableIncome));
+        assertEquals(new BigDecimal("185913.7327"), taxReturnService.calculateTaxLiability(taxReturnMarried, taxableIncome));
+        assertEquals(new BigDecimal("185913.7327"), taxReturnService.calculateTaxLiability(taxReturnQss, taxableIncome));
     }
 
     @Test
     void calculateTaxLiabilityHeadOfHousehold() {
         BigDecimal taxableIncome = new BigDecimal("580000.00");
 
-        TaxReturn taxReturn = TaxReturn.builder()
-                .filingStatus("Head of Household")
+        Adjustment adjustment = Adjustment.builder()
+                .stdDeduction(true)
+                .eitcAmount(new BigDecimal("600.00"))
+                .childCreditAmount(new BigDecimal("2000.00"))
+                .retirementCreditAmount(new BigDecimal("400.00"))
                 .build();
 
-        assertEquals(new BigDecimal("173326.2327"), taxReturnService.calculateTaxLiability(taxReturn, taxableIncome));
+        TaxReturn taxReturn = TaxReturn.builder()
+                .filingStatus("Head of Household")
+                .adjustment(adjustment)
+                .build();
+
+        assertEquals(new BigDecimal("170326.2327"), taxReturnService.calculateTaxLiability(taxReturn, taxableIncome));
     }
 
 }
