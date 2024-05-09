@@ -1,6 +1,6 @@
 services:
   backend:
-    build: .
+    image: clxm/taxguru:latest
     container_name: taxguru-backend
     ports:
       - 8080:8080
