@@ -57,17 +57,33 @@ export default function FilingInformation() {
       spouseTaxWithheld,
     };
 
-    const res = await fetch(
-      `http://localhost:8080/return?username=${user?.username}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${jwt}`,
-        },
-        body: JSON.stringify(formData),
-      }
-    );
+    let res: Response;
+    if (user?.taxReturn?.id) {
+      // existing return so we should update the current one
+      res = await fetch(
+        `http://localhost:8080/return/${user.taxReturn.id}?username=${user.username}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jwt}`,
+          },
+          body: JSON.stringify({ ...user.taxReturn, ...formData }),
+        }
+      );
+    } else {
+      res = await fetch(
+        `http://localhost:8080/return?username=${user?.username}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jwt}`,
+          },
+          body: JSON.stringify(formData),
+        }
+      );
+    }
 
     if (res.ok) {
       const data: TaxReturn = await res.json();
@@ -203,12 +219,14 @@ export default function FilingInformation() {
                   name="dependent"
                   value="Yes"
                   label={t("y")}
+                  defaultChecked={user?.taxReturn?.dependent === true}
                 />
                 <Radio
                   id="dependent-no"
                   name="dependent"
                   value="No"
                   label={t("n")}
+                  defaultChecked={user?.taxReturn?.dependent === false}
                 />
               </Grid>
             </Grid>

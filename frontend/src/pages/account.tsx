@@ -22,7 +22,7 @@ import { Navigate, useNavigate } from "react-router-dom";
 export default function Account() {
   const navigate = useNavigate();
 
-  const { jwt, user, setUser, username, logout } = useAuth();
+  const { loading, jwt, user, setUser, username, logout } = useAuth();
 
   const { t } = useTranslation();
 
@@ -93,8 +93,12 @@ export default function Account() {
     return;
   };
 
+  if (loading) {
+    return <h1>Loading...</h1>;
+  }
+
   // redirect them to the login page if they are not logged in
-  if (!jwt) {
+  if (!jwt && !loading) {
     return <Navigate to="/login" />;
   }
 

@@ -1,4 +1,4 @@
-import type { User } from "../types";
+import type { TaxReturn, User } from "../types";
 
 import {
   Dispatch,
@@ -20,6 +20,7 @@ interface Authorization {
   setUser: Dispatch<SetStateAction<User | null>>;
   setUsername: Dispatch<SetStateAction<string | null>>;
   updateUser: (user: User) => Promise<void>;
+  updateReturn: (taxReturn: TaxReturn) => Promise<void>;
   logout: () => void;
 }
 
@@ -32,6 +33,7 @@ const AuthContext = createContext<Authorization>({
   setUser: () => {},
   setUsername: () => {},
   updateUser: () => Promise.resolve(),
+  updateReturn: () => Promise.resolve(),
   logout: () => {},
 });
 
@@ -56,7 +58,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   // when the JWT is updated, store it as a cookie
   useEffect(() => {
-    if (!jwt || !username) return;
+    if (!jwt || !username) {
+      setLoading(false);
+      return;
+    }
 
     // since we have a JWT, fetch the user information
     fetch(`http://localhost:8080/users/data?username=${username}`, {
@@ -116,6 +121,27 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setUser(updatedUser);
   };
 
+  const updateReturn = async (taxReturn: TaxReturn) => {
+    const res = await fetch(
+      `http://localhost:8080/return/${taxReturn.id}?username=${username}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jwt}`,
+        },
+        body: JSON.stringify(taxReturn),
+      }
+    );
+    const updatedReturn = await res.json();
+
+    const updatedUser = {
+      ...user,
+      taxReturn: updatedReturn,
+    } as User;
+    setUser(updatedUser);
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -126,6 +152,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setJwt,
         setUser,
         updateUser,
+        updateReturn,
         setUsername,
         logout,
       }}
