@@ -88,6 +88,7 @@ export default function Login() {
                       id="username"
                       name="username"
                       type="text"
+                      autoComplete="username"
                       required
                     />
 
@@ -96,6 +97,7 @@ export default function Login() {
                       id="password"
                       name="password"
                       type={showPassword ? "text" : "password"}
+                      autoComplete="current-password"
                     />
 
                     <button

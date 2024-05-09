@@ -152,7 +152,7 @@ export default function Deductions() {
             {/* Standard Deduction & Retirement Plan */}
             <Grid row gap>
               <Grid tablet={{ col: true }}>
-                <Label htmlFor="stdDeduction">{t("deductions.standard")}</Label>
+                <p className="usa-label">{t("deductions.standard")}</p>
                 <Radio
                   id="std"
                   name="stdDeduction"
@@ -172,9 +172,7 @@ export default function Deductions() {
               </Grid>
 
               <Grid tablet={{ col: true }}>
-                <Label htmlFor="retirementWorkPlan">
-                  {t("deductions.retirement")}
-                </Label>
+                <p className="usa-label">{t("deductions.retirement")}</p>
                 <Radio
                   id="plan-y"
                   name="retirementWorkPlan"

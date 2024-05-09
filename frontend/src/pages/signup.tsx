@@ -128,6 +128,7 @@ export default function SignUp() {
                       id="username"
                       name="username"
                       type="text"
+                      autoComplete="username"
                       required
                     />
 
@@ -137,6 +138,7 @@ export default function SignUp() {
                     <TextInput
                       id="password"
                       name="password"
+                      autoComplete="new-password"
                       type={showPassword ? "text" : "password"}
                     />
                     <button
@@ -158,6 +160,7 @@ export default function SignUp() {
                       id="password_confirm"
                       name="password_confirm"
                       type={showPassword ? "text" : "password"}
+                      autoComplete="new-password"
                     />
 
                     <Button type="submit">{t("auth.signup")}</Button>
