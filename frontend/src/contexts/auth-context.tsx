@@ -103,6 +103,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const logout = () => {
     setJwt(null);
     setUsername(null);
+    setUser(null);
     Cookies.remove("jwt");
     Cookies.remove("username");
   };
