@@ -102,10 +102,11 @@
     "deductions": {
       "title": "Credits & Deductions",
       "desc": "Let's help you get the highest possible refund.",
-      "interest": "Mortgage Interest Paid",
-      "taxes": "Property Taxes Paid",
-      "donations": "Check or Cash Donations",
-      "nonCash": "Total Non-Cash Donations"
+      "ira": "Contributions to IRA Account",
+      "standard": "Choose your deduction type",
+      "std": "Standard Deduction",
+      "itemized": "Itemized Deduction",
+      "retirement": "Do you have a retirement plan at work?"
     },
     "review": {
       "title": "Review",

@@ -48,7 +48,6 @@ export default function SelfEmployment() {
     };
 
     let res: Response;
-
     if (user?.taxReturn?.form1099?.id) {
       res = await fetch(
         `http://localhost:8080/1099/${user.taxReturn.form1099.id}?username=${user.username}`,

@@ -101,10 +101,11 @@
     "deductions": {
       "title": "Créditos y Deducciones",
       "desc": "Ayudémosle a obtener el mayor reembolso posible.",
-      "interest": "Intereses Hipotecarios Pagados",
-      "taxes": "Impuestos sobre la Propiedad Pagados",
-      "donations": "Donaciones en Cheque o Efectivo",
-      "nonCash": "Total de Donaciones No en Efectivo"
+      "ira": "Contribuciones a una cuenta IRA",
+      "standard": "Elige tu tipo de deducción",
+      "std": "Deducción estándar",
+      "itemized": "Deducción detallada",
+      "retirement": "¿Tienes un plan de jubilación en el trabajo?"
     },
     "review": {
       "title": "Revisión",

@@ -165,19 +165,6 @@ export default function FilingInformation() {
                   </option>
                 </Select>
               </Grid>
-
-              {/* <Grid tablet={{ col: true }}>
-                <Label htmlFor="dependents" requiredMarker>
-                  {t("filing-info.dependents")}
-                </Label>
-                <TextInput
-                  id="dependents"
-                  name="dependents"
-                  type="number"
-                  defaultValue={0}
-                  required
-                />
-              </Grid> */}
             </Grid>
 
             {filingValue === "Married, Filing Jointly" && (

@@ -24,7 +24,14 @@ export interface Form1099 {
 
 export interface Adjustment {
   id: number;
-  stdDeduction: true;
+  stdDeduction: boolean;
+  claimedDependents: number;
+  earnedIncomeCredit: boolean;
+  eitcAmount: number;
+  childCreditAmount: number;
+  retirementWorkPlan: boolean;
+  iraContribution: number;
+  retirementCreditAmount: number;
 }
 
 export interface TaxReturn {

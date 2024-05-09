@@ -25,8 +25,8 @@ import { AuthProvider } from "./contexts/auth-context.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <AuthProvider>
-      <BrowserRouter>
+    <BrowserRouter>
+      <AuthProvider>
         <HeaderNav />
         <Routes>
           <Route path="/" element={<App />} />
@@ -43,7 +43,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
           <Route path="/filing/deductions" element={<Deductions />} />
           <Route path="/filing/review" element={<Review />} />
         </Routes>
-      </BrowserRouter>
-    </AuthProvider>
+      </AuthProvider>
+    </BrowserRouter>
   </React.StrictMode>
 );

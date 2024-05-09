@@ -8,8 +8,8 @@ import {
   createContext,
   SetStateAction,
 } from "react";
-
 import Cookies from "js-cookie";
+import { useNavigate } from "react-router-dom";
 
 interface Authorization {
   loading: boolean;
@@ -38,6 +38,8 @@ const AuthContext = createContext<Authorization>({
 });
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+  const navigate = useNavigate();
+
   const [loading, setLoading] = useState(true);
   const [jwt, setJwt] = useState<string | null>(null);
   const [user, setUser] = useState<User | null>(null);
@@ -73,6 +75,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           setUser(data);
           setLoading(false);
         });
+      } else {
+        if (res.status === 401) {
+          logout();
+          navigate("/");
+        }
       }
     });
 
@@ -87,7 +94,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       expires: 1, // 1 day from now
     });
     setLoading(false);
-  }, [jwt, username]);
+  }, [jwt, username, navigate]);
 
   useEffect(() => {
     if (user) console.log(user);
