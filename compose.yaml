@@ -2,9 +2,9 @@ services:
   backend:
     build: .
     container_name: taxguru-backend
-    ports: 
+    ports:
       - 8080:8080
     environment:
-      - DB_URL=some_value
-      - DB_USER=some_value
-      - DB_PASSWORD=some_value
+      - DB_URL=jdbc:postgresql://p2-team1-taxguru-instance-1.c4eqo06kg56i.us-east-1.rds.amazonaws.com:5432/postgres
+      - DB_USER=postgres
+      - DB_PASSWORD=Fg8FDq&66BUw7hUJ
