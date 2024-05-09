@@ -325,7 +325,9 @@ public class TaxReturnServiceImpl implements TaxReturnService {
         }
 
         // RETIREMENT CREDIT
-        if (filingStatus.equals("Married, Filing Jointly") && retirementWorkPlan) {
+        if (iraContribution.doubleValue() == 0) {
+            calculatedAdj.setRetirementCreditAmount(new BigDecimal("0.00"));
+        } else if (filingStatus.equals("Married, Filing Jointly") && retirementWorkPlan) {
             if (adjGrossIncome.doubleValue() <= iraWorkPlanAgiLimitMfj.doubleValue()) {
                 if (iraContribution.doubleValue() <= iraContributionLimit.doubleValue()) {
                     calculatedAdj.setRetirementCreditAmount(iraContribution);
@@ -336,6 +338,16 @@ public class TaxReturnServiceImpl implements TaxReturnService {
                 calculatedAdj.setRetirementCreditAmount(new BigDecimal("0.00"));
             }
         } else if (retirementWorkPlan) {
+            if (adjGrossIncome.doubleValue() <= iraWorkPlanAgiLimit.doubleValue()) {
+                if (iraContribution.doubleValue() <= iraContributionLimit.doubleValue()) {
+                    calculatedAdj.setRetirementCreditAmount(iraContribution);
+                } else {
+                    throw new ResultCalculationException("IRA contribution exceeded " + iraContributionLimit.doubleValue() + ".");
+                }
+            } else {
+                calculatedAdj.setRetirementCreditAmount(new BigDecimal("0.00"));
+            }
+        } else {
             if (adjGrossIncome.doubleValue() <= iraWorkPlanAgiLimit.doubleValue()) {
                 if (iraContribution.doubleValue() <= iraContributionLimit.doubleValue()) {
                     calculatedAdj.setRetirementCreditAmount(iraContribution);
