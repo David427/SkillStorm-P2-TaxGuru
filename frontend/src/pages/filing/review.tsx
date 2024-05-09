@@ -1,6 +1,9 @@
+import type { TaxReturn, User } from "../../types";
+
 import {
   Form,
   Grid,
+  Alert,
   Label,
   Button,
   Fieldset,
@@ -10,7 +13,7 @@ import {
   StepIndicator,
   StepIndicatorStep,
 } from "@trussworks/react-uswds";
-import { FormEvent } from "react";
+import { FormEvent, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "../../contexts/auth-context";
 import { Link, Navigate, useNavigate } from "react-router-dom";
@@ -19,12 +22,34 @@ export default function Review() {
   const navigate = useNavigate();
 
   const { t } = useTranslation();
-  const { loading, jwt, user } = useAuth();
+  const { loading, jwt, user, setUser } = useAuth();
 
-  const handleReviewInfo = (e: FormEvent<HTMLFormElement>) => {
+  const [error, setError] = useState<string | null>(null);
+
+  const handleReviewInfo = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    navigate("/filing/results");
+    const res = await fetch(
+      `http://localhost:8080/return/${user?.taxReturn?.id}/result?username=${user?.username}`,
+      { method: "GET", headers: { Authorization: `Bearer ${jwt}` } }
+    );
+
+    if (res.ok) {
+      const taxReturn: TaxReturn = await res.json();
+      const updated = { ...user, taxReturn } as User;
+
+      setUser(updated);
+      navigate("/filing/results");
+    } else {
+      console.log("Error: ", res.status, res.statusText);
+      if (res.headers.get("content-type")?.includes("application/json")) {
+        const data = await res.json();
+        setError(data.error);
+      } else if (res.headers.get("content-type")?.includes("text/plain")) {
+        const text = await res.text();
+        setError(text);
+      }
+    }
   };
 
   if (loading) {
@@ -47,6 +72,12 @@ export default function Review() {
           <StepIndicatorStep label={t("review.title")} status="current" />
           <StepIndicatorStep label={t("results.title")} />
         </StepIndicator>
+
+        {error && (
+          <Alert type="error" headingLevel="h4" slim>
+            {error}
+          </Alert>
+        )}
 
         <Form onSubmit={handleReviewInfo} className="w-full">
           <Fieldset legend={t("review.desc")}>
