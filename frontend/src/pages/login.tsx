@@ -36,7 +36,7 @@ export default function Login() {
     };
 
     const res = await fetch(
-      "http://ec2-54-224-41-31.compute-1.amazonaws.com:8080/auth/login",
+      "http://api.taxguru.skillstorm-congo.com:8080/auth/login",
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },

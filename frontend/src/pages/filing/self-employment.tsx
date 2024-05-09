@@ -50,7 +50,7 @@ export default function SelfEmployment() {
     let res: Response;
     if (user?.taxReturn?.form1099?.id) {
       res = await fetch(
-        `http://ec2-54-224-41-31.compute-1.amazonaws.com:8080/1099/${user.taxReturn.form1099.id}?username=${user.username}`,
+        `http://api.taxguru.skillstorm-congo.com:8080/1099/${user.taxReturn.form1099.id}?username=${user.username}`,
         {
           method: "PUT",
           headers: {
@@ -62,7 +62,7 @@ export default function SelfEmployment() {
       );
     } else {
       res = await fetch(
-        `http://ec2-54-224-41-31.compute-1.amazonaws.com:8080/1099?username=${user?.username}`,
+        `http://api.taxguru.skillstorm-congo.com:8080/1099?username=${user?.username}`,
         {
           method: "POST",
           headers: {
