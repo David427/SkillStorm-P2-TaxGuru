@@ -71,7 +71,9 @@
       "married-sep": "Casado que presenta por separado",
       "married-jointly": "Casado con declaración conjunta",
       "widow": "Esposo/a sobreviviente calificada/o",
-      "hoh": "Jefe de familia"
+      "hoh": "Jefe de familia",
+      "spouse-income": "Ingresos del cónyuge",
+      "spouse-withheld": "Impuesto federal retenido al cónyuge"
     },
     "w2": {
       "hint": "Casilla {{hint}} en el Formulario W-2",

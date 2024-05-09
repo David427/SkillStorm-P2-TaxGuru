@@ -8,23 +8,32 @@ import {
   ButtonGroup,
   GridContainer,
   StepIndicator,
-  TextInputMask,
   StepIndicatorStep,
 } from "@trussworks/react-uswds";
 import { FormEvent } from "react";
-
 import { useTranslation } from "react-i18next";
-import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../../contexts/auth-context";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 
 export default function Review() {
-  const { t } = useTranslation();
   const navigate = useNavigate();
+
+  const { t } = useTranslation();
+  const { loading, jwt, user } = useAuth();
 
   const handleReviewInfo = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     navigate("/filing/results");
   };
+
+  if (loading) {
+    return <h1>Loading ...</h1>;
+  }
+
+  if (!jwt && !loading) {
+    return <Navigate to="/login" />;
+  }
 
   return (
     <main className="full-page">
@@ -49,29 +58,23 @@ export default function Review() {
               {/* Fname & Lname */}
               <Grid row gap>
                 <Grid tablet={{ col: true }}>
-                  <Label id="label-first_name" htmlFor="first_name">
-                    {t("personal.fname")}
-                  </Label>
+                  <Label htmlFor="first_name">{t("personal.fname")}</Label>
                   <TextInput
                     id="first_name"
                     name="first_name"
-                    aria-labelledby="label-first_name"
                     type="text"
-                    defaultValue="First Name"
+                    defaultValue={user?.firstName ?? undefined}
                     disabled
                   />
                 </Grid>
 
                 <Grid tablet={{ col: true }}>
-                  <Label id="label-last_name" htmlFor="last_name">
-                    {t("personal.lname")}
-                  </Label>
+                  <Label htmlFor="last_name">{t("personal.lname")}</Label>
                   <TextInput
                     id="last_name"
                     name="last_name"
-                    aria-labelledby="label-last_name"
                     type="text"
-                    defaultValue="Last Name"
+                    defaultValue={user?.lastName ?? undefined}
                     disabled
                   />
                 </Grid>
@@ -80,35 +83,23 @@ export default function Review() {
               {/* Birthdate & SSN */}
               <Grid row gap>
                 <Grid tablet={{ col: true }}>
-                  <Label id="label-birthdate" htmlFor="birthdate">
-                    {t("personal.birthdate")}
-                  </Label>
-                  <TextInputMask
+                  <Label htmlFor="birthdate">{t("personal.birthdate")}</Label>
+                  <TextInput
                     id="birthdate"
                     name="birthdate"
                     type="text"
-                    aria-labelledby="label-birthdate"
-                    aria-describedby="hint-birthdate"
-                    mask="__/__/____"
-                    // the pattern fits the date format MM/DD/YYYY
-                    pattern="^(0[1-9]|1[0-2])/(0[1-9]|[12][0-9]|3[01])/\d{4}$"
-                    defaultValue="11/28/2001"
+                    defaultValue={user?.dateOfBirth ?? undefined}
                     disabled
                   />
                 </Grid>
 
                 <Grid tablet={{ col: true }}>
-                  <Label id="label-ssn" htmlFor="ssn">
-                    SSN or TIN
-                  </Label>
-                  <TextInputMask
+                  <Label htmlFor="ssn">SSN or TIN</Label>
+                  <TextInput
                     id="ssn"
                     name="ssn"
                     type="text"
-                    aria-labelledby="label-ssn"
-                    mask="___-__-____"
-                    pattern="\d{3}-\d{2}-\d{4}"
-                    defaultValue="123-45-6789"
+                    defaultValue={user?.ssn ?? undefined}
                     disabled
                   />
                 </Grid>
@@ -126,33 +117,64 @@ export default function Review() {
               {/* Filing Status and Dependents */}
               <Grid row gap>
                 <Grid tablet={{ col: true }}>
-                  <Label id="label-filing_status" htmlFor="filing_status">
+                  <Label htmlFor="filing_status">
                     {t("filing-info.status")}
                   </Label>
                   <TextInput
                     id="filing_status"
                     name="filing_status"
                     type="text"
-                    aria-labelledby="label-filing_status"
-                    defaultValue={"Single"}
+                    defaultValue={user?.taxReturn?.filingStatus ?? undefined}
                     disabled
                   />
                 </Grid>
 
                 <Grid tablet={{ col: true }}>
-                  <Label id="label-dependents" htmlFor="dependents">
-                    {t("review.dependents")}
+                  <Label htmlFor="dependent">
+                    {t("filing-info.isDependent")}
                   </Label>
                   <TextInput
-                    id="dependents"
-                    name="dependents"
-                    type="number"
-                    aria-labelledby="label-dependents"
-                    defaultValue={0}
+                    id="dependent"
+                    name="dependent"
+                    type="text"
+                    defaultValue={user?.taxReturn?.dependent ? "Yes" : "No"}
                     disabled
                   />
                 </Grid>
               </Grid>
+
+              {/* optional spouse fields based on filing statues */}
+              {user?.taxReturn?.filingStatus === "Married, Filing Jointly" && (
+                <Grid row gap>
+                  <Grid tablet={{ col: true }}>
+                    <Label htmlFor="spouseAgi">
+                      {t("filing-info.spouse-income")}
+                    </Label>
+                    <TextInput
+                      id="spouseAgi"
+                      name="spouseAgi"
+                      type="number"
+                      defaultValue={user?.taxReturn?.spouseAgi ?? undefined}
+                      disabled
+                    />
+                  </Grid>
+
+                  <Grid tablet={{ col: true }}>
+                    <Label htmlFor="spouseTaxWithheld">
+                      {t("filing-info.spouse-withheld")}
+                    </Label>
+                    <TextInput
+                      id="spouseTaxWithheld"
+                      name="spouseTaxWithheld"
+                      type="number"
+                      defaultValue={
+                        user?.taxReturn?.spouseTaxWithheld ?? undefined
+                      }
+                      disabled
+                    />
+                  </Grid>
+                </Grid>
+              )}
             </section>
 
             {/* W2 */}
@@ -164,15 +186,12 @@ export default function Review() {
               {/* Employer Name, Wages, & Taxes Withheld */}
               <Grid row gap>
                 <Grid tablet={{ col: true }}>
-                  <Label id="label-employer_name" htmlFor="employer_name">
-                    {t("w2.ename")}
-                  </Label>
+                  <Label htmlFor="employer_name">{t("w2.ename")}</Label>
                   <TextInput
                     id="employer_name"
                     name="employer_name"
                     type="text"
-                    aria-labelledby="label-employer_name"
-                    defaultValue={"Skillstorm Commercial Services, LLC"}
+                    defaultValue={user?.taxReturn?.formW2?.empName}
                     disabled
                   />
                 </Grid>
@@ -185,8 +204,7 @@ export default function Review() {
                     id="wages"
                     name="wages"
                     type="number"
-                    aria-labelledby="label-wages"
-                    defaultValue={100_000}
+                    defaultValue={user?.taxReturn?.formW2?.income}
                     disabled
                   />
                 </Grid>
@@ -199,8 +217,7 @@ export default function Review() {
                     id="w2_withheld"
                     name="w2_withheld"
                     type="number"
-                    aria-labelledby="label-w2_withheld"
-                    defaultValue={10_000}
+                    defaultValue={user?.taxReturn?.formW2?.fedTaxWithheld}
                     disabled
                   />
                 </Grid>
@@ -216,15 +233,12 @@ export default function Review() {
               {/* Non-Employment Compensation & Taxes Withheld */}
               <Grid row gap>
                 <Grid tablet={{ col: true }}>
-                  <Label id="label-nec_wages" htmlFor="nec_wages">
-                    {t("1099.nec")}
-                  </Label>
+                  <Label htmlFor="nec_wages">{t("1099.income")}</Label>
                   <TextInput
                     id="nec_wages"
                     name="nec_wages"
                     type="number"
-                    aria-labelledby="label-nec_wages"
-                    defaultValue={10_000}
+                    defaultValue={user?.taxReturn?.form1099?.income}
                     disabled
                   />
                 </Grid>
@@ -237,8 +251,7 @@ export default function Review() {
                     id="nec_withheld"
                     name="nec_withheld"
                     type="number"
-                    aria-labelledby="label-nec_withheld"
-                    defaultValue={1_000}
+                    defaultValue={user?.taxReturn?.form1099?.fedTaxWithheld}
                     disabled
                   />
                 </Grid>
@@ -250,68 +263,69 @@ export default function Review() {
               <h4 className="margin-bottom-0">
                 <Link to="/filing/deductions">{t("deductions.title")}</Link>
               </h4>
+              {/* Mortgage Interest & Property Taxes Paid */}
               <Grid row gap>
                 <Grid tablet={{ col: true }}>
-                  <Label
-                    id="label-mortgage-interest"
-                    htmlFor="mortgage_interest"
-                  >
-                    {t("deductions.interest")}
+                  <Label htmlFor="claimedDependents">
+                    {t("filing-info.dependents")}
                   </Label>
                   <TextInput
-                    id="mortgage_interest"
-                    name="mortgage_interest"
+                    id="claimedDependents"
+                    name="claimedDependents"
                     type="number"
-                    aria-labelledby="label-mortgage-interest"
-                    defaultValue={0}
+                    defaultValue={
+                      user?.taxReturn?.adjustment?.claimedDependents ?? 0
+                    }
                     disabled
                   />
                 </Grid>
 
                 <Grid tablet={{ col: true }}>
-                  <Label id="label-property-taxes" htmlFor="property_taxes">
-                    {t("deductions.taxes")}
-                  </Label>
+                  <Label htmlFor="iraContribution">{t("deductions.ira")}</Label>
                   <TextInput
-                    id="property_taxes"
-                    name="property_taxes"
+                    id="iraContribution"
+                    name="iraContribution"
                     type="number"
-                    aria-labelledby="label-property-taxes"
-                    defaultValue={0}
+                    defaultValue={
+                      user?.taxReturn?.adjustment?.iraContribution ?? 0
+                    }
                     disabled
                   />
                 </Grid>
               </Grid>
 
-              {/* Donations */}
+              {/* Standard Deduction & Retirement Plan */}
               <Grid row gap>
                 <Grid tablet={{ col: true }}>
-                  <Label id="label-donations" htmlFor="donations">
-                    {t("deductions.donations")}
+                  <Label htmlFor="stdDeduction">
+                    {t("deductions.standard")}
                   </Label>
                   <TextInput
-                    id="donations"
-                    name="donations"
-                    type="number"
-                    aria-labelledby="label-donations"
-                    defaultValue={0}
+                    id="stdDeduction"
+                    name="stdDeduction"
+                    type="text"
+                    defaultValue={
+                      user?.taxReturn?.adjustment?.stdDeduction
+                        ? "Standard Deduction"
+                        : "Itemized Deduction"
+                    }
                     disabled
                   />
                 </Grid>
 
                 <Grid tablet={{ col: true }}>
-                  <Label
-                    id="label-nonCash-donations"
-                    htmlFor="nonCash_donations"
-                  >
-                    {t("deductions.nonCash")}
+                  <Label htmlFor="retirementWorkPlan">
+                    {t("deductions.retirement")}
                   </Label>
                   <TextInput
-                    id="nonCash_donations"
-                    name="nonCash_donations"
-                    type="number"
-                    aria-labelledby="label-nonCash-donations"
-                    defaultValue={0}
+                    id="retirementWorkPlan"
+                    name="retirementWorkPlan"
+                    type="text"
+                    defaultValue={
+                      user?.taxReturn?.adjustment?.retirementWorkPlan
+                        ? "Yes"
+                        : "No"
+                    }
                     disabled
                   />
                 </Grid>
@@ -321,7 +335,7 @@ export default function Review() {
             <div className="tablet:display-flex tablet:flex-justify">
               <ButtonGroup type="default">
                 <Link
-                  to="/filing/self-employment"
+                  to="/filing/deductions"
                   className="usa-button usa-button--outline"
                 >
                   {t("back")}

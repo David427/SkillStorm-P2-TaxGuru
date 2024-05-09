@@ -171,7 +171,7 @@ export default function FilingInformation() {
               <Grid row gap>
                 <Grid tablet={{ col: true }}>
                   <Label htmlFor="spouseAgi" requiredMarker>
-                    Spouse Income
+                    {t("filing-info.spouse-income")}
                   </Label>
                   <TextInput
                     id="spouseAgi"
@@ -184,7 +184,7 @@ export default function FilingInformation() {
 
                 <Grid tablet={{ col: true }}>
                   <Label htmlFor="spouseTaxWithheld" requiredMarker>
-                    Spouse Federal Tax Withheld
+                    {t("filing-info.spouse-withheld")}
                   </Label>
                   <TextInput
                     id="spouseTaxWithheld"
@@ -193,6 +193,7 @@ export default function FilingInformation() {
                     defaultValue={
                       user?.taxReturn?.spouseTaxWithheld ?? undefined
                     }
+                    required
                   />
                 </Grid>
               </Grid>

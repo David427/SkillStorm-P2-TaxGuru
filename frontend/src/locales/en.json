@@ -72,7 +72,9 @@
       "married-sep": "Married, filing separately",
       "married-jointly": "Married, filing jointly",
       "widow": "Qualifying Surviving Spouse",
-      "hoh": "Head of household"
+      "hoh": "Head of household",
+      "spouse-income": "Spouse Income",
+      "spouse-withheld": "Spouse Federal Tax Withheld"
     },
     "w2": {
       "hint": "Box {{hint}} on W-2 Form",
