@@ -1,6 +1,9 @@
+import type { User } from "../../types";
+
 import {
   Form,
   Grid,
+  Alert,
   Label,
   Button,
   Select,
@@ -11,12 +14,12 @@ import {
   TextInputMask,
   StepIndicatorStep,
 } from "@trussworks/react-uswds";
-import { FormEvent } from "react";
-
 import { states } from "../../states";
-
-import { useNavigate } from "react-router-dom";
+import { FormEvent, useState } from "react";
+import { valueOrNull } from "../../lib/utils";
 import { useTranslation } from "react-i18next";
+import { useAuth } from "../../contexts/auth-context";
+import { useNavigate, Navigate } from "react-router-dom";
 
 const suffixOptions = [
   "Jr.",
@@ -32,10 +35,14 @@ const suffixOptions = [
 ];
 
 export default function Personal() {
-  const { t } = useTranslation();
   const navigate = useNavigate();
 
-  const handlePersonalInfo = (e: FormEvent<HTMLFormElement>) => {
+  const { t } = useTranslation();
+  const { loading, jwt, user, setUser } = useAuth();
+
+  const [error, setError] = useState<string | null>(null);
+
+  const handlePersonalInfo = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const formData = {
@@ -44,27 +51,62 @@ export default function Personal() {
       // @ts-expect-error untyped form elements but we need the values
       lastName: e.currentTarget.elements.last_name.value,
       // @ts-expect-error untyped form elements but we need the values
-      suffix: e.currentTarget.elements.suffix.value,
+      suffix: valueOrNull(e.currentTarget.elements.suffix.value, t("select")),
       // @ts-expect-error untyped form elements but we need the values
-      birthdate: e.currentTarget.elements.birthdate.value,
+      dateOfBirth: e.currentTarget.elements.birthdate.value,
       // @ts-expect-error untyped form elements but we need the values
       ssn: e.currentTarget.elements.ssn.value,
       // @ts-expect-error untyped form elements but we need the values
-      tel: e.currentTarget.elements.tel.value,
+      phoneNumber: e.currentTarget.elements.tel.value,
       // @ts-expect-error untyped form elements but we need the values
       streetAddress: e.currentTarget.elements.street_address.value,
       // @ts-expect-error untyped form elements but we need the values
       city: e.currentTarget.elements.city.value,
       // @ts-expect-error untyped form elements but we need the values
-      state: e.currentTarget.elements.state.value,
+      userState: e.currentTarget.elements.state.value,
       // @ts-expect-error untyped form elements but we need the values
       zipCode: e.currentTarget.elements.zipcode.value,
+      // these fields aren't included in the form, but we don't want to accidentally override them
+      username: user?.username,
+      email: user?.email,
+      taxReturn: user?.taxReturn,
     };
 
-    console.log(formData);
+    const res = await fetch(
+      `http://localhost:8080/users/update?username=${user?.username}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jwt}`,
+        },
+        body: JSON.stringify(formData),
+      }
+    );
 
-    navigate("/filing/filing-information");
+    if (res.ok) {
+      const data: User = await res.json();
+      setUser(data);
+      navigate("/filing/filing-information");
+    } else {
+      console.log("Error: ", res.status);
+      if (res.headers.get("content-type")?.includes("application/json")) {
+        const data = await res.json();
+        setError(data.error);
+      } else if (res.headers.get("content-type")?.includes("text/plain")) {
+        const text = await res.text();
+        setError(text);
+      }
+    }
   };
+
+  if (loading) {
+    return <h1>Loading...</h1>;
+  }
+
+  if (!jwt && !loading) {
+    return <Navigate to="/login" />;
+  }
 
   return (
     <main className="full-page">
@@ -79,6 +121,12 @@ export default function Personal() {
           <StepIndicatorStep label={t("results.title")} />
         </StepIndicator>
 
+        {error && (
+          <Alert type="error" headingLevel="h4" slim>
+            {error}
+          </Alert>
+        )}
+
         <Form onSubmit={handlePersonalInfo} className="w-full">
           <Fieldset legend={t("personal.desc")}>
             {/* FName, LName, Suffix */}
@@ -92,6 +140,7 @@ export default function Personal() {
                   name="first_name"
                   type="text"
                   autoComplete="given-name"
+                  defaultValue={user?.firstName ?? undefined}
                   required
                 />
               </Grid>
@@ -105,13 +154,18 @@ export default function Personal() {
                   name="last_name"
                   type="text"
                   autoComplete="family-name"
+                  defaultValue={user?.lastName ?? undefined}
                   required
                 />
               </Grid>
 
               <Grid tablet={{ col: true }}>
                 <Label htmlFor="suffix">{t("personal.suffix")}</Label>
-                <Select id="suffix" name="suffix">
+                <Select
+                  id="suffix"
+                  name="suffix"
+                  defaultValue={user?.suffix ?? undefined}
+                >
                   <option>{t("select")}</option>
                   {suffixOptions.map((s) => (
                     <option key={s} value={s}>
@@ -129,7 +183,7 @@ export default function Personal() {
                   {t("personal.birthdate")}
                 </Label>
                 <span id="hint-birthdate" className="usa-hint">
-                  MM/DD/YYYY
+                  YYYY-MM-DD
                 </span>
                 <TextInputMask
                   id="birthdate"
@@ -137,9 +191,10 @@ export default function Personal() {
                   type="text"
                   aria-labelledby="label-birthdate"
                   aria-describedby="hint-birthdate"
-                  mask="__/__/____"
-                  // the pattern fits the date format MM/DD/YYYY
-                  pattern="^(0[1-9]|1[0-2])/(0[1-9]|[12][0-9]|3[01])/\d{4}$"
+                  mask="____-__-__"
+                  // the pattern fits the date format YYYY-MM-DD
+                  pattern="^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$"
+                  defaultValue={user?.dateOfBirth ?? undefined}
                   required
                 />
               </Grid>
@@ -159,6 +214,7 @@ export default function Personal() {
                   aria-describedby="hint-ssn"
                   mask="___-__-____"
                   pattern="\d{3}-\d{2}-\d{4}"
+                  defaultValue={user?.ssn ?? undefined}
                   required
                 />
               </Grid>
@@ -182,6 +238,7 @@ export default function Personal() {
                   mask="___-___-____"
                   pattern="\d{3}-\d{3}-\d{4}"
                   autoComplete="tel-national"
+                  defaultValue={user?.phoneNumber ?? undefined}
                   required
                 />
               </Grid>
@@ -198,6 +255,7 @@ export default function Personal() {
                   aria-describedby="hint-street-address"
                   type="text"
                   autoComplete="street-address"
+                  defaultValue={user?.streetAddress ?? undefined}
                   required
                 />
               </Grid>
@@ -209,14 +267,25 @@ export default function Personal() {
                 <Label htmlFor="city" requiredMarker>
                   {t("personal.city")}
                 </Label>
-                <TextInput id="city" name="city" type="text" required />
+                <TextInput
+                  id="city"
+                  name="city"
+                  type="text"
+                  defaultValue={user?.city ?? undefined}
+                  required
+                />
               </Grid>
 
               <Grid tablet={{ col: true }}>
                 <Label htmlFor="state" requiredMarker>
                   {t("personal.state")}
                 </Label>
-                <Select id="state" name="state" required>
+                <Select
+                  id="state"
+                  name="state"
+                  defaultValue={user?.userState ?? undefined}
+                  required
+                >
                   <option>{t("select")}</option>
                   {states.map((s) => (
                     <option key={s} value={s}>
@@ -240,6 +309,7 @@ export default function Personal() {
                   mask="_____"
                   pattern="^\d{5}"
                   autoComplete="postal-code"
+                  defaultValue={user?.zipCode ?? undefined}
                   required
                 />
               </Grid>

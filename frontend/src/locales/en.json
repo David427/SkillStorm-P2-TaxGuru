@@ -6,6 +6,7 @@
     "skip": "Skip",
     "y": "Yes",
     "n": "No",
+    "logout": "Log Out",
     "index": {
       "hero-heading-alt": "Act now:",
       "hero-heading": "Federal taxes are due by April 15th",
@@ -68,8 +69,12 @@
       "dependents": "How many dependents can you claim?",
       "isDependent": "Can someone claim you as a dependent?",
       "single": "Single",
-      "married": "Married filing separately",
-      "hoh": "Head of household"
+      "married-sep": "Married, filing separately",
+      "married-jointly": "Married, filing jointly",
+      "widow": "Qualifying Surviving Spouse",
+      "hoh": "Head of household",
+      "spouse-income": "Spouse Income",
+      "spouse-withheld": "Spouse Federal Tax Withheld"
     },
     "w2": {
       "hint": "Box {{hint}} on W-2 Form",
@@ -87,20 +92,23 @@
       "medicare-withheld": "Medicare Tax Withheld"
     },
     "1099": {
-      "hint": "Box {{hint}} on Form 1099-NEC",
+      "hint": "Box {{hint}} on Form 1099",
       "title": "Self Employment",
-      "desc": "This information can be found on form 1099-NEC. If you don't have any self employment income to enter, you can skip this section.",
-      "payerTIN": "Payer's TIN",
-      "recipientTIN": "Recipient's TIN",
-      "nec": "Non-Employee Compensation"
+      "desc": "This information can be found on form 1099. If you don't have any self employment income to enter, you can skip this section.",
+      "accountNum": "Account Number",
+      "payerName": "Payer Name",
+      "payerState": "Payer State",
+      "payerZipCode": "Payer Zip Code",
+      "income": "Income"
     },
     "deductions": {
       "title": "Credits & Deductions",
       "desc": "Let's help you get the highest possible refund.",
-      "interest": "Mortgage Interest Paid",
-      "taxes": "Property Taxes Paid",
-      "donations": "Check or Cash Donations",
-      "nonCash": "Total Non-Cash Donations"
+      "ira": "Contributions to IRA Account",
+      "standard": "Choose your deduction type",
+      "std": "Standard Deduction",
+      "itemized": "Itemized Deduction",
+      "retirement": "Do you have a retirement plan at work?"
     },
     "review": {
       "title": "Review",

@@ -1,6 +1,9 @@
+import type { FormW2, TaxReturn } from "../../types";
+
 import {
   Form,
   Grid,
+  Alert,
   Label,
   Button,
   Select,
@@ -12,45 +15,99 @@ import {
   TextInputMask,
   StepIndicatorStep,
 } from "@trussworks/react-uswds";
-import { FormEvent } from "react";
-
 import { states } from "../../states";
+import { FormEvent, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../../contexts/auth-context";
+import { Link, useNavigate, Navigate } from "react-router-dom";
 
 export default function W2() {
-  const { t } = useTranslation();
   const navigate = useNavigate();
 
-  const handleW2Info = (e: FormEvent<HTMLFormElement>) => {
+  const { t } = useTranslation();
+  const { loading, jwt, user, updateReturn } = useAuth();
+
+  const [error, setError] = useState<string | null>(null);
+
+  const handleW2Info = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const formData = {
       // @ts-expect-error untyped form elements but we need the values
-      ein: e.currentTarget.elements.ein.value,
+      eid: e.currentTarget.elements.ein.value,
       // @ts-expect-error untyped form elements but we need the values
-      employerName: e.currentTarget.elements.e_name.value,
+      empName: e.currentTarget.elements.e_name.value,
       // @ts-expect-error untyped form elements but we need the values
-      employerStreetAddress: e.currentTarget.elements.e_street_address.value,
+      empStreetAddress: e.currentTarget.elements.e_street_address.value,
       // @ts-expect-error untyped form elements but we need the values
-      employerCity: e.currentTarget.elements.e_city.value,
+      empCity: e.currentTarget.elements.e_city.value,
       // @ts-expect-error untyped form elements but we need the values
-      employerZipCode: e.currentTarget.elements.e_zipcode.value,
+      empZipCode: e.currentTarget.elements.e_zipcode.value,
       // @ts-expect-error untyped form elements but we need the values
-      employerState: e.currentTarget.elements.e_state.value,
+      empState: e.currentTarget.elements.e_state.value,
       // @ts-expect-error untyped form elements but we need the values
-      wages: e.currentTarget.elements.wages.value,
+      income: e.currentTarget.elements.wages.value,
       // @ts-expect-error untyped form elements but we need the values
-      fedWithheld: e.currentTarget.elements.fed_withheld.value,
+      fedTaxWithheld: e.currentTarget.elements.fed_withheld.value,
       // @ts-expect-error untyped form elements but we need the values
-      socialWithheld: e.currentTarget.elements.social_withheld.value,
+      ssTaxWithheld: e.currentTarget.elements.social_withheld.value,
       // @ts-expect-error untyped form elements but we need the values
-      medicareWithheld: e.currentTarget.elements.medicare_withheld.value,
+      mediTaxWithheld: e.currentTarget.elements.medicare_withheld.value,
     };
 
-    console.log(formData);
-    navigate("/filing/self-employment");
+    let res: Response;
+    if (user?.taxReturn?.formW2?.id) {
+      // existing w2 so update it
+      res = await fetch(
+        `http://localhost:8080/w2/${user.taxReturn.formW2.id}?username=${user.username}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jwt}`,
+          },
+          body: JSON.stringify(formData),
+        }
+      );
+    } else {
+      res = await fetch(`http://localhost:8080/w2?username=${user?.username}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jwt}`,
+        },
+        body: JSON.stringify(formData),
+      });
+    }
+
+    if (res.ok) {
+      const w2Data: FormW2 = await res.json();
+
+      // update the tax return object with the new W2 Data
+      const updatedReturn = { ...user?.taxReturn, formW2: w2Data } as TaxReturn;
+
+      await updateReturn(updatedReturn);
+
+      navigate("/filing/self-employment");
+    } else {
+      console.log("Error", res.status, res.statusText);
+      if (res.headers.get("content-type")?.includes("application/json")) {
+        const data = await res.json();
+        setError(data.error);
+      } else if (res.headers.get("content-type")?.includes("text/plain")) {
+        const text = await res.text();
+        setError(text);
+      }
+    }
   };
+
+  if (loading) {
+    return <h1>Loading...</h1>;
+  }
+
+  if (!jwt && !loading) {
+    return <Navigate to="/"></Navigate>;
+  }
 
   return (
     <main className="full-page">
@@ -64,6 +121,12 @@ export default function W2() {
           <StepIndicatorStep label={t("review.title")} />
           <StepIndicatorStep label={t("results.title")} />
         </StepIndicator>
+
+        {error && (
+          <Alert type="error" headingLevel="h4" slim>
+            {error}
+          </Alert>
+        )}
 
         <Form onSubmit={handleW2Info} className="w-full">
           <Fieldset legend={t("w2.desc")}>
@@ -84,6 +147,7 @@ export default function W2() {
                   aria-describedby="hint-ein"
                   mask="__-_______"
                   pattern="^\d{2}-\d{7}"
+                  defaultValue={user?.taxReturn?.formW2?.eid ?? undefined}
                   required
                 />
               </Grid>
@@ -95,7 +159,13 @@ export default function W2() {
                 <span id="hint-e_name" className="usa-hint">
                   {t("w2.hint", { hint: "c" })}
                 </span>
-                <TextInput id="e_name" name="e_name" type="text" required />
+                <TextInput
+                  id="e_name"
+                  name="e_name"
+                  type="text"
+                  defaultValue={user?.taxReturn?.formW2?.empName ?? undefined}
+                  required
+                />
               </Grid>
             </Grid>
 
@@ -109,6 +179,9 @@ export default function W2() {
                   id="e_street_address"
                   name="e_street_address"
                   type="text"
+                  defaultValue={
+                    user?.taxReturn?.formW2?.empStreetAddress ?? undefined
+                  }
                   required
                 />
               </Grid>
@@ -117,7 +190,13 @@ export default function W2() {
                 <Label htmlFor="e_city" requiredMarker>
                   {t("w2.ecity")}
                 </Label>
-                <TextInput id="e_city" name="e_city" type="text" required />
+                <TextInput
+                  id="e_city"
+                  name="e_city"
+                  type="text"
+                  defaultValue={user?.taxReturn?.formW2?.empCity}
+                  required
+                />
               </Grid>
             </Grid>
 
@@ -127,7 +206,12 @@ export default function W2() {
                 <Label htmlFor="e_state" requiredMarker>
                   {t("w2.estate")}
                 </Label>
-                <Select id="e_state" name="e_state" required>
+                <Select
+                  id="e_state"
+                  name="e_state"
+                  defaultValue={user?.taxReturn?.formW2?.empState ?? undefined}
+                  required
+                >
                   <option>{t("select")}</option>
                   {states.map((s) => (
                     <option key={s} value={s}>
@@ -146,6 +230,9 @@ export default function W2() {
                   type="text"
                   mask="_____"
                   pattern="^\d{5}"
+                  defaultValue={
+                    user?.taxReturn?.formW2?.empZipCode ?? undefined
+                  }
                   required
                 />
               </Grid>
@@ -166,6 +253,7 @@ export default function W2() {
                   type="number"
                   aria-describedby="hint-wages"
                   aria-labelledby="label-wages"
+                  defaultValue={user?.taxReturn?.formW2?.income ?? undefined}
                   required
                 />
               </Grid>
@@ -187,6 +275,9 @@ export default function W2() {
                   type="number"
                   aria-describedby="hint-fed-withheld"
                   aria-labelledby="label-fed-withheld"
+                  defaultValue={
+                    user?.taxReturn?.formW2?.fedTaxWithheld ?? undefined
+                  }
                   required
                 />
               </Grid>
@@ -211,6 +302,9 @@ export default function W2() {
                   type="number"
                   aria-describedby="hint-social-withheld"
                   aria-labelledby="label-social-withheld"
+                  defaultValue={
+                    user?.taxReturn?.formW2?.ssTaxWithheld ?? undefined
+                  }
                   required
                 />
               </Grid>
@@ -232,6 +326,9 @@ export default function W2() {
                   type="number"
                   aria-describedby="hint-medicare-withheld"
                   aria-labelledby="label-medicare-withheld"
+                  defaultValue={
+                    user?.taxReturn?.formW2?.mediTaxWithheld ?? undefined
+                  }
                   required
                 />
               </Grid>

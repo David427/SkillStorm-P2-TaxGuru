@@ -9,6 +9,7 @@ import {
   LanguageSelector,
 } from "@trussworks/react-uswds";
 import { changeLanguage } from "i18next";
+import { useAuth } from "../contexts/auth-context";
 
 const navItems = [
   <Link to="/login" className="usa-nav__link">
@@ -19,7 +20,6 @@ const navItems = [
   </Link>,
   <LanguageSelector
     className="usa-button--unstyled usa-nav__link language-selector"
-    label="Languages"
     langs={[
       {
         attr: "en",
@@ -50,7 +50,6 @@ const authenticatedNavItems = [
   </Link>,
   <LanguageSelector
     className="usa-button--unstyled usa-nav__link language-selector"
-    label="Languages"
     langs={[
       {
         attr: "en",
@@ -73,7 +72,8 @@ const authenticatedNavItems = [
 ];
 
 export function HeaderNav() {
-  const isAuthenticated = true;
+  const { jwt } = useAuth();
+
   const [mobileExpanded, setMobileExpanded] = useState(false);
 
   return (
@@ -91,7 +91,7 @@ export function HeaderNav() {
         </div>
 
         <PrimaryNav
-          items={isAuthenticated ? authenticatedNavItems : navItems}
+          items={jwt ? authenticatedNavItems : navItems}
           mobileExpanded={mobileExpanded}
           onToggleMobileNav={() => setMobileExpanded((prev) => !prev)}
         ></PrimaryNav>

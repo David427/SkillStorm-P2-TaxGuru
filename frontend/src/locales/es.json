@@ -6,6 +6,7 @@
     "skip": "Omitir",
     "y": "Sí",
     "n": "No",
+    "logout": "Cerrar sesión",
     "index": {
       "hero-heading-alt": "Actúa ahora:",
       "hero-heading": "Los impuestos federales deben pagarse antes del 15 de abril",
@@ -67,8 +68,12 @@
       "dependents": "¿Cuántos dependientes puede reclamar?",
       "isDependent": "¿Alguien puede reclamarlo como dependiente?",
       "single": "Soltero",
-      "married": "Casado que presenta por separado",
-      "hoh": "Jefe de familia"
+      "married-sep": "Casado que presenta por separado",
+      "married-jointly": "Casado con declaración conjunta",
+      "widow": "Esposo/a sobreviviente calificada/o",
+      "hoh": "Jefe de familia",
+      "spouse-income": "Ingresos del cónyuge",
+      "spouse-withheld": "Impuesto federal retenido al cónyuge"
     },
     "w2": {
       "hint": "Casilla {{hint}} en el Formulario W-2",
@@ -86,20 +91,23 @@
       "medicare-withheld": "Impuesto sobre Medicare Retenido"
     },
     "1099": {
-      "hint": "Casilla {{hint}} en el Formulario 1099-NEC",
+      "hint": "Casilla {{hint}} en el Formulario 1099",
       "title": "Trabajo por cuenta propia",
-      "desc": "Esta información se puede encontrar en el formulario 1099-NEC. Si no tiene ingresos por trabajo por cuenta propia para ingresar, puede omitir esta sección.",
-      "payerTIN": "TIN del pagador",
-      "recipientTIN": "TIN del receptor",
-      "nec": "Compensación a no empleados"
+      "desc": "Esta información se puede encontrar en el formulario 1099. Si no tiene ingresos por trabajo por cuenta propia para ingresar, puede omitir esta sección.",
+      "accountNum": "Número de cuenta",
+      "payerName": "Nombre del pagador",
+      "payerState": "Estado del pagador",
+      "payerZipCode": "Código postal del pagador",
+      "income": "Ingresos"
     },
     "deductions": {
       "title": "Créditos y Deducciones",
       "desc": "Ayudémosle a obtener el mayor reembolso posible.",
-      "interest": "Intereses Hipotecarios Pagados",
-      "taxes": "Impuestos sobre la Propiedad Pagados",
-      "donations": "Donaciones en Cheque o Efectivo",
-      "nonCash": "Total de Donaciones No en Efectivo"
+      "ira": "Contribuciones a una cuenta IRA",
+      "standard": "Elige tu tipo de deducción",
+      "std": "Deducción estándar",
+      "itemized": "Deducción detallada",
+      "retirement": "¿Tienes un plan de jubilación en el trabajo?"
     },
     "review": {
       "title": "Revisión",

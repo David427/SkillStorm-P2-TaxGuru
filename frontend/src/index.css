@@ -42,8 +42,37 @@ a {
   position: initial !important;
 }
 
+.card-section {
+  display: flex;
+  justify-content: space-between;
+
+  border-bottom: 1px solid #222;
+}
+
+.value {
+  text-decoration: underline;
+  font-weight: 600;
+}
+
+.result__container {
+  text-align: center;
+}
+
+.result__value {
+  font-weight: 600;
+  text-decoration: underline;
+}
+
 @media (max-width: 63.99em) {
   .usa-nav-container {
     border-bottom: none;
+  }
+
+  .card-section {
+    display: block;
+  }
+
+  .value {
+    text-align: right;
   }
 }
