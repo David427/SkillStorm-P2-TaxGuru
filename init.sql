@@ -36,7 +36,7 @@ CREATE TABLE form_w2_data (
 CREATE TABLE adjustments (
   id SERIAL PRIMARY KEY,
   std_deduction BOOLEAN,
-  claimed_dependents SMALLINT,
+  claimed_dependents INTEGER,
   earned_income_credit BOOLEAN,
   eitc_amount NUMERIC,
   child_credit_amount NUMERIC,
