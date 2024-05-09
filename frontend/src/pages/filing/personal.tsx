@@ -73,7 +73,7 @@ export default function Personal() {
     };
 
     const res = await fetch(
-      `http://localhost:8080/users/update?username=${user?.username}`,
+      `http://ec2-54-224-41-31.compute-1.amazonaws.com:8080/users/update?username=${user?.username}`,
       {
         method: "PUT",
         headers: {

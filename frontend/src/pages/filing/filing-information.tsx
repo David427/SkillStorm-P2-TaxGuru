@@ -61,7 +61,7 @@ export default function FilingInformation() {
     if (user?.taxReturn?.id) {
       // existing return so we should update the current one
       res = await fetch(
-        `http://localhost:8080/return/${user.taxReturn.id}?username=${user.username}`,
+        `http://ec2-54-224-41-31.compute-1.amazonaws.com:8080/return/${user.taxReturn.id}?username=${user.username}`,
         {
           method: "PUT",
           headers: {
@@ -73,7 +73,7 @@ export default function FilingInformation() {
       );
     } else {
       res = await fetch(
-        `http://localhost:8080/return?username=${user?.username}`,
+        `http://ec2-54-224-41-31.compute-1.amazonaws.com:8080/return?username=${user?.username}`,
         {
           method: "POST",
           headers: {

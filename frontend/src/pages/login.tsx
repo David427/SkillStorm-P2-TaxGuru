@@ -35,11 +35,14 @@ export default function Login() {
       password: e.currentTarget.elements.password.value,
     };
 
-    const res = await fetch("http://localhost:8080/auth/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData),
-    });
+    const res = await fetch(
+      "http://ec2-54-224-41-31.compute-1.amazonaws.com:8080/auth/login",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      }
+    );
 
     if (res.ok) {
       const data: AuthResponse = await res.json();

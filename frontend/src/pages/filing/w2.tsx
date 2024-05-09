@@ -59,7 +59,7 @@ export default function W2() {
     if (user?.taxReturn?.formW2?.id) {
       // existing w2 so update it
       res = await fetch(
-        `http://localhost:8080/w2/${user.taxReturn.formW2.id}?username=${user.username}`,
+        `http://ec2-54-224-41-31.compute-1.amazonaws.com:8080/w2/${user.taxReturn.formW2.id}?username=${user.username}`,
         {
           method: "PUT",
           headers: {
@@ -70,14 +70,17 @@ export default function W2() {
         }
       );
     } else {
-      res = await fetch(`http://localhost:8080/w2?username=${user?.username}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${jwt}`,
-        },
-        body: JSON.stringify(formData),
-      });
+      res = await fetch(
+        `http://ec2-54-224-41-31.compute-1.amazonaws.com:8080/w2?username=${user?.username}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${jwt}`,
+          },
+          body: JSON.stringify(formData),
+        }
+      );
     }
 
     if (res.ok) {

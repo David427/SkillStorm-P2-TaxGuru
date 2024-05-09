@@ -66,10 +66,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
 
     // since we have a JWT, fetch the user information
-    fetch(`http://localhost:8080/users/data?username=${username}`, {
-      method: "GET",
-      headers: { Authorization: `Bearer ${jwt}` },
-    }).then((res) => {
+    fetch(
+      `http://ec2-54-224-41-31.compute-1.amazonaws.com:8080/users/data?username=${username}`,
+      {
+        method: "GET",
+        headers: { Authorization: `Bearer ${jwt}` },
+      }
+    ).then((res) => {
       if (res.ok) {
         res.json().then((data: User) => {
           setUser(data);
@@ -115,7 +118,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
    */
   const updateUser = async (user: User) => {
     const res = await fetch(
-      `http://localhost:8080/users/update?username=${user.username}`,
+      `http://ec2-54-224-41-31.compute-1.amazonaws.com:8080/users/update?username=${user.username}`,
       {
         method: "PUT",
         headers: {
@@ -131,7 +134,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const updateReturn = async (taxReturn: TaxReturn) => {
     const res = await fetch(
-      `http://localhost:8080/return/${taxReturn.id}?username=${username}`,
+      `http://ec2-54-224-41-31.compute-1.amazonaws.com:8080/return/${taxReturn.id}?username=${username}`,
       {
         method: "PUT",
         headers: {

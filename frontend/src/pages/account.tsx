@@ -58,7 +58,7 @@ export default function Account() {
     };
 
     const res = await fetch(
-      `http://localhost:8080/users/update?username=${username}`,
+      `http://ec2-54-224-41-31.compute-1.amazonaws.com:8080/users/update?username=${username}`,
       {
         method: "PUT",
         headers: {

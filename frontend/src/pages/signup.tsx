@@ -47,14 +47,17 @@ export default function SignUp() {
       return;
     }
 
-    const res = await fetch("http://localhost:8080/auth/register", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        username: formData.username,
-        password: formData.password,
-      }),
-    });
+    const res = await fetch(
+      "http://ec2-54-224-41-31.compute-1.amazonaws.com:8080/auth/register",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          username: formData.username,
+          password: formData.password,
+        }),
+      }
+    );
 
     if (res.ok) {
       // no need to get the response json since we need the user to log in again
