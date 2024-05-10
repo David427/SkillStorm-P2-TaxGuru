@@ -59,7 +59,7 @@ export default function W2() {
     if (user?.taxReturn?.formW2?.id) {
       // existing w2 so update it
       res = await fetch(
-        `http://api.taxguru.skillstorm-congo.com:8080/w2/${user.taxReturn.formW2.id}?username=${user.username}`,
+        `https://api-taxguru.skillstorm-congo.com/w2/${user.taxReturn.formW2.id}?username=${user.username}`,
         {
           method: "PUT",
           headers: {
@@ -71,7 +71,7 @@ export default function W2() {
       );
     } else {
       res = await fetch(
-        `http://api.taxguru.skillstorm-congo.com:8080/w2?username=${user?.username}`,
+        `https://api-taxguru.skillstorm-congo.com/w2?username=${user?.username}`,
         {
           method: "POST",
           headers: {

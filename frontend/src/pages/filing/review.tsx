@@ -30,7 +30,7 @@ export default function Review() {
     e.preventDefault();
 
     const res = await fetch(
-      `http://api.taxguru.skillstorm-congo.com:8080/return/${user?.taxReturn?.id}/result?username=${user?.username}`,
+      `https://api-taxguru.skillstorm-congo.com/return/${user?.taxReturn?.id}/result?username=${user?.username}`,
       { method: "GET", headers: { Authorization: `Bearer ${jwt}` } }
     );
 

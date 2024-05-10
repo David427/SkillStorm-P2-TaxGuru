@@ -48,7 +48,7 @@ export default function Deductions() {
     let res: Response;
     if (user?.taxReturn?.adjustment?.id) {
       res = await fetch(
-        `http://api.taxguru.skillstorm-congo.com:8080/adjustments/${user.taxReturn.adjustment.id}?username=${user.username}`,
+        `https://api-taxguru.skillstorm-congo.com/adjustments/${user.taxReturn.adjustment.id}?username=${user.username}`,
         {
           method: "PUT",
           headers: {
@@ -60,7 +60,7 @@ export default function Deductions() {
       );
     } else {
       res = await fetch(
-        `http://api.taxguru.skillstorm-congo.com:8080/adjustments?username=${user?.username}`,
+        `https://api-taxguru.skillstorm-congo.com/adjustments?username=${user?.username}`,
         {
           method: "POST",
           headers: {

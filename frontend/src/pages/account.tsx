@@ -58,7 +58,7 @@ export default function Account() {
     };
 
     const res = await fetch(
-      `http://api.taxguru.skillstorm-congo.com:8080/users/update?username=${username}`,
+      `https://api-taxguru.skillstorm-congo.com/users/update?username=${username}`,
       {
         method: "PUT",
         headers: {

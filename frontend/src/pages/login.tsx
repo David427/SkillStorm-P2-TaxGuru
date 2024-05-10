@@ -36,7 +36,7 @@ export default function Login() {
     };
 
     const res = await fetch(
-      "http://api.taxguru.skillstorm-congo.com:8080/auth/login",
+      "https://api-taxguru.skillstorm-congo.com/auth/login",
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
